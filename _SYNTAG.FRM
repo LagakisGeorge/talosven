@@ -3,7 +3,6 @@ Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{00028C01-0000-0000-0000-000000000046}#1.0#0"; "DBGRID32.OCX"
 Object = "{648A5603-2C6E-101B-82B6-000000000014}#1.1#0"; "MSCOMM32.OCX"
 Object = "{00025600-0000-0000-C000-000000000046}#4.6#0"; "crystl32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmSYNT 
    BackColor       =   &H00FF0000&
    ClientHeight    =   7080
@@ -18,21 +17,15 @@ Begin VB.Form frmSYNT
    ScaleHeight     =   7080
    ScaleWidth      =   9480
    WindowState     =   2  'Maximized
-   Begin MSComctlLib.StatusBar StatusBar1 
+   Begin VB.PictureBox StatusBar1 
       Align           =   2  'Align Bottom
       Height          =   255
       Left            =   0
+      ScaleHeight     =   195
+      ScaleWidth      =   9420
       TabIndex        =   354
       Top             =   6825
       Width           =   9480
-      _ExtentX        =   16722
-      _ExtentY        =   450
-      _Version        =   393216
-      BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
-         NumPanels       =   1
-         BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
-         EndProperty
-      EndProperty
    End
    Begin VB.CommandButton Command2 
       Caption         =   "Command2"
@@ -5726,7 +5719,7 @@ Function NER_DOSOMETRHSH(ByVal gr As Single, ByVal porta As String)
 
 'È‹Ì˘ ÙÔ 95% ÏÂ ÙÁÌ Ïﬂ·
 Dim ssdxx As Single, Y As Double, Z As Double, w As Double, fores
-Dim X As Single, tmax As Double, tmin As Double, t As Double, texcel As Double, stoxos As Double
+Dim x As Single, tmax As Double, tmin As Double, t As Double, texcel As Double, stoxos As Double
 Dim xronos, mxronos
 Dim Poses_Zyg, starter, DEYTEROLEPTA
 Dim proth_fora As Byte, ZYG1, DT
@@ -5750,9 +5743,20 @@ Dim Water
  
 mz = Zygis0(0)
 
-Do While Abs(mz) > 40
-  G_REZERO MSComm1
+Do While Abs(Val(mz)) > 40
+
+
+  If Balance_Type = "ADAM" Then
+    ' ≈…Õ¡… ”¬«”‘« ‘«Õ ¡Õ¡¬Ÿ  ¡… ‘«Õ –¡Ÿ ”‘œ 0
+    If Zygis0(0) < -99900 Then
+        MSComm1.Output = "ON" + Chr$(13)
+        MilSec 2000
+    End If
+  End If
+  
+ ' G_REZERO MSComm1
 '    MSComm1.Output = "Z " + Chr$(13) + Chr(10)
+     
      MilSec 200
      mz = Zygis0(0)
 Loop
@@ -5968,8 +5972,158 @@ End Function
 
 '
 '
-Function Zygis_adamEQ(X As Single)
-  Dim counter, START1, FromModem$, dummy, ZYG
+
+
+
+
+Function zyg_ADAM(Zygis_Kind As Variant)
+On Error GoTo er_det
+   Dim counter
+  Dim tot_counter
+  Dim START
+  Dim FromModem As String
+  Dim DUMMY
+  Dim BUF
+  
+   counter = 0: tot_counter = 0: Label10 = 0
+' If system_ready = 0 Then zyg_ADAM = "System not Working": Exit Function
+  START = GetCurrentTime()
+  
+  
+    Do
+    If GetCurrentTime() - START > 10001 Then zyg_ADAM = " ": Exit Function
+     MSComm1.InBufferCount = 0
+      FromModem$ = ""
+           MSComm1.Output = Balance_Asking + Chr$(13)
+          MilSec (50)
+          DUMMY = DoEvents()
+          If MSComm1.InBufferCount Then
+           BUF = MSComm1.InBufferCount
+          FromModem$ = FromModem$ + MSComm1.Input
+        '  List1.AddItem FromModem$, 0
+           
+           If InStr(FromModem$, "OL") > 0 Then
+                'MsgBox "Scale Overload ...", , "Talos"
+                zyg_ADAM = "OL"
+                Exit Do
+            End If
+           If InStr(FromModem$, "UL") > 0 Then
+                'MsgBox "Scale Overload ...", , "Talos"
+                zyg_ADAM = "UL"
+                Exit Do
+            End If
+            If GetCurrentTime() - START > 5000 And Zygis_Kind = "OK" Then Zygis_Kind = 0: tot_counter = 0
+          
+          
+          
+          
+          
+    If InStr(FromModem$, ".") > 0 Then
+          
+            Dim NN As Integer
+            NN = InStr(FromModem$, ".")
+            Dim CC3 As String
+            Dim DD As String
+            
+           If NN > 3 Then
+            
+            
+            '    CC = Mid(FromModem$, NN - 3, 7)
+             '   DD = Mid(FromModem$, NN, 4)
+              '  If InStr(DD, "?") > 0 Then
+               '    DD = Replace(DD, "?", "0")
+               ' End If
+                
+                
+                CC3 = Mid(FromModem$, NN - 3, 7)
+                
+                If InStr(CC3, "?") > 0 Then
+                 
+                   
+                Else
+                
+                  '  CC = Replace(CC, "?", "0")
+                    zyg_ADAM = CC3
+                    Exit Do
+                End If
+            Else
+               zyg_ADAM = ""
+            End If
+            
+               
+          
+     End If
+
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          If InStr(FromModem$, Chr$(13)) >= 5 Then
+                 If InStr(FromModem$, ".") >= 5 Then
+                       Exit Do
+                End If
+          End If
+       
+       
+       
+       
+       counter = counter + 1
+       If counter >= 15 Then tot_counter = tot_counter + 1
+            Label10 = counter
+          If tot_counter >= 20 And Zygis_Kind <> "OK" Then
+          counter = 0: tot_counter = tot_counter + 1
+               zyg_ADAM = " "
+               Exit Function
+           End If
+          If counter >= 50 Then  ' 500
+             counter = 0: tot_counter = tot_counter + 1
+               MSComm1.InBufferCount = 0
+              MSComm1.Output = Balance_Asking + Chr$(13)
+              End If
+     End If
+     If Zygis_Kind = "OK" Then
+             'Me.Zyg_Show.Width = (GetCurrentTime() - start) / 1000 * 650
+              'Me.Zyg_Show.Caption = Int(((GetCurrentTime() - start) / 1000) + 0.5) & " Sec"
+             'Me.Zyg_Show.Refresh
+      End If
+      
+    Loop
+         
+       '  zyg_ADAM = Mid$(FromModem$, InStr(FromModem$, ".") - 4, 8)
+        ' If InStr(FromModem$, "-") > 0 Or InStr(FromModem$, "?") > 0 Then
+         '    zyg_ADAM = Str(-Val(LTrim(zyg_ADAM)))
+        ' End If
+er_ex:
+Exit Function
+er_det:
+ zyg_ADAM = " "
+Resume er_ex
+End Function
+
+
+
+
+
+
+Function Zygis_adamEQ(x As Single)  'OLD ONE
+  Dim counter, START1, FromModem$, DUMMY, ZYG
     ' Flush the input buffer.
        MSComm1.Output = Balance_Asking + Chr$(13)
        MSComm1.InBufferCount = 0
@@ -5978,7 +6132,7 @@ Function Zygis_adamEQ(X As Single)
     START1 = GetCurrentTime()
     Do
        MilSec 40
-       dummy = DoEvents()
+       DUMMY = DoEvents()
        ' If there is data in the buffer, then read it.
        If MSComm1.InBufferCount Then
           FromModem$ = FromModem$ + MSComm1.Input
@@ -6009,11 +6163,11 @@ End Function
 '
 '
 
-Function Zygis0(X As Single)
+Function Zygis0(x As Single)
   Dim counter, starter, FromModem$, x0, y0
   
-   If Balance_Type = "ADAMEQ" Then
-        Zygis0 = Zygis0_adamEQ(MSComm1, 0)
+   If Balance_Type = "ADAM" Then
+        Zygis0 = zyg_ADAM(0)
         Label3(0).Caption = Zygis0
         Exit Function
    Else
@@ -6074,12 +6228,12 @@ Function Zygis0(X As Single)
      
       If InStr(FromModem$, ".") < 5 Then
          x0 = InStr(6, FromModem$, ".")
-         y0 = InStr(X, FromModem$, "g")
+         y0 = InStr(x, FromModem$, "g")
       Else
          x0 = InStr(FromModem$, ".")
          y0 = InStr(FromModem$, "g")
       End If
-      Zygis0 = Val(Mid$(FromModem$, x0 - 6, 10)) * 1000 'If Val(Label2) < 1 Then
+      Zygis0 = Val(Mid$(FromModem$, IIf(x0 - 6 < 1, 1, x0 - 6), 10)) * 1000 'If Val(Label2) < 1 Then
     
       ' Me.Caption = Format(Zygis0, "###0.000")
     
@@ -6090,8 +6244,8 @@ Function Zygis0(X As Single)
 End Function
 
 
-Function Zygis0OLD(X As Single)
-  Dim counter, starter, dummy, FromModem$
+Function Zygis0OLD(x As Single)
+  Dim counter, starter, DUMMY, FromModem$
   Dim Y
   Ref.Caption = left(Ref.Caption + Space(15), 15) + "Sc"
 
@@ -6120,7 +6274,7 @@ Function Zygis0OLD(X As Single)
     counter = 0
     ' Wait for "OK" to come back from the modem.
     Do
-       dummy = DoEvents()
+       DUMMY = DoEvents()
           If GetCurrentTime() - starter > 2000 Then
             Zygis0OLD = -999000999
             Gwrite_zygish "---OverTime---", z0
@@ -6161,13 +6315,13 @@ Function Zygis0OLD(X As Single)
     
  
       If InStr(FromModem$, ".") < 5 Then
-         X = InStr(6, FromModem$, ".")
-         Y = InStr(X, FromModem$, "g")
+         x = InStr(6, FromModem$, ".")
+         Y = InStr(x, FromModem$, "g")
       Else
-         X = InStr(FromModem$, ".")
+         x = InStr(FromModem$, ".")
          Y = InStr(FromModem$, "g")
       End If
-      Zygis0OLD = Val(Mid$(FromModem$, X - 6, 10)) * 1000
+      Zygis0OLD = Val(Mid$(FromModem$, x - 6, 10)) * 1000
 
     
 '    Gwrite_zygish FromModem$, ZYGIS0OLD
@@ -6240,7 +6394,7 @@ End Function
 
 
 Function gyrise_zygaria(chfia)
-Dim dummy
+Dim DUMMY
 
 ' ∆’√…∆≈… ”‘œ    "HIGH"  2 ‰ÂÍ·‰ÈÍ‹ ·ÍÒﬂ‚ÂÈ·
  Dim counter, starter, Proeid, FromModem$, a
@@ -6252,7 +6406,7 @@ Dim dummy
     counter = 0
     ' Wait for "OK" to come back from the modem.
     Do
-       dummy = DoEvents()
+       DUMMY = DoEvents()
        If GetCurrentTime() - starter > 27000 Then
           '
              MsgBox "¡ÌÔﬂÓÙÂ ÙÁÌ Êı„·ÒÈ‹ KAI √’—…”‘≈ ‘«Õ ”‘¡ " + str(chfia) + " –¡‘ŸÕ‘¡” ‘œ   F "
@@ -6319,7 +6473,7 @@ Function metrhs2(xr As Double, rixies As Integer) As Double
  '*************************************
 Dim ll, ii$, cmd$, TEMP%
 '***  online  ∆’√…”«
-Dim Poses_Zyg, start, zyg0, blab
+Dim Poses_Zyg, START, zyg0, blab
  ll = 0
 ii$ = ""
 ZYG = 0
@@ -6365,7 +6519,7 @@ End Function
 Private Sub print_rep(mpot, m_synt)
 
 ' print_rep str(a_Syntagh(Move)), a_Ar_Syntag(Move)
-Dim k, Joblist, X, r, ok, a, mydb, ddd, Diff, stoxos
+Dim k, JOBLIST, x, r, ok, a, mydb, ddd, Diff, stoxos
 Dim rkod As String
 Dim m_err
 
@@ -6549,7 +6703,7 @@ Dim result%, status_high%, status_low%, status&
     Uesh_4axona = axe(4)
 End Function
 Function uesh_ajonon()
-     Dim X, result%, status_high%, status_low%, status&
+     Dim x, result%, status_high%, status_low%, status&
      Dim Y, Z
        uesh_ajonon = axe(1) + axe(2) + axe(3)
        
@@ -7179,7 +7333,7 @@ Case 2 '–¡Õ≈ –œ‘«—…
             ' MSComm1.Output = "Z " + Chr$(13) + Chr(10)
             G_REZERO MSComm1
            MilSec 500
-           
+           ' G_REZERO MSComm1
            
            If aritmos_ximikon > 0 Then
                  m_synt = a_Ar_Syntag(Move)
@@ -9114,7 +9268,7 @@ Dim k
 
 End Sub
 
-Private Sub Label1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Label1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
 If Not IsNull(Perigrafh(Index)) Then
      SXOLIA1.Caption = Perigrafh(Index)
  End If
@@ -9129,7 +9283,7 @@ End Sub
 
 
 
-Private Sub Label3_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Label3_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
 If Index > 0 And Index <= Ar_Pothr Then
      Label18.Caption = IIf(IsNull(pin_Syntag(Index)), "", pin_Syntag(Index))
 End If

@@ -98,13 +98,24 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+
+
+
+
+
+
+
+
+
+
 Dim m_unloading As Integer, m_menu
 Dim epitr_syntages
 
-Function Find_ANTICODE(dum)
+Function Find_ANTICODE(DUM)
 ' arx = Year(Now) * 12 + Month(Now) * 24 + Day(Now) * 36 + Hour(Now) * 48 + Minute(Now) * 72 + Second(Now) * 96
 Dim a, c, b
-a = LTrim(str(dum))
+a = LTrim(str(DUM))
 
 c = 0
 For k = 1 To Len(a)
@@ -520,10 +531,10 @@ aritmos_ximikon = 0
 'End If
 
 
-
+'to ekana rem giati ειχε λαθη νομιζε οτι δεν εκανα home
 For k = 1 To 4
    If Not IsHomeDone(k) Then
-     MsgBox mL_Res(-1000 + 476) + str(k)
+   '  MsgBox mL_Res(-1000 + 476) + str(k)
      homedone = 0
    End If
 Next
@@ -718,7 +729,7 @@ Load_Parametroi
 Set dbsjet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\recipies.mdb")
 
 Set r = dbsjet.OpenRecordset("prospau2")
-dum = r("DATE_DISP")
+DUM = r("DATE_DISP")
 r.Close
        
 Set r = dbsjet.OpenRecordset("jOBLIST")
@@ -735,7 +746,7 @@ m_err = "users,c:\talos\recipies.mdb"
        
  userinput.Show
 
-1100 dum = ADD_FIELD("PANIA", "FYRA", "SINGLE")
+1100 DUM = ADD_FIELD("PANIA", "FYRA", "SINGLE")
 
 
 1101 If Command = "P" Then
@@ -982,9 +993,9 @@ If M12 = 0 Then dbsjet.Execute "ALTER TABLE PARAMETROI ADD COLUMN MPANIO SINGLE"
 If M13 = 0 Then dbsjet.Execute "ALTER TABLE PARAMETROI ADD COLUMN MAXTIMEWATER SINGLE"
 
 
-dum = ADD_FIELD("PARAMETROI", "TIME_PREHEAT", "SINGLE")
-dum = ADD_FIELD("PARAMETROI", "WEIGHT_BOTTLE_MIN", "SINGLE")
-dum = ADD_FIELD("PARAMETROI", "WEIGHT_BOTTLE_MAX", "SINGLE")
+DUM = ADD_FIELD("PARAMETROI", "TIME_PREHEAT", "SINGLE")
+DUM = ADD_FIELD("PARAMETROI", "WEIGHT_BOTTLE_MIN", "SINGLE")
+DUM = ADD_FIELD("PARAMETROI", "WEIGHT_BOTTLE_MAX", "SINGLE")
 
 
 
@@ -996,12 +1007,12 @@ If Not IsEmpty(Xim1_on) Then
     ' DUM = ADD_FIELD("PROSPAU2", "XIM5", "SINGLE")
 End If
 
-dum = ADD_FIELD("PROSPAU2", "DATE_DISP", "DATETIME")
-dum = ADD_FIELD("PROSPAU3", "DATE_DISP", "DATETIME")
-dum = ADD_FIELD("DOKPROS2", "DATE_DISP", "DATETIME")
+DUM = ADD_FIELD("PROSPAU2", "DATE_DISP", "DATETIME")
+DUM = ADD_FIELD("PROSPAU3", "DATE_DISP", "DATETIME")
+DUM = ADD_FIELD("DOKPROS2", "DATE_DISP", "DATETIME")
 
-dum = ADD_FIELD("JOBLIST", "XHMIKA", "SINGLE")
-dum = ADD_FIELD("JOBLIST3", "XHMIKA", "SINGLE")
+DUM = ADD_FIELD("JOBLIST", "XHMIKA", "SINGLE")
+DUM = ADD_FIELD("JOBLIST3", "XHMIKA", "SINGLE")
 
 'r("MPANIO")
 Set dbsjet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\recipies.mdb")

@@ -1,7 +1,6 @@
 VERSION 5.00
 Object = "{00028C01-0000-0000-0000-000000000046}#1.0#0"; "DBGRID32.OCX"
 Object = "{648A5603-2C6E-101B-82B6-000000000014}#1.1#0"; "MSCOMM32.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form skones 
    BackColor       =   &H00808000&
    ClientHeight    =   6975
@@ -28,21 +27,15 @@ Begin VB.Form skones
    ScaleHeight     =   6975
    ScaleWidth      =   9660
    WindowState     =   2  'Maximized
-   Begin MSComctlLib.StatusBar StatusBar1 
+   Begin VB.PictureBox StatusBar1 
       Align           =   2  'Align Bottom
       Height          =   252
       Left            =   0
+      ScaleHeight     =   195
+      ScaleWidth      =   9600
       TabIndex        =   104
       Top             =   6720
       Width           =   9660
-      _ExtentX        =   17039
-      _ExtentY        =   450
-      _Version        =   393216
-      BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
-         NumPanels       =   1
-         BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
-         EndProperty
-      EndProperty
    End
    Begin VB.ListBox List1 
       BeginProperty Font 
@@ -1962,7 +1955,7 @@ Sub command1_old()
 End Sub
 
 Sub finirisma(mpoykali)
-Dim mixOn, mixOff, dum
+Dim mixOn, mixOff, DUM
 
 If mpoykali = 1 Then
    mixOn = mixer_ON
@@ -2305,7 +2298,7 @@ send_to_mixer 1
 
 Set dddb = Workspaces(0).OpenDatabase("c:\talos\katoflia.MDB")
 Set r = dddb.OpenRecordset("mixer")
- r.Edit
+ r.EDIT
  r("time") = mixtim
  r("n1") = 1
  r.update
@@ -2462,7 +2455,7 @@ G_REZERO MSComm1
 
 Set dddb = Workspaces(0).OpenDatabase("c:\talos\katoflia.MDB")
 Set r = dddb.OpenRecordset("mixer")
- r.Edit
+ r.EDIT
  r("time") = mixtim
  r("n1") = 2
  r.update
@@ -2902,7 +2895,7 @@ End Function
 Function Zygis0(x As Single)
   Dim counter, starter
   
-   If Balance_Type = "ADAMEQ" Then
+   If Balance_Type = "ADAM" Then
         Zygis0 = Zygis0_adamEQ(MSComm1, x)
         Me.Caption = Format(Zygis0, "###0.000")
         Exit Function
@@ -3156,7 +3149,7 @@ TaxyThtes = "!V,," + str(v_Z) + ":"
         'йяата апобаяо
      APOBARO = Zygis0(0)
      
-     dum = Wait_Robot(0)
+     DUM = Wait_Robot(0)
 
 
     
@@ -3395,7 +3388,7 @@ Set r = mydb.OpenRecordset("ximitech")
 r.Index = "kod"
 r.Seek "=", left(ximiko, 6)
 If Not r.NoMatch Then
-     r.Edit
+     r.EDIT
      r("min_sygk") = diad_Max_Pos
      r.update
 End If
@@ -3593,7 +3586,7 @@ TaxyThtes = "!V,," + str(v_Z) + ",0.3:"
      
      APOBARO = Zygis0(0)
      
-     dum = Wait_Robot(0)
+     DUM = Wait_Robot(0)
 
 
     
@@ -4054,7 +4047,7 @@ Set r = mydb.OpenRecordset("dialymata")
 Do Until r.eof
 entol = 0
  If IsNull(r("nero_act")) Then
-    r.Edit
+    r.EDIT
      r("nero_act") = nerot - CurQ
      r("color_act") = CurQ
      r("duration") = Val(Diarkeia.text) / 1000
@@ -4634,7 +4627,7 @@ If gXimikaDial Then
         '  fere mpoykali ximikon
      kod6400 = 1000 + 69  ' 69 mpoykali einai to ximiko
      cmd$ = "!var12=" + str(kod6400) + ":"
-     dum = wait_to_understand(cmd$)
+     DUM = wait_to_understand(cmd$)
 End If
 
 
@@ -4672,7 +4665,7 @@ Do
    If Telos_Dialymaton = 1 Then Exit Do
    CurQ = 0: CurQ_Dis = CurQ
    On Error GoTo 0
-   dum = start2_dosing_click(1, 2, Buk, 7)
+   DUM = start2_dosing_click(1, 2, Buk, 7)
    If Command2.Enabled = False Then Telos_Dialymaton = 1
    
    If Telos_Dialymaton = 1 Then Exit Do
@@ -4693,7 +4686,7 @@ If gXimikaDial Then
         '  fere mpoykali ximikon
      kod6400 = 2000 + 69  ' 69 mpoykali einai to ximiko
      cmd$ = "!var12=" + str(kod6400) + ":"
-     dum = wait_to_understand(cmd$)
+     DUM = wait_to_understand(cmd$)
      Wait_Robot (0)
 End If
        
@@ -5276,7 +5269,7 @@ Set r = mydb.OpenRecordset("skones")
 
 Do Until r.eof
  If Val(Buk) = r("no_mpoykalioy") Then
-    r.Edit
+    r.EDIT
       r("Datum") = Now()
       r("Factor_A") = Ca_Factor
       r("Ximiko") = ximiko
@@ -5338,7 +5331,7 @@ r.Index = "kod"
 r.Seek "=", left(ximiko, 6)
 If Not r.NoMatch Then
 
-    r.Edit
+    r.EDIT
      r("ypol_prot") = r("ypol_prot") - SERVIRISMA / 1000
     r.update
 End If
