@@ -1,0 +1,13 @@
+[History]
+1=#P0#=mb	#P1#=Gwrite_zygish	#P2#=ken6/Module1/Gwrite_zygish	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805083221	#P7#=0	#P8#=2	.
+2=#P0#=mb	#P1#=Update_Grid	#P2#=ken6/FRMSYNT2/Update_Grid	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805083633	#P7#=0	#P8#=42	.
+3=#P0#=mb	#P1#=MaskEdBox1_LostFocus	#P2#=ken6/FRMSYNT2/MaskEdBox1_LostFocus	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805082639	#P7#=0	#P8#=34	.
+4=#P0#=mb	#P1#=DBCombo1_Click	#P2#=ken6/FRMSYNT2/DBCombo1_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805082300	#P7#=0	#P8#=2	.
+5=#P0#=mb	#P1#=Command5_Click	#P2#=ken6/FRMSYNT2/Command5_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805082236	#P7#=0	#P8#=1	.
+6=#P0#=mb	#P1#=Command1_Click	#P2#=ken6/FRMSYNT2/Command1_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805082107	#P7#=0	#P8#=-2	.
+7=#P0#=mb	#P1#=Command1_Click	#P2#=ken6/PARAMETROI/Command1_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805081310	#P7#=0	#P8#=56	.
+8=#P0#=mb	#P1#=SSTab1_DblClick	#P2#=ken6/PARAMETROI/SSTab1_DblClick	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805080210	#P7#=0	#P8#=1	.
+9=#P0#=mb	#P1#=Form_Load	#P2#=ken6/PARAMETROI/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805080346	#P7#=0	#P8#=15	.
+10=#P0#=mb	#P1#=Command2_Click	#P2#=ken6/PARAMETROI/Command2_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805075600	#P7#=0	#P8#=5	.
+11=#P0#=mb	#P1#=Form_Load	#P2#=ken6/FRMSYNT2/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805073906	#P7#=0	#P8#=50	.
+12=#P0#=mb	#P1#=Connect_System	#P2#=ken6/terminal/Connect_System	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20190805073113	#P7#=0	#P8#=8	.

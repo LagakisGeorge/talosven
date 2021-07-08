@@ -1,0 +1,25 @@
+Line 175: Class MSGrid.Grid of control Grid1 was not a loaded control class.
+Line 216: Class MSDBCtls.DBCombo of control DBCombo2 was not a loaded control class.
+Line 291: Class MSDBCtls.DBCombo of control DBCombo1 was not a loaded control class.
+Line 181: The property name _version in Grid1 is invalid.
+Line 182: The property name _extentx in Grid1 is invalid.
+Line 183: The property name _extenty in Grid1 is invalid.
+Line 184: The property name _stockprops in Grid1 is invalid.
+Line 186: The property name rows in Grid1 is invalid.
+Line 187: The property name cols in Grid1 is invalid.
+Line 175: Property MouseIcon in Grid1 could not be set.
+Line 217: The property name Bindings in DBCombo2 is invalid.
+Line 223: The property name _version in DBCombo2 is invalid.
+Line 224: The property name _extentx in DBCombo2 is invalid.
+Line 225: The property name _extenty in DBCombo2 is invalid.
+Line 226: The property name _stockprops in DBCombo2 is invalid.
+Line 229: The property name style in DBCombo2 is invalid.
+Line 230: The property name listfield in DBCombo2 is invalid.
+Line 231: The property name boundcolumn in DBCombo2 is invalid.
+Line 292: The property name Bindings in DBCombo1 is invalid.
+Line 298: The property name _version in DBCombo1 is invalid.
+Line 299: The property name _extentx in DBCombo1 is invalid.
+Line 300: The property name _extenty in DBCombo1 is invalid.
+Line 301: The property name _stockprops in DBCombo1 is invalid.
+Line 304: The property name listfield in DBCombo1 is invalid.
+Line 305: The property name boundcolumn in DBCombo1 is invalid.

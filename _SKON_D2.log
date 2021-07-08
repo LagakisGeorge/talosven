@@ -1,0 +1,24 @@
+Line 1321: Class MSDBGrid.DBGrid of control DBGrid1 was not a loaded control class.
+Line 1331: Class MSCommLib.MSComm of control MSComm1 was not a loaded control class.
+Line 1322: The property name Bindings in DBGrid1 is invalid.
+Line 1325: The property name OleObjectBlob in DBGrid1 is invalid.
+Line 1334: The property name _version in MSComm1 is invalid.
+Line 1335: The property name _extentx in MSComm1 is invalid.
+Line 1336: The property name _extenty in MSComm1 is invalid.
+Line 1337: The property name _stockprops in MSComm1 is invalid.
+Line 1338: The property name cdtimeout in MSComm1 is invalid.
+Line 1339: The property name commport in MSComm1 is invalid.
+Line 1340: The property name ctstimeout in MSComm1 is invalid.
+Line 1341: The property name dsrtimeout in MSComm1 is invalid.
+Line 1342: The property name dtrenable in MSComm1 is invalid.
+Line 1343: The property name handshaking in MSComm1 is invalid.
+Line 1344: The property name inbuffersize in MSComm1 is invalid.
+Line 1345: The property name inputlen in MSComm1 is invalid.
+Line 1346: The property name interval in MSComm1 is invalid.
+Line 1347: The property name nulldiscard in MSComm1 is invalid.
+Line 1348: The property name outbuffersize in MSComm1 is invalid.
+Line 1349: The property name parityreplace in MSComm1 is invalid.
+Line 1350: The property name rthreshold in MSComm1 is invalid.
+Line 1351: The property name rtsenable in MSComm1 is invalid.
+Line 1352: The property name settings in MSComm1 is invalid.
+Line 1353: The property name sthreshold in MSComm1 is invalid.

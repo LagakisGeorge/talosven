@@ -1,0 +1,44 @@
+declare arx[30]
+
+arx[1]="_DELETE.frm"
+arx[2]="_FARBEN.frm"
+arx[3]="_FERE.frm"
+arx[4]="_FERESK.frm"
+arx[5]="_JOBLIST.frm"
+arx[6]="_KENTRIK.frm"
+arx[7]="_PANE.frm"
+arx[8]="_PARAM.frm"
+arx[9]="_PELATES.frm"
+arx[10]="_SKON_DO.frm"
+arx[11]="_SYN_DOS.frm"
+arx[12]="_SYNMAK9.frm"
+arx[13]="_SYNTAGes.bas"
+arx[14]="_SYNTAG.frm"
+arx[15]="_USERINP.frm"
+arx[16]="_WAIT.frm"
+arx[17]="_XHM.frm"
+arx[18]="_XHMEDIT.frm"
+
+set conf off
+set safety off
+set talk off
+
+use ml_res
+zap
+
+
+
+
+
+for k=1 to 18
+   use mlres
+   zap
+   x=arx[k]
+   append from &x sdf
+   use ml_res
+   appe from mlres for at("mL_Res",S)>0 .and.( at("'",S)=0 .or. at("'",S)>at("mL_Res",S) )
+next
+
+*copy to ml_res for at("mL_Res",S)>0 .and.( at("'",S)=0 .or. at("'",S)>at("mL_Res",S) )
+
+

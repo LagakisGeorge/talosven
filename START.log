@@ -1,0 +1,26 @@
+Line 168: Class MSCommLib.MSComm of control MSComm1 was not a loaded control class.
+Line 253: Class MSComDlg.CommonDialog of control CommonDialog1 was not a loaded control class.
+Line 171: The property name _Version in MSComm1 is invalid.
+Line 172: The property name _ExtentX in MSComm1 is invalid.
+Line 173: The property name _ExtentY in MSComm1 is invalid.
+Line 174: The property name _StockProps in MSComm1 is invalid.
+Line 175: The property name CDTimeout in MSComm1 is invalid.
+Line 176: The property name CommPort in MSComm1 is invalid.
+Line 177: The property name CTSTimeout in MSComm1 is invalid.
+Line 178: The property name DSRTimeout in MSComm1 is invalid.
+Line 179: The property name DTREnable in MSComm1 is invalid.
+Line 180: The property name Handshaking in MSComm1 is invalid.
+Line 181: The property name InBufferSize in MSComm1 is invalid.
+Line 182: The property name InputLen in MSComm1 is invalid.
+Line 183: The property name Interval in MSComm1 is invalid.
+Line 184: The property name NullDiscard in MSComm1 is invalid.
+Line 185: The property name OutBufferSize in MSComm1 is invalid.
+Line 186: The property name ParityReplace in MSComm1 is invalid.
+Line 187: The property name RThreshold in MSComm1 is invalid.
+Line 188: The property name RTSEnable in MSComm1 is invalid.
+Line 189: The property name Settings in MSComm1 is invalid.
+Line 190: The property name SThreshold in MSComm1 is invalid.
+Line 256: The property name _Version in CommonDialog1 is invalid.
+Line 257: The property name _ExtentX in CommonDialog1 is invalid.
+Line 258: The property name _ExtentY in CommonDialog1 is invalid.
+Line 259: The property name _StockProps in CommonDialog1 is invalid.

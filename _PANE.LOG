@@ -1,0 +1,13 @@
+Line 675: Class MSDBCtls.DBCombo of control DBCombo1 was not a loaded control class.
+Line 701: Class MSComDlg.CommonDialog of control CommonDialog1 was not a loaded control class.
+Line 676: The property name Bindings in DBCombo1 is invalid.
+Line 683: The property name _version in DBCombo1 is invalid.
+Line 684: The property name _extentx in DBCombo1 is invalid.
+Line 685: The property name _extenty in DBCombo1 is invalid.
+Line 686: The property name _stockprops in DBCombo1 is invalid.
+Line 689: The property name listfield in DBCombo1 is invalid.
+Line 690: The property name boundcolumn in DBCombo1 is invalid.
+Line 704: The property name _version in CommonDialog1 is invalid.
+Line 705: The property name _extentx in CommonDialog1 is invalid.
+Line 706: The property name _extenty in CommonDialog1 is invalid.
+Line 707: The property name _stockprops in CommonDialog1 is invalid.

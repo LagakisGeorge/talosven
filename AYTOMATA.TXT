@@ -1,0 +1,63 @@
+              If IsNull(JOBLIST.Recordset("apor")) Then
+                            PROSPAU2.Recordset("apor") = 0
+              Else
+                            PROSPAU2.Recordset("apor") = JOBLIST.Recordset("apor")
+              End If
+              PROSPAU2.Recordset("GL") = mGL
+              PROSPAU2.Recordset("ALATI") = Text3.text
+              PROSPAU2.Recordset.update
+             End If
+          End If
+       End If
+  Next
+  ookk = 1
+  mC = mC + 1
+  k = mC
+  
+  If m_aa = 1 Then
+              PROSPAU2.Recordset.AddNew
+  
+              PROSPAU2.Recordset("SEIRA") = mC
+              PROSPAU2.Recordset("STATUS") = 0
+              PROSPAU2.Recordset("AYJON") = Grid1.Row + 1
+              PROSPAU2.Recordset("KOD") = "000008"
+              PROSPAU2.Recordset("EK") = 0.1
+              PROSPAU2.Recordset("GL") = 0
+              PROSPAU2.Recordset("PERIGR") = "sshgshsgddsh"
+              
+              
+              '---------------- standard -----------------
+              PROSPAU2.Recordset("ENTOLH") = m_entolh
+              PROSPAU2.Recordset("SXESH_MPAN") = mJOBLIST.JOBLIST.Recordset("SXESH_MPAN")
+              If M_AA2 = 0 Then
+                 PROSPAU2.Recordset("AA_PROSPAU") = m_aa
+              Else
+                 PROSPAU2.Recordset("AA_PROSPAU") = Right$("00" + LTrim(str(M_AA2)), 2)
+              End If
+              PROSPAU2.Recordset("kod_pel") = mJOBLIST.JOBLIST.Recordset("kod_pel")
+              PROSPAU2.Recordset("hme_parad") = mJOBLIST.JOBLIST.Recordset("hme_parad")
+              PROSPAU2.Recordset("baros_pani") = mJOBLIST.JOBLIST.Recordset("baros_pani")
+              PROSPAU2.Recordset("UserW") = User_ID
+              PROSPAU2.Recordset("apoxrvsh") = mJOBLIST.JOBLIST.Recordset("apoxrvsh")
+              PROSPAU2.Recordset("hme") = Date
+              If IsNull(JOBLIST.Recordset("apor")) Then
+                            PROSPAU2.Recordset("apor") = 0
+              Else
+                            PROSPAU2.Recordset("apor") = JOBLIST.Recordset("apor")
+              End If
+
+              PROSPAU2.Recordset.update
+  End If
+  
+  
+  
+  
+  If update Then
+     If M_AA2 = 0 Then
+         m_aa = Right$("00" + LTrim(str(Val(m_aa) + 1)), 2)
+     End If
+     PROSXHM.Refresh
+  End If
+   show_on_grid
+   
+    

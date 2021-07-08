@@ -1,0 +1,25 @@
+Line 61: Class Crystal.CrystalReport of control CrystalReport1 was not a loaded control class.
+Line 64: The property name _extentx in CrystalReport1 is invalid.
+Line 65: The property name _extenty in CrystalReport1 is invalid.
+Line 66: The property name _stockprops in CrystalReport1 is invalid.
+Line 67: The property name reportfilename in CrystalReport1 is invalid.
+Line 68: The property name destination in CrystalReport1 is invalid.
+Line 69: The property name windowleft in CrystalReport1 is invalid.
+Line 70: The property name windowtop in CrystalReport1 is invalid.
+Line 71: The property name windowwidth in CrystalReport1 is invalid.
+Line 72: The property name windowheight in CrystalReport1 is invalid.
+Line 73: The property name windowtitle in CrystalReport1 is invalid.
+Line 74: The property name windowborderstyle in CrystalReport1 is invalid.
+Line 75: The property name windowcontrolbox in CrystalReport1 is invalid.
+Line 76: The property name windowmaxbutton in CrystalReport1 is invalid.
+Line 77: The property name windowminbutton in CrystalReport1 is invalid.
+Line 78: The property name copiestoprinter in CrystalReport1 is invalid.
+Line 79: The property name printfilename in CrystalReport1 is invalid.
+Line 80: The property name printfiletype in CrystalReport1 is invalid.
+Line 81: The property name selectionformula in CrystalReport1 is invalid.
+Line 82: The property name groupselectionformula in CrystalReport1 is invalid.
+Line 83: The property name connect in CrystalReport1 is invalid.
+Line 84: The property name username in CrystalReport1 is invalid.
+Line 85: The property name reportsource in CrystalReport1 is invalid.
+Line 86: The property name boundreportheading in CrystalReport1 is invalid.
+Line 87: The property name boundreportfooter in CrystalReport1 is invalid.

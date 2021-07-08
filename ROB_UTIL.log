@@ -1,0 +1,21 @@
+Line 358: Class MSCommLib.MSComm of control MSComm1 was not a loaded control class.
+Line 361: The property name _version in MSComm1 is invalid.
+Line 362: The property name _extentx in MSComm1 is invalid.
+Line 363: The property name _extenty in MSComm1 is invalid.
+Line 364: The property name _stockprops in MSComm1 is invalid.
+Line 365: The property name cdtimeout in MSComm1 is invalid.
+Line 366: The property name commport in MSComm1 is invalid.
+Line 367: The property name ctstimeout in MSComm1 is invalid.
+Line 368: The property name dsrtimeout in MSComm1 is invalid.
+Line 369: The property name dtrenable in MSComm1 is invalid.
+Line 370: The property name handshaking in MSComm1 is invalid.
+Line 371: The property name inbuffersize in MSComm1 is invalid.
+Line 372: The property name inputlen in MSComm1 is invalid.
+Line 373: The property name interval in MSComm1 is invalid.
+Line 374: The property name nulldiscard in MSComm1 is invalid.
+Line 375: The property name outbuffersize in MSComm1 is invalid.
+Line 376: The property name parityreplace in MSComm1 is invalid.
+Line 377: The property name rthreshold in MSComm1 is invalid.
+Line 378: The property name rtsenable in MSComm1 is invalid.
+Line 379: The property name settings in MSComm1 is invalid.
+Line 380: The property name sthreshold in MSComm1 is invalid.

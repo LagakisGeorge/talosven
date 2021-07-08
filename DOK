@@ -1,0 +1,192 @@
+‘η΅¨ © «ΰ¤ ¨®εΰ¤ R_2SYNTG.BAS ΅  r_2syntg.old
+****** R_2SYNTG.BAS
+Dim a
+#If Win32 Then
+   a = SendAT6400Block(768, cmd$)
+#Else
+   a = SendAT6400Block(768, cmd$, 0)
+#End If
+End Function
+
+****** r_2syntg.old
+Dim a
+
+    On Error Resume Next
+             Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\watch.mdb")
+             Set r = dbsJet.OpenRecordset("moves")
+             r.AddNew
+               r("movement") = left$(cmd$, 150)
+               r("datetime") = Now
+             r.Update
+             r.Close
+    
+
+******
+
+****** R_2SYNTG.BAS
+
+Function mL_Res(etik)
+****** r_2syntg.old
+
+
+
+#If Win32 Then
+   a = SendAT6400Block(768, cmd$)
+#Else
+   a = SendAT6400Block(768, cmd$, 0)
+#End If
+End Function
+
+
+Function mL_Res(etik)
+******
+
+****** R_2SYNTG.BAS
+If system_ready = 0 Then Exit Sub
+           '  Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\watch.mdb")
+           '  Set r = dbsJet.OpenRecordset("moves")
+           '  r.AddNew
+           '    r("movement") = left$(cmd$, 150)
+           '    r("datetime") = Now
+           '  r.Update
+           '  r.Close
+
+****** r_2syntg.old
+If system_ready = 0 Then Exit Sub
+
+******
+
+****** R_2SYNTG.BAS
+    
+
+****** r_2syntg.old
+    
+    
+#If Win32 Then
+    On Error GoTo create
+       r.Index = "aa"
+       r.Seek "=", Eidos, Number
+       If r.NoMatch Then
+         SYN_X = 0: SYN_Y = 0: syn_z = 0
+       Else
+          SYN_X = r("Συντεταγμένη_Χ_user")
+          SYN_Y = r("Συντεταγμένη_Υ_user")
+          syn_z = r("Συντεταγμένη_Ζ_user")
+       End If
+       
+    On Error GoTo 0
+#Else
+
+
+******
+
+****** R_2SYNTG.BAS
+Do Until r.EOF
+If r("ΑΑ_Item") = Eidos Then
+****** r_2syntg.old
+Do Until r.EOF
+
+If r("ΑΑ_Item") = Eidos Then
+******
+
+****** R_2SYNTG.BAS
+  
+ If SYN_X = 0 And SYN_Y = 0 And syn_z = 0 Then
+****** r_2syntg.old
+  
+  
+#End If
+    
+    
+    
+
+'Do Until r.EOF
+'If r("ΑΑ_Item") = Eidos Then
+' If r("Νο_Τεμαχιου") = Number Then
+'   SYN_X = r("Συντεταγμένη_Χ_user")
+'   SYN_Y = r("Συντεταγμένη_Υ_user")
+'   syn_z = r("Συντεταγμένη_Ζ_user")
+'   Exit Do
+'   End If
+' End If
+'  r.MoveNext
+' Loop
+  
+ If SYN_X = 0 And SYN_Y = 0 And syn_z = 0 Then
+******
+
+****** R_2SYNTG.BAS
+
+End Function
+Sub get_uesh(aritmos)
+ 
+    Set db = OpenDatabase("c:\talos\coord_tb.mdb")
+    Set r = db.OpenRecordset("Συντεταγμενες")
+       Do Until r.EOF
+           If r("ΑΑ_Item") = 1 Then
+           If r("Νο_Τεμαχιου") = aritmos Then
+                x0 = r("Συντεταγμένη_Χ_user")
+                y0 = r("Συντεταγμένη_Υ_user")
+                z0 = r("Συντεταγμένη_Ζ_user")
+                Exit Do
+            End If
+           End If
+           r.MoveNext
+       Loop
+    r.Close
+
+End Sub
+
+****** r_2syntg.old
+
+Exit Function
+create:
+'If r("ΑΑ_Item") = Eidos Then
+' If r("Νο_Τεμαχιου") = Number Then
+r.Close
+
+******
+
+****** R_2SYNTG.BAS
+****** r_2syntg.old
+     MyDB.Execute "CREATE  INDEX  aa ON   [Συντεταγμενες]([ΑΑ_Item],[Νο_Τεμαχιου]);"
+     
+     Set r = MyDB.OpenRecordset("Συντεταγμενες", dbOpenTable)
+     r.Index = "aa"
+     Resume Next
+     Return
+
+
+
+
+
+
+
+
+
+
+
+
+End Function
+Sub get_uesh(aritmos)
+ 
+    Set db = OpenDatabase("c:\talos\coord_tb.mdb")
+    Set r = db.OpenRecordset("Συντεταγμενες")
+       Do Until r.EOF
+           If r("ΑΑ_Item") = 1 Then
+           If r("Νο_Τεμαχιου") = aritmos Then
+                x0 = r("Συντεταγμένη_Χ_user")
+                y0 = r("Συντεταγμένη_Υ_user")
+                z0 = r("Συντεταγμένη_Ζ_user")
+                Exit Do
+            End If
+           End If
+           r.MoveNext
+       Loop
+    r.Close
+
+End Sub
+
+******
+
+

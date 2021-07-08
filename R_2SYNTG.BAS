@@ -1,0 +1,1827 @@
+Attribute VB_Name = "Module1"
+'VB-ASM DLL declarations
+Type MODEl
+AIM As Integer
+End Type
+
+Type VBREGS
+    AX As Integer
+    BX As Integer
+    CX As Integer
+    DX As Integer
+    BP As Integer
+    SI As Integer
+    DI As Integer
+    Flags As Integer
+    DS As Integer
+    ES As Integer
+End Type
+
+Global Menu
+Global m_entolh
+
+Global Const ho = 372
+Global Const m0 = 600
+
+Global Lim1, Lim2 'σοφτ=17,18   /hard limits =15,16
+
+Global X_arxh, Y_arxh, Z_arxh, W_arxh
+Global Xt, Yt, Zt, Wt
+
+
+Global User_ID
+Global x0, y0, z0, w0
+Global m_Cmd$
+Global Const ERGOSTASIO = "iris"
+
+     '***********************  I R I S *****************************
+  Global Const Ar_Mpoykal = 300
+  Global Ar_1_mpoykal
+  Global Ar_tel_mpoykal
+  
+ ' Global Const Gripper_Input = 13
+  Global Const Ar_Pothr = 30
+  Global Const K_AR = 0   '7=iris  ' farbetex=4
+  Global Const bit_ok = 14  ' farbetex=24
+  Global Const Open_Valve = ""             '   farb = "!out.3-0:"
+  Global Const Close_Valve = ""             ' farb="!out.3-1:"
+  Global Const Porta_Ar = 17               '  farb="2"
+  Global Const Porta_Dex = "18"     '   farb="1"
+  Global Const Porta_Ner = "4"              ' farb="4"
+  
+  
+  Global Const grip_o = 11    '       IRIS= 5       ' farb=11
+  Global Const grip_c = 10   'IRIS= 4     'farb=12
+  Global Const Serial_Zyg = 1
+  Global Const coordin = 1    ' Αν ειναι 0 οι συντεταγμένες ειναι στανταρ ,αν ειναι 1 τις δινει ο χρηστης
+
+
+'Global Pause_input
+'Global Air_Input
+'Global Door_input
+'Global Gripper_Input
+
+
+
+
+
+     '*****************************************************************
+
+     '*********************** FARBETEX  *****************************
+'    Global Const Ar_Mpoykal = 260
+'    Global Const K_AR = 4     ' farbetex=4
+'    Global Const bit_ok = 24   ' farbetex=24
+'    Global Const Open_Valve = "!out.3-0:"
+'    Global Const Close_Valve = "!out.3-1:"
+'    Global Const Porta_Ar = "2"
+'    Global Const Porta_Dex = "1"
+'    Global Const Porta_Ner = "4"
+'    Global Const grip_o = 11
+'    Global Const grip_c = 12
+'    Global Const Serial_Zyg = 2
+'    Global Const coordin = 1    ' Αν ειναι 0 οι συντεταγμένες ειναι στανταρ ,αν ειναι 1 τις δινει ο χρηστης
+     '*****************************************************************
+
+'Global xhm_c
+'Global xhmedit_c
+'Global joblist_c
+'Global synmaker_c
+'Global wait_c
+'Global syntages_c
+'Global fere_c
+'Global feresk_c
+'Global pane_c
+'Global zygpani_c
+Global dokimastikh_syntagh
+Global allazo_xromata
+Global allazo_fonts
+Global prozygismena
+Global Default_baros_panioy
+Global AXRHSIMOPOIHTES_ORES
+Global xymeno As Single
+Global baros As Single
+Global xronos
+Global valve_closed
+Global gINDEX
+Global kod6400
+Global kodTimer
+Global EPIU
+Global Flag_Show
+Global Flag_Kefal
+Global porta As String
+Global a As Single
+Global zyg
+
+Global flag_paint
+
+Global Exo_entolh
+Global cmd2$
+Global var65_1kef
+Global var66_2kef
+Global var67_3kef
+Global var68_4kef
+Global var(1 To 99)
+
+Global AA_SYNTAG
+Global Const VBFLAGS_CARRY = &H1
+Global Const VBFLAGS_PARITY = &H4
+Global Const VBFLAGS_AUX = &H10
+Global Const VBFLAGS_ZERO = &H40
+Global Const VBFLAGS_SIGN = &H80
+
+'vbGetDriveType return values
+Global Const VBDRIVE_REMOVABLE = &H1002
+Global Const VBDRIVE_FIXED = &H1003
+Global Const VBDRIVE_REMOTE = &H1004
+Global Const VBDRIVE_CDROM = &H1005
+Global Const VBDRIVE_FLOPPY = &H1006
+Global Const VBDRIVE_RAMDISK = &H1007
+Global Const VBDRIVE_UNKNOWN = &H1010
+Global Const VBDRIVE_INVALID = &H0
+Global flag As Integer
+Global gram As Single
+'Public OldColor(1 To AR_MPOYKAL) As Single   ' Public array variable.
+'Public kodikos(1 To AR_MPOYKAL)     ' Public array variable.
+'Public Perigrafh(1 To AR_MPOYKAL)   ' Public array variable.
+'Public Lhjh(1 To AR_MPOYKAL)   ' Public array variable.
+'Public Ypoloipo(1 To AR_MPOYKAL)   ' Public array variable.
+'Public mTop(1 To AR_MPOYKAL)   ' Public array variable.
+'Public mLeft(1 To AR_MPOYKAL)   ' Public array variable.
+'Public pTop(1 To 20)   ' Public array variable.
+'Public pLeft(1 To 20)   ' Public array variable.
+'Public XHM(1 To 9)
+'Public GR(1 To 9)
+'Public PER(1 To 9)
+'Public ADDR(1 To 9)
+'Public Antistoix(1 To 9)
+
+'Public katofli(1 To AR_MPOYKAL)
+
+'Declare Function SendAT6400Block Lib "win6400.dll" Alias "sendat6400block" (ByVal address%, ByVal cmd$, ByVal irqnum%) As Integer
+'Declare Function RecvAT6400Block Lib "win6400.dll" Alias "recvat6400block" (ByVal address%, ByVal response$, ByVal irqnum%) As Integer
+'Declarations for the AT6400 Dynamic Link Library from file WIN6400.DLL
+'----------------------------------------------------------------------------
+#If Win32 Then
+'32 BIT
+Declare Function GetTickCount Lib "kernel32" () As Long
+Declare Function PEPrintReport Lib "CRPE.DLL" (ByVal reportFilePath As String, ByVal toPrinter As Integer, ByVal toWindow As Integer, ByVal title As String, ByVal left As Integer, ByVal top As Integer, ByVal width As Integer, ByVal height As Integer, ByVal style As Long, ByVal parentWindow As Integer) As Integer
+Declare Function GetCurrentTime Lib "kernel32" Alias "GetTickCount" () As Long
+Declare Function SendAT6400Block% Lib "c:\talos\wn956000.dll" (ByVal ADDRESS%, ByVal cmd$)
+Declare Function RecvAT6400Block% Lib "c:\talos\wn956000.dll" (ByVal ADDRESS%, ByVal resp$)
+Declare Function OSLoad% Lib "c:\talos\wn956000.dll" Alias "osload" (ByVal ADDRESS%, ByVal rsvdsrt$, ByVal irqnum%)
+Declare Function IsOSLoaded% Lib "c:\talos\wn956000.dll" (ByVal ADDRESS%)
+Declare Function Request_Status% Lib "c:\talos\wn956000.dll" Alias "request_status" (ByVal ADDRESS%)
+Declare Sub Set_Pointer Lib "c:\talos\wn956000.dll" Alias "set_pointer" (ByVal ADDRESS%, ByVal status_offset%)
+Declare Sub Read_Status Lib "c:\talos\wn956000.dll" Alias "read_status" (ByVal ADDRESS%, status_high%, status_low%, status&)
+Declare Function IsAT6400Ready% Lib "c:\talos\wn956000.dll" (ByVal ADDRESS%)
+Declare Sub SetTimeout Lib "c:\talos\wn956000.dll" (ByVal timeout&)
+Declare Sub Delay Lib "c:\talos\wn956000.dll" (ByVal timedelay&)
+Declare Function SendAT6400File% Lib "c:\talos\wn956000.dll" (ByVal handle%, ByVal ADDRESS%, ByVal irqnum%, ByVal filename$, ByVal options$)
+Declare Function SetDevice Lib "c:\talos\wn956000.dll" (ByVal devnum&, ByVal ADDRESS%) As Boolean
+Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+
+Public Declare Function GetWindowsDirectory Lib "kernel32" Alias "GetWindowsDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Long) As Long
+
+#Else
+
+
+
+Declare Function SendAT6400Block Lib "win6400.dll" (ByVal ADDRESS%, ByVal cmd$, ByVal irqnum%) As Integer
+Declare Function RecvAT6400Block Lib "win6400.dll" (ByVal ADDRESS%, ByVal response$, ByVal irqnum%) As Integer
+Declare Function OSLoad Lib "win6400.dll" (ByVal ADDRESS%, ByVal rsvdstr$, ByVal rsvd%) As Integer
+Declare Function IsOSLoaded Lib "c:\talos\win6400.dll" (ByVal ADDRESS%) As Integer
+Declare Function SetNTParam Lib "win6400.dll" (ByVal ADDRESS%, ByVal irqnum%) As Integer
+Declare Function Request_Status Lib "win6400.dll" (ByVal ADDRESS%) As Integer
+Declare Sub Set_Pointer Lib "win6400.dll" (ByVal ADDRESS%, ByVal status_offset%)
+Declare Sub Read_Status Lib "win6400.dll" (ByVal ADDRESS%, status_high%, status_low%, status&)
+
+Declare Function PEPrintReport Lib "CRPE.DLL" (ByVal reportFilePath As String, ByVal toPrinter As Integer, ByVal toWindow As Integer, ByVal title As String, ByVal left As Integer, ByVal top As Integer, ByVal width As Integer, ByVal height As Integer, ByVal style As Long, ByVal parentWindow As Integer) As Integer
+
+Declare Function GetWinFlags Lib "kernel" () As Long
+Declare Function GetCurrentTime Lib "user" () As Long
+
+Declare Function vbGetCtrlHwnd Lib "VBASM.DLL" (Ctrl As Any) As Integer
+Declare Function vbGetCtrlModel Lib "VBASM.DLL" (Ctrl As Any) As Long
+Declare Function vbGetCtrlName Lib "VBASM.DLL" (Ctrl As Any) As String
+Declare Sub vbGetData Lib "C:\WINDOWS\SYSTEM\VBASM.DLL" (ByVal Pointer As Long, VARIABLE As Any, ByVal nCount As Integer)
+Declare Function vbGetDriveType Lib "VBASM.DLL" (ByVal drive As String) As Integer
+Declare Function vbGetLongPtr Lib "VBASM.DLL" (nVariable As Any) As Long
+Declare Function vbHiByte Lib "VBASM.DLL" (ByVal nValue As Integer) As Integer
+Declare Function vbHiWord Lib "VBASM.DLL" (ByVal nValue As Long) As Integer
+Declare Function vbInp Lib "C:\VIS_UTIL\VBASM.DLL" (ByVal nPort As Integer) As Integer
+Declare Function vbInpw Lib "VBASM.DLL" (ByVal nPort As Integer) As Integer
+Declare Sub vbInterrupt Lib "VBASM.DLL" (ByVal IntNum As Integer, InRegs As VBREGS, OutRegs As VBREGS)
+Declare Sub vbInterruptX Lib "VBASM.DLL" (ByVal IntNum As Integer, InRegs As VBREGS, OutRegs As VBREGS)
+Declare Function vbLoByte Lib "VBASM.DLL" (ByVal nValue As Integer) As Integer
+Declare Function vbLoWord Lib "VBASM.DLL" (ByVal nValue As Long) As Integer
+Declare Function vbMakeLong Lib "VBASM.DLL" (ByVal nLoWord As Integer, ByVal nHiWord As Integer) As Long
+Declare Function vbMakeWord Lib "VBASM.DLL" (ByVal nLoByte As Integer, ByVal nHiByte As Integer) As Integer
+Declare Sub vbOut Lib "C:\VIS_UTIL\VBASM.DLL" (ByVal nPort As Integer, ByVal nData As Integer)
+Declare Sub vbOutW Lib "C:\VIS_UTIL\VBASM.DLL" (ByVal nPort As Integer, ByVal nData As Integer)
+Declare Function vbPeek Lib "VBASM.DLL" (ByVal nSegment As Integer, ByVal nOffset As Integer) As Integer
+Declare Function vbPeekw Lib "VBASM.DLL" (ByVal nSegment As Integer, ByVal nOffset As Integer) As Integer
+Declare Sub vbPoke Lib "VBASM.DLL" (ByVal nSegment As Integer, ByVal nOffset As Integer, ByVal nValue As Integer)
+Declare Sub vbPokew Lib "VBASM.DLL" (ByVal nSegment As Integer, ByVal nOffset As Integer, ByVal nValue As Integer)
+Declare Function vbRealModeIntX Lib "VBASM.DLL" (ByVal IntNum As Integer, InRegs As VBREGS, OutRegs As VBREGS) As Integer
+Declare Function vbRecreateCtrl Lib "VBASM.DLL" (Ctrl As Any) As Integer
+Declare Function vbSAdd Lib "VBASM.DLL" (VARIABLE As String) As Integer
+Declare Sub vbSetData Lib "VBASM.DLL" (ByVal Pointer As Long, VARIABLE As Any, ByVal nCount As Integer)
+Declare Function vbShiftLeft Lib "VBASM.DLL" (ByVal nValue As Integer, ByVal nBits As Integer) As Integer
+Declare Function vbShiftRight Lib "VBASM.DLL" (ByVal nValue As Integer, ByVal nBits As Integer) As Integer
+Declare Function vbSSeg Lib "VBASM.DLL" (VARIABLE As String) As Integer
+Declare Function vbVarPtr Lib "VBASM.DLL" (VARIABLE As Any) As Integer
+Declare Function vbVarSeg Lib "VBASM.DLL" (VARIABLE As Any) As Integer
+ 
+Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+
+#End If
+
+
+
+'To call the Sleep function, you could use code like the following:
+
+'Call Sleep(1000)
+'----------------------------------------------------------------------------
+' Global Constants
+'----------------------------------------------------------------------------
+Global Const BASEP = 768            'AT6400 Base Address
+Global Const MIN_BASEP = &H100      'Minimum address setting
+Global Const Max_BASEP = &H3F8      'Maximum address setting
+Global Const ENTER = 13
+Global Const LIGHTBLUE = &HFFC0C0
+Global Const WHITE = &HFFFFFF
+Global Const LIMIT_OPEN = 1
+Global Const LIMIT_CLOSED = 0
+Global Const HOME_INACTIVE = 0
+Global Const HOME_ACTIVE = 1
+
+Global Const WF_WINNT = &H4000
+
+'----------------------------------------------------------------------------
+' AT6400 Fast Status Area Constants
+' Used by WIN6400.DLL SUB ---> set_pointer
+'----------------------------------------------------------------------------
+Global Const AXIS1_MOTOR = &H0
+Global Const AXIS2_MOTOR = &H2
+Global Const AXIS3_MOTOR = &H4
+Global Const AXIS4_MOTOR = &H6
+Global Const AXIS1_ENCODER = &H8
+Global Const AXIS2_ENCODER = &HA
+Global Const AXIS3_ENCODER = &HC
+Global Const AXIS4_ENCODER = &HE
+Global Const AXIS1_VELOCITY = &H10
+Global Const AXIS2_VELOCITY = &H12
+Global Const AXIS3_VELOCITY = &H14
+Global Const AXIS4_VELOCITY = &H16
+Global Const AXIS1_STATUS = &H18
+Global Const AXIS2_STATUS = &H1A
+Global Const AXIS3_STATUS = &H1C
+Global Const AXIS4_STATUS = &H1E
+Global Const INPUT_STATUS = &H20
+Global Const OUTPUT_STATUS = &H22
+Global Const LIMIT_STATUS = &H24
+Global Const INO_STATUS = &H25
+Global Const ANALOG_STATUS = &H26
+Global Const INT_STATUS = &H28
+Global Const SYSTEM_STATUS = &H2A
+Global Const USER_STATUS = &H2C
+Global Const TFRM_STATUS = &H2D
+Global Const TIMER_STATUS = &H2E
+
+'----------------------------------------------------------------------------
+' AT6400 Fast Status Response Masks
+'----------------------------------------------------------------------------
+Global Const CW1_MASK = &H1
+Global Const CCW1_MASK = &H2
+Global Const CW2_MASK = &H4
+Global Const CCW2_MASK = &H8
+Global Const CW3_MASK = &H10
+Global Const CCW3_MASK = &H20
+Global Const CW4_MASK = &H40
+Global Const CCW4_MASK = &H80
+Global Const HOME1_MASK = &H100
+Global Const HOME2_MASK = &H200
+Global Const HOME3_MASK = &H400
+Global Const HOME4_MASK = &H800
+Global Const PCUT_MASK = &H20
+Global Const SYSTEM_READY_MASK = &H1
+
+
+'----------------- giannhs
+Global system_ready As Integer
+Global Pause As Integer
+Global Air_Input As Integer
+Global Gripper As Integer  '1-->ανοικτός , 0--> κλειστός
+Global Gripper_Input As Integer
+Global Door_input As Integer
+Global Pause_input As Integer
+Global Const Green = &HFF00&
+Global Const Red = &HFF&
+Global Const Grey = &H808080
+Global Const orange = &HFFFF&
+Global Balance_Asking As String
+Global Balance_Settings As String
+Global Balance_2_Digits As String
+Global Balance_3_Digits As String
+Global Balance_Clear As String
+Global Balance_Zero As String
+Global Gripper_On As String
+Global Gripper_Off As String
+Global Ready_Bit As String
+Global mixer_on As String
+Global mixer_off As String
+Global skon_motor_on As String
+Global skon_motor_off As String
+Global Cold_Water_On As String
+Global Cold_Water_Off As String
+Global Hot_Water_On As String
+Global Hot_Water_Off As String
+Global Alarm1_on As String
+Global Alarm1_off As String
+Global Balance_Port As Integer
+Global valve_mixed_on As String
+Global valve_mixed_off As String
+Global Central_Water_On As String
+Global Central_Water_Off As String
+Global valve_1_on As String
+Global valve_1_off As String
+Global valve_2_on As String
+Global valve_2_off As String
+Global Motor_Input As String
+Global Motor_Output_on As String
+Global Motor_Output_off As String
+Global Motor_Preheating As Long
+Global Motor_Preheated As Integer
+Global Motor_Output_Number As Integer
+Global Water_Bypass As String
+Global Balance_Type As String
+Global Balance_Mode As String
+Global Beaker_Bottle As String ' Αν είναι <> ""  επιτρέπει μεταφορά ποτηριών με μπουκάλια στις κεφαλές
+Global Program1 As String
+Global Program2 As String
+Global Program3 As String
+Global Program4 As String '----------------- giannhs
+
+Function SendATBlock(n, cmd$, DUM)
+
+Dim a, dbsJet, r
+#If Win32 Then
+   a = SendAT6400Block(768, cmd$)
+#Else
+   a = SendAT6400Block(768, cmd$, 0)
+#End If
+
+             Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\watch.mdb")
+             Set r = dbsJet.OpenRecordset("moves")
+             r.AddNew
+               r("movement") = left$(cmd$, 150)
+               r("datetime") = Now
+             r.Update
+             r.Close
+
+End Function
+
+
+Function mL_Res(etik)
+' αριθμός + Label
+Dim db As Database, r As Recordset, cret As String
+ On Error Resume Next
+  Set db = OpenDatabase("c:\talos\coord_tb.mdb")
+  Set r = db.OpenRecordset("Language", dbOpenTable)
+  mL_Res = "    "
+  r.Index = "PrimaryKey"
+  r.Seek "=", etik + 1000
+  If Not r.NoMatch And (Not IsNull(r("LABEL"))) Then mL_Res = LTrim(Str(1000 + etik)) + "." + r("label")
+  r.Close
+End Function
+
+Public Function IsLoaded(FormName)
+    Dim I
+    IsLoaded = False
+    For I = 0 To Forms.Count - 1
+        If Forms(I).Name = FormName Then
+            IsLoaded = True
+            Exit Function
+        End If
+    Next
+End Function
+Sub robsend_3w(cmd$)
+Dim a
+
+'15-11
+arxikox = axe(1)
+arxikoY = axe(2)
+arxikoZ = axe(3)
+arxikow = axe(4)
+onlyZ = 0
+If arxikox + arxikoY + arxikow = x0 + y0 + w0 Then 'kineitai mono z
+    If Abs(arxikoZ - z0) > 65000 Then  'oxi droubanisma
+        onlyZ = 1
+    End If
+End If
+'15-11
+
+
+t1 = GetCurrentTime()
+
+If system_ready = 0 Then Exit Sub
+       m_Cmd$ = cmd$
+       temp% = SendATBlock(768, cmd$, 0)
+       MilSec 500
+  
+  
+  Do While Bit_Axona(1, 1) + Bit_Axona(2, 1) + Bit_Axona(3, 1) > 0
+       DoEvents
+  Loop
+  
+  Do While True
+     
+     If Abs(axe(1) - x0) < 1 And Abs(axe(2) - y0) < 1 And Abs(axe(3) - z0) < 1 Then
+          Exit Do
+     End If
+       
+             '15-11  αυτοματο HOME
+       If GetCurrentTime() - t1 > 15000 And onlyZ = 1 Then
+       '   stam = 1
+       '   mlim1 = Lim1
+       '  If Lim1 = 15 Then
+       '      Lim1 = 17
+       '   Else
+       '      RobSend ("!lh 3,3,3,3:")
+       '      RobSend ("!ls 0,0,0,0:")
+       '   End If
+       '   temp% = SendAT6400Block(768, "!hom,,0:", 0)
+       '   MilSec 5000
+          'perimene  mexri na stamathsei na kineitai kai paei sto 0
+       '   Do While Abs(axe(3) - 0) < 1 And Bit_Axona(3, 1) > 0
+       '      DoEvents
+       '   Loop
+       '       MilSec 1000
+       '       If mlim1 = 17 Then
+       '           RobSend ("!lh 0,0,0,0:")
+       '           RobSend ("!ls 3,3,3,3:")
+       '       Else
+       '           Lim1 = 15
+       '       End If
+       '       temp% = SendAT6400Block(768, "!d,," + Str(z0) + ":", 0)
+       '       MilSec 500
+       '       temp% = SendAT6400Block(768, cmd$, 0)
+       '
+       '   t1 = GetCurrentTime()
+
+       End If
+       '15-11
+
+             '15-11  b
+          If GetCurrentTime() - t1 > 10000 And onlyZ = 0 And Abs(axe(3) - z0) < 1 Then
+         ' stam = 1
+         ' mlim1 = Lim1
+         ' If Lim1 = 15 Then
+         '    Lim1 = 17
+         ' Else
+         '    RobSend ("!lh 3,3,3,3:")
+         '    RobSend ("!ls 0,0,0,0:")
+         ' End If
+          
+          
+         ' temp% = SendAT6400Block(768, "!hom,0:", 0)
+         ' MilSec 5000
+          'perimene  mexri na stamathsei na kineitai kai paei sto 0
+         ' Do While Abs(axe(2) - 0) < 1 And Bit_Axona(2, 1) > 0
+         '    DoEvents
+         ' Loop
+              
+         ' temp% = SendAT6400Block(768, "!hom1:", 0)
+         ' MilSec 5000
+          'perimene  mexri na stamathsei na kineitai kai paei sto 0
+         ' Do While Abs(axe(1) - 0) < 1 And Bit_Axona(1, 1) > 0
+         '    DoEvents
+         ' Loop
+              
+              
+              
+         '     MilSec 1000
+         '     If mlim1 = 17 Then
+         '         RobSend ("!lh 0,0,0,0:")
+         '         RobSend ("!ls 3,3,3,3:")
+         '     Else
+         '         Lim1 = 15
+         '     End If
+         '     temp% = SendAT6400Block(768, "!d" + Str(x0) + "," + Str(y0) + ":", 0)
+         '     MilSec 500
+         '     temp% = SendAT6400Block(768, cmd$, 0)
+          't1 = GetCurrentTime()
+
+       End If
+       '15-11
+     
+     
+     
+     DoEvents
+  Loop
+  'GoTo 3333
+   a = 1
+End Sub
+
+Function zyg_decimals(asw)
+'asw = zygisi4(0)
+    poin = InStr(asw, ".")
+    For I = 1 To 20
+       If IsNumeric(Mid(asw, poin + I, 1)) Then dec = dec + 1 Else Exit For
+     Next I
+ zyg_decimals = dec
+ 
+Exit Function
+End Function
+Public Function wait_to_understand(cmd$)
+Dim Runner, temp%
+Dim dbsJet As Database
+Dim r As Recordset, MHome
+'   Dim dbsJet As Database
+
+
+'καταγραφη εντολης στο αρχείο Commun
+Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\watch.mdb")
+             Set r = dbsJet.OpenRecordset("commun")
+             r.Edit
+               r("cmd") = left$(cmd$, 150)
+               r("diabasthke") = 0
+               r("ektelesthke") = 0
+           
+           
+           r.Update
+           r.Close
+             
+          m_Cmd$ = cmd$
+          
+          If system_ready = 0 Then Exit Function
+
+Do While True
+'διαβάζω την  εντολη cmd$ από το αρχείο Commun
+        Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\watch.mdb")
+        Set r = dbsJet.OpenRecordset("commun")
+         If r("diabasthke") = 1 Then
+            r.Close
+            Exit Do
+         End If
+         r.Close
+         MilSec 100
+Loop
+End Function
+Public Function new_Wait_Robot(DUM As Integer) As Integer
+  Dim Begin$, Pause
+Dim dbsJet As Database
+Dim r As Recordset, MHome
+If system_ready = 0 Then Exit Function
+
+Do While True
+'διαβάζω την  εντολη cmd$ από το αρχείο Commun
+        Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\watch.mdb")
+        Set r = dbsJet.OpenRecordset("commun")
+         If r("ektelesthke") = 1 Then
+            r.Close
+            Exit Do
+         End If
+         r.Close
+         MilSec 100
+Loop
+  new_Wait_Robot = 1
+End Function
+Public Function FindInput(InputBit As Integer) As Integer
+ If system_ready = 0 Then FindInput = 0: Exit Function
+    result% = Request_Status(768)
+    Set_Pointer 768, INPUT_STATUS
+    Read_Status 768, status_high%, status_low%, status&
+     If (status_low% And 2 ^ (InputBit - 1)) = 0 Then
+          FindInput = 0
+      Else
+          FindInput = 1
+     End If
+End Function
+Public Function FindOutput(Bit_Num)
+    If system_ready = 0 Then
+       FindOutput = 1
+       Exit Function
+    End If
+result% = Request_Status(768)
+  Set_Pointer 768, OUTPUT_STATUS
+    Read_Status 768, status_high%, status_low%, status&
+     If (status& And 2 ^ (Bit_Num - 1)) = 0 Then
+           FindOutput = 0
+     Else
+           FindOutput = 1
+     End If
+End Function
+
+Function find_uesh(cmd$) As String
+Dim MyPos, Kod, kod2 As Long
+   ' A textual comparison starting at position 4. Returns 6.
+  
+    MyPos = InStr(1, cmd$, "=")
+     Kod = Val(Mid$(cmd$, MyPos + 1, 10))
+          If Kod > 1000 And Kod < 1399 Then ' μπουκάλι σε κεφαλή
+             find_uesh = cmd$ + find_Coordin(1, Kod - 1000, 1)
+             
+          ElseIf Kod > 1500 And Kod < 1899 Then ' μπουκάλι σε κεφαλή
+             find_uesh = cmd$ + find_Coordin(1, Kod - 1500, 1)
+   
+          ElseIf Kod > 2000 And Kod < 2999 Then    ' μπουκάλι  από κεφαλή σε θέση
+             find_uesh = cmd$ + find_Coordin(1, Kod - 2000, 1)
+          ElseIf Kod > 3000 And Kod < 3999 Then ' φερε ποτήρι σε ζυγαριά
+             find_uesh = cmd$ + find_Coordin(2, Kod - 3000, 1)
+          ElseIf Kod > 4000 And Kod < 4999 Then ' φερε ποτήρι απο ζυγαριά στην θέση του
+             find_uesh = cmd$ + find_Coordin(2, Kod - 4000, 1)
+          
+          ElseIf Kod > 6000 And Kod < 12000 Then ''Μεταφορά μπουκαλιων στο χειριστή
+             find_uesh = cmd$ + find_Coordin(1, Kod - 6000, 1) ' μπουκαλι
+              
+              MyPos2 = InStr(MyPos + 1, cmd$, "=")
+              kod2 = Val(Mid$(cmd$, MyPos2 + 1, 10))
+              find_uesh = find_uesh + find_Coordin(2, kod2, 1) '  pothri
+          
+          ElseIf Kod > 12000 And Kod < 18000 Then   '  Επαναφορά μπουκαλιων στη θέση τους  από χειριστη
+             find_uesh = cmd$ + find_Coordin(1, Kod - 12000, 1)
+          
+              MyPos2 = InStr(MyPos + 1, cmd$, "=")
+              kod2 = Val(Mid$(cmd$, MyPos2 + 1, 10))
+              find_uesh = find_uesh + find_Coordin(2, kod2, 1) '  pothri
+          ElseIf Kod > 19000 And Kod < 19030 Then    '
+             find_uesh = cmd$ + find_Coordin(2, Kod - 19000, 1)
+          
+          ElseIf Kod > 100000 And Kod < 100300 Then    '
+               ' μπουκάλι κεφαλής ( που θα φύγει απο κεφαλή )
+                find_uesh = cmd$ + find_Coordin(1, Kod - 100000, 1) ' μπουκάλι - μπουκάλι
+                 
+                ' μπουκάλι που θα ρθεί στην κεφαλή
+              MyPos2 = InStr(MyPos + 1, cmd$, "=")
+              kod2 = Val(Mid$(cmd$, MyPos2 + 1, 10))
+              find_uesh = find_uesh + find_Coordin(1, kod2, 2) '  pothri
+         ElseIf Kod > 200 And Kod <= 230 Then
+             find_uesh = cmd$ + find_Coordin(2, Kod - 200, 1)
+          
+          ElseIf Kod < 100 Then
+              find_uesh = cmd$
+   End If
+
+End Function
+
+Sub Elegxo_Katastash()
+        ' ελεγχος αν πατήθηκε το CutOff
+        If isCutOff(0) = 1 Then
+                     MilSec 500
+                     If isCutOff(0) = 1 Then
+                         MilSec 500
+                         If isCutOff(0) = 1 Then
+                             Stamathma_Talos "Cutoff"
+                             '  "Διακοπή λειτουργίας προγράμματος λόγω ενεργοποίησης Αισθητήρα Πρόσκρουσης (Crush Sensor) ή Emergency Stop"
+                             MsgBox mL_Res(612) + Chr$(13) + mL_Res(613), , "Talos"  '  "Διακοπή λειτουργίας προγράμματος λόγω ενεργοποίησης Αισθητήρα Πρόσκρουσης (Crush Sensor) ή Emergency Stop"
+                             End
+                         End If
+                     End If
+        End If
+        
+          If is_pause = 1 Then
+              'MsgBox "Διακοπή λειτουργίας λόγω ενεργοποίησης διακόπτη PAUSE"
+          End If
+          
+          'If PTOSH_PIESHS = 1 Then
+           '  cmd$ = "!" + Central_Water_Off + ":" + "!" + Cold_Water_Off + ":" + "!" + Hot_Water_Off + ":" + "!" + valve_1_off + ":" + "!" + valve_2_off + ":"
+            ' RobSend (cmd$)
+          '   Stamathma_Talos "Διακοπή λειτουργίας λόγω ΠΤΩΣΗΣ ΠΙΕΣΗΣ."
+           '  End
+            '   MsgBox "Διακοπή λειτουργίας λόγω ΠΤΩΣΗΣ ΠΙΕΣΗΣ."
+         ' End If
+        
+If Lim1 < 17 And Lim2 < 17 Then ' αν δουλεύω hard limits
+   'ελεγχος τερματικών
+    result% = Request_Status(768)
+    Set_Pointer 768, LIMIT_STATUS
+    Read_Status 768, status_high%, status_low%, status&
+        
+    For k = 1 To 4
+        If (status_high% And 2 ^ (2 * k - 2)) = 0 Then
+            Stamathma_Talos "Terminal from axe  " + Str(k)
+            MsgBox "Limit switch from axe  " + Str(k)
+            End
+        End If
+        If (status_high% And 2 ^ (2 * k - 1)) = 0 Then
+            Stamathma_Talos "Terminal from axe  " + Str(k)
+            MsgBox "Limit switch from axe " + Str(k)
+            End
+        End If
+    Next
+End If
+        
+        
+        
+         ' ΕΛΕΓΧΟΣ ΚΙΝΗΤΗΡΩΝ
+        If error(13, 0) = 1 Or error(14, 0) = 1 Then
+                    Stamathma_Talos "Limit switch from axe  13-14"
+                    MsgBox mL_Res(614), , "Talos"     ' "Διακοπή λειτουργίας προγράμματος λόγω ενεργοποίησης τερματικού"
+                End
+        End If
+        
+        ' ΕΛΕΓΧΟΣ ΚΙΝΗΤΗΡΩΝ
+        If error(Lim1, 0) = 1 Or error(Lim2, 0) = 1 Then
+                Stamathma_Talos "Terminal from axe  15-16"
+                '    "Διακοπή λειτουργίας προγράμματος λόγω ενεργοποίησης τερματικού"
+                   MsgBox mL_Res(615), , "Talos"
+                End
+                '
+        End If
+        
+        
+        
+        
+           ' ΕΛΕΓΧΟΣ encoder
+'     If K_AR = 7 Then
+        If error(12, 0) = 1 Then
+                Stamathma_Talos " encoder is activated "
+                '  "Διακοπή λειτουργίας  λόγω ενεργοποίησης encoder "
+                    MsgBox mL_Res(616), , "Talos" ' "Interrupt of execution bacause one encoder is activated " '
+                End
+         End If
+'    End If
+    
+    
+   ' Do While Is_Porta() = "α"
+   '    cmd$ = "!" + Central_Water_Off + ":" + "!" + Cold_Water_Off + ":" + "!" + Hot_Water_Off + ":" + "!" + valve_1_off + ":" + "!" + valve_2_off + ":"
+   '     RobSend (cmd$)
+       
+   
+   '      MsgBox "Κλείστε την πόρτα αμέσως για να συνεχιστεί η διαδικασία."
+   '  Loop
+End Sub
+Public Function LoadLabel(Number As Long) As String
+On Error GoTo er_ck
+Dim db As Database, r As Recordset, cret As String
+  Set db = OpenDatabase("c:\talos\coord_tb.mdb")
+  Set r = db.OpenRecordset("Labels", dbOpenDynaset)
+    cret = "[Id_Label]=" & Number
+    r.FindFirst cret
+   LoadLabel = r("Label")
+    If r.NoMatch Then LoadLabel = "Error : Label " + Str(Number) + "  missing"
+    r.Close
+Exit Function
+er_ck:
+LoadLabel = "Error Label :" + Str(Number) + "  Missing"
+End Function
+Public Sub PreHeating()
+
+If Len(Motor_Input) > 0 And FindInput(Val(Motor_Input)) = 0 Then
+  If Motor_Preheating > 0 Then
+       Msg = LoadLabel(465) + Chr$(13) + LoadLabel(466) + Chr$(13) + LoadLabel(467)
+      style = vbYesNo + vbCritical + vbDefaultButton2
+      title = LoadLabel(490)
+      response = MsgBox(Msg, style, title)
+            If response = 7 Then Screen.MousePointer = 1: Exit Sub
+             cmd$ = "!" + Motor_Output_on + ":"
+              RobSend (cmd$)
+              MilSec 200
+            makehome = Shell("C:\talos\chek_hom.EXE", 1)
+            MilSec 20000
+            Do: DoEvents: Loop Until FindOutput(Ready_Bit) = 1
+             cmd$ = "!" + Motor_Output_on + ":"
+          Motor_Preheated = 1
+          RobSend (cmd$)
+     End If
+End If
+If Motor_Input <> "" And FindOutput(Motor_Output_Number) = 0 Then
+        cmd$ = "!" + Motor_Output_on + ":"
+        Motor_Preheated = 1
+        RobSend (cmd$)
+End If
+
+ValveReset
+End Sub
+
+Function begin_talos(X As Integer) As Integer
+'******* κάνω εκκίνηση το τάλος
+Dim counter
+counter = 0
+
+ValveReset
+
+
+  If isCutOff(0) = 1 Then
+  '   "Ελευθερώστε  το Emergency Stop.."
+         MsgBox mL_Res(617), , "Talos "
+         begin_talos = 0
+         Exit Function
+  End If
+
+
+
+
+     cmd$ = "!var1=1:!k:!setup:"
+     temp% = SendATBlock(768, cmd$, 0)
+
+
+     cmd$ = "!out.14-1:"
+     temp% = SendATBlock(768, cmd$, 0)
+
+
+
+     begin_talos = 1
+         
+
+
+
+End Function
+Public Function Wait_Robot(DUM As Integer) As Integer
+  Dim Begin$, Pause
+    Wait_Robot = 1
+    If system_ready = 0 Then Exit Function
+         
+    Begin$ = Time$
+     While out_bit(bit_ok) = 0
+           DoEvents
+           timdif = DateDiff("s", Begin$, Time$)
+           If timdif > 90 Then
+                If Is_Porta = "κ" And is_pause = 1 And PTOSH_PIESHS = 0 Then
+                   Stamathma_Talos "Αδυναμία Κίνησης Robot."
+                   '   "Αδυναμία Κίνησης Robot. Για να δουλεύει ανεμπόδιστα ΠΡΕΠΕΙ:"
+                   MsgBox mL_Res(619) + Chr$(13) + mL_Res(620) + Chr$(13) + mL_Res(621) + Chr$(13) + mL_Res(622) + Chr$(13) + mL_Res(623) + Chr$(13) + mL_Res(624) + Chr$(13) + mL_Res(625) + Chr$(13) + mL_Res(626) + Chr$(13) + mL_Res(627), , "Talos"
+                   End
+                   Wait_Robot = 0
+                 End If
+                While Is_Porta = "α"
+                       '   "Αδυναμία Κίνησης λόγω ανοικτής πόρτας "
+                         MsgBox mL_Res(628) + Chr$(13) + mL_Res(629), , "Talos"
+                         Begin$ = Time$
+                Wend
+                While Pause = 1
+                   '    "Αδυναμία Κίνησης λόγω διακόπτη PAUSE" , "Γυρίστε το PAUSE στο 1 καί κάντε κλικ στο ΟΚ"
+                         MsgBox mL_Res(630) + Chr$(13) + mL_Res(631), , "Talos"
+                         Begin$ = Time$
+                Wend
+                While PTOSH_PIESHS = 1
+                   '"Αδυναμία Κίνησης λόγω πτώσης Πίεσης " , "Μόλις η πίεση επανέρθει στα 3bar  κάντε κλικ στο ΟΚ"
+                         MsgBox mL_Res(632) + Chr$(13) + mL_Res(633), , "Talos"
+                         Begin$ = Time$
+                 Wend
+                 If DateDiff("s", Begin$, Time$) > 90 Then
+                     '  "Δεν παίρνει σήμα το πρόγραμμα συνταγών ότι ολοκληρώθηκε η κίνηση (Wait_robot)"
+                     MsgBox mL_Res(634), , "Talos"
+                     End
+                 End If
+          End If
+     Wend
+     Wait_Robot = 1
+
+End Function
+Public Sub Stamathma_Talos(aitia)
+
+Dim dbsJet As Database
+Dim r As Recordset, MHome
+     
+         ' ΧΤΥΠΗΜΑ ΚΟΥΔΟΥΝΙΟΥ
+ cmd$ = "!" + Alarm1_off + ":"
+RobSend (cmd$)
+ 
+ cmd$ = "!" + Alarm1_on + ":"
+RobSend (cmd$)
+
+               RobSend ("!k:")
+               
+             If Lim1 = 17 Then
+                  MilSec 100
+                  RobSend ("!lh 3,3,3,3:")
+                  RobSend ("!ls 0,0,0,0:")
+             End If
+
+
+
+'stamathma  KATAΓΡΑΦΗ ΔΙΑΚΟΠΗΣ
+Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\watch.mdb")
+             Set r = dbsJet.OpenRecordset("stamathma")
+             r.AddNew
+               r("aitia") = left$(aitia, 150)
+               r("last_command") = left$(m_Cmd$, 150)
+               r("datetime") = Now
+               r("x") = axe(1)
+               r("y") = axe(2)
+               r("z") = axe(3)
+               r("w") = axe(4)
+           r.Update
+             r.Close
+  
+' δινω σημα στο άλλο πρόγραμμα να σταματήσει    r("ektelesthke") = 9
+        Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\watch.mdb")
+        Set r = dbsJet.OpenRecordset("commun")
+         r.Edit
+              r("ektelesthke") = 9
+         r.Update
+         r.Close
+  
+  
+  
+  
+  
+
+ValveReset
+
+Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\coord_tb.mdb")
+      Set r = dbsJet.OpenRecordset("mem3")
+       r.MoveFirst
+       r.Edit
+       r("HOME") = "NO HOME"
+       r("XRHSTHS") = "NO BUSY"
+       r.Update
+       r.Close
+           
+           
+           
+           cmd$ = "!k:!miden:!out." + LTrim(Str(bit_ok)) + "-0:"
+           temp% = SendATBlock(768, cmd$, 0)
+           
+           
+End Sub
+Function tas_bit(ar_bit, stat)
+     If (stat And 2 ^ (ar_bit - 1)) = 0 Then
+           tas_bit = 0
+     Else
+           tas_bit = 1
+     End If
+End Function
+
+
+Public Sub Err_Ck(ERR_NUM As Long)
+If ERR_NUM = 53 Then MsgBox LoadLabel(25), , "Talos": Exit Sub
+If ERR_NUM = 3011 Then MsgBox LoadLabel(26), , "Talos": Exit Sub
+MsgBox "Error number " + Str(Err) + Chr(13) + Err.Description, , "Talos"
+End Sub
+Public Sub ValveReset() ' Κάνει Reset σ'όλες τις βαλβίδες κατά την έναρξη προγραμμάτων
+FindValves
+cmd$ = "!" + mixer_off + ":"
+cmd$ = cmd$ + "!" + Cold_Water_Off + ":"
+cmd$ = cmd$ + "!" + Hot_Water_Off + ":"
+If Central_Water_Off <> "" Then cmd$ = cmd$ + "!" + Central_Water_Off + ":"
+cmd$ = cmd$ + "!" + valve_1_off + ":"
+cmd$ = cmd$ + "!" + valve_2_off + ":"
+cmd$ = cmd$ + "!" + skon_motor_off + ":"
+RobSend (cmd$)
+End Sub
+
+Public Sub Reindexing(DUM)
+
+EXCL = True
+Set MyDB = Workspaces(0).OpenDatabase("c:\TALOS", False, False, "dBASE IV;")
+
+On Error Resume Next
+
+'   DROP INDEX MyIndex ON Employees;    Deletes MyIndex from the Employees table.
+
+'SQL = "DROP INDEX  ENTOLH  ON   prospau2;"
+'MyDB.Execute SQL
+
+Kill "PROSPAU2.MDX"
+SQL = "CREATE  INDEX  ENTOLH  ON   prospau2(ENTOLH,AA_PROSPAU);"
+MyDB.Execute SQL
+
+Kill "JOBLIST.MDX"
+SQL = "CREATE  INDEX  ENTOLH  ON  JOBLIST(ENTOLH);"
+MyDB.Execute SQL
+
+SQL = "CREATE  INDEX  HME_PARAD  ON   JOBLIST(HME_PARAD);"
+MyDB.Execute SQL
+
+SQL = "CREATE  INDEX  PARAT  ON   JOBLIST(PARAT);"
+MyDB.Execute SQL
+
+SQL = "CREATE  INDEX  ONOMA  ON   PELATES(ONOMA);"
+MyDB.Execute SQL
+
+SQL = "CREATE  INDEX  PANI  ON   PANIA(PANI);"
+MyDB.Execute SQL
+
+
+Kill "ximitech.mdx"
+
+'Kill "dok.dbf"
+'MyDB.Execute "select * into dok from ximitech"
+'Kill "ximitech.dbf"
+'Name "dok.dbf" As "ximitech.dbf"
+
+SQL = "CREATE  INDEX  KOD  ON   XIMITECH(KOD);"
+MyDB.Execute SQL
+
+SQL = "CREATE  INDEX  PER  ON   XIMITECH(PERIGRAFH);"
+MyDB.Execute SQL
+
+SQL = "CREATE  INDEX  mPER  ON   XIMITECH(mPERIGRAFH);"
+MyDB.Execute SQL
+
+MyDB.Close
+
+On Error GoTo 0
+
+RetVal = Shell("\talos\reindex.exe", 1)    ' Run Calculator.
+
+
+End Sub
+Public Function Bit_Axona(axe, No_bit)
+Dim stat, status_array(1 To 5), Msg
+
+Msg = " "
+sfalma = 0
+ I = axe
+    Select Case I
+       Case 1
+        
+      result% = Request_Status(768)
+       Set_Pointer 768, AXIS1_STATUS
+       Case 2
+            
+             result% = Request_Status(768)
+              Set_Pointer 768, AXIS2_STATUS
+       Case 3
+              
+                 result% = Request_Status(768)
+                Set_Pointer 768, AXIS3_STATUS
+       Case 4
+               
+               result% = Request_Status(768)
+              Set_Pointer 768, AXIS4_STATUS
+End Select
+
+ Read_Status 768, status_high%, status_low%, status&
+  
+  status_array(I) = status&
+  
+'If tas_bit(No_bit, status&) <> EPIU Then
+
+      If (status& And 2 ^ (No_bit - 1)) = 0 Then
+           Bit_Axona = 0
+     Else
+           Bit_Axona = 1
+     End If
+
+
+End Function
+
+
+
+
+
+
+Public Function error(No_bit, EPIU)
+Dim stat, status_array(1 To 5), Msg
+
+Msg = " "
+sfalma = 0
+For I = 1 To 4
+    Select Case I
+       Case 1
+        
+      result% = Request_Status(768)
+       Set_Pointer 768, AXIS1_STATUS
+       Case 2
+            
+             result% = Request_Status(768)
+              Set_Pointer 768, AXIS2_STATUS
+       Case 3
+              
+                 result% = Request_Status(768)
+                Set_Pointer 768, AXIS3_STATUS
+       Case 4
+               
+               result% = Request_Status(768)
+              Set_Pointer 768, AXIS4_STATUS
+End Select
+
+ Read_Status 768, status_high%, status_low%, status&
+  
+  status_array(I) = status&
+  
+If tas_bit(No_bit, status&) <> EPIU Then
+Msg = "    ...."
+ Select Case No_bit
+ Case 13
+       Msg = "Thermal protection or low voltage on motor number.." + Str(I) + " Check the connection of the motors."
+   Case 14
+       Msg = "No communication between CompuMotor card and Motor Νο " + Str(I) + ". Check the connection of the motors. "
+   Case 5
+       Msg = "Incorrect home on axe Νο " + Str(I)
+   Case 15
+       Msg = "The terminal is activated on axe number " + Str(I)
+   Case 16
+       Msg = "The terminal is activated on axe number " + Str(I)
+  Case 12
+       Msg = "Steps are lost on axe number " + Str(I)
+ Case 17
+       Msg = "The soft limit +  of axe Number " + Str(I)
+   Case 18
+       Msg = "The soft limit negative of axe Number " + Str(I)
+ End Select
+       
+       
+       Stamathma_Talos Msg
+       GoSub err_msg
+       '   "Διακοπή λειτουργίας προγράμματος ."
+       MsgBox mL_Res(635), , "Talos"
+       End
+  End If
+Next
+    
+    If sfalma = 1 Then
+        error = 1
+    Else
+       error = 0
+   End If
+Exit Function
+   
+   
+   
+err_msg:
+sfalma = 1 'Σφάλμα κατάστασης
+ 
+ 
+ Select Case No_bit
+ 
+ Case 13
+      ' MsgBox "Θερμικό ή έλλειψη τάσης  στον κινητήρα του άξονα  Νο" + Str(I) + " Ελέγξτε την συνδεσμολογία του πίνακα."
+       MsgBox mL_Res(600) + Str(I) + mL_Res(601), , "Talos (600-1)"
+   Case 14
+     '  MsgBox "Δεν υπάρχει επικοινωνία μεταξύ κάρτας CompuMotor  και κινητήρα  στον άξονα Νο " + Str(I) + ".   Ελέγξτε την συνδεσμολογία του πίνακα."
+       MsgBox mL_Res(602) + Str(I) + mL_Res(603), , "Talos (602-3)"
+   Case 5
+'      MsgBox "Δεν έγινε σωστό Home   στον άξονα Νο" + Str(I)
+       MsgBox mL_Res(604) + Str(I), , "Talos(604)"
+   Case 15
+       ' MsgBox "Ενεργοποιήθηκε τερματικό  του άξονα  Νο" + Str(I)
+       MsgBox mL_Res(605) + Str(I) + " .", , "Talos(605)"
+   Case 16
+'         MsgBox "Ενεργοποιήθηκε τερματικό  του άξονα  Νο" + Str(I)
+       MsgBox mL_Res(606) + Str(I) + " .", , "Talos(606)"
+  Case 12
+      'MsgBox "Χάθηκαν βήματα στον άξονα  Νο" + Str(I)
+       MsgBox mL_Res(607) + Str(I) + " .", , ""
+ 
+End Select
+  Return
+End Function
+
+
+
+
+
+Function Is_Porta() As String
+   Dim z
+      z = FindInput(Door_input)
+      If z >= 1 Then
+          Is_Porta = "α"
+      Else
+          Is_Porta = "κ"
+     End If
+End Function
+
+Function PTOSH_PIESHS() As Integer
+   Dim z
+  PTOSH_PIESHS = FindInput(Air_Input)
+End Function
+
+
+Public Function out_bit(ByVal ar_bit As Integer)   ' ελέγχω το βιτ out_bit
+ 
+    On Error Resume Next
+    If flag = 1 Then Exit Function
+    result% = Request_Status(768)
+    ' ******* Update Motor Position ****************
+
+    Set_Pointer 768, OUTPUT_STATUS
+    Read_Status 768, status_high%, status_low%, status&
+    
+     If (status& And 2 ^ (ar_bit - 1)) = 0 Then
+           out_bit = 0
+     Else
+           out_bit = 1
+     End If
+Exit Function
+End Function
+
+
+Public Sub MilSec(WAIT As Long)
+     start = GetCurrentTime()
+     Do
+        c_tim = GetCurrentTime()
+        DoEvents
+     Loop Until c_tim >= start + WAIT
+End Sub
+Public Function FIND_COLOR(MERES)
+                          Select Case MERES
+                                    Case 0
+                                         FIND_COLOR = &H80FF&           '  πορτοκαλί
+                                     Case Is > 0
+                                         FIND_COLOR = &H8000& '  πράσινο
+                                      Case Else
+                                          FIND_COLOR = &HFF&         'κοκκινο
+                            End Select
+
+End Function
+
+Public Sub FindValves()
+
+Dim MyDB As Database, r As Recordset
+
+On Error GoTo er_c:
+Set MyDB = OpenDatabase("c:\talos\coord_tb.mdb")
+Set r = MyDB.OpenRecordset("Βαλβιδες")
+Beaker_Bottle = ""
+Do Until r.EOF
+  If r("valve_kod") = 1 Then
+    Gripper_On = r("valve_on")
+     Gripper_Off = r("valve_off")
+   End If
+   If r("valve_kod") = 2 Then
+      Ready_Bit = Val(Mid(r("valve_on"), 5, 2))
+   End If
+    If r("valve_kod") = 3 Then
+   Braxionas = r("valve_on")
+   End If
+  If r("valve_kod") = 4 Then
+    skon_motor_on = r("valve_on")
+     skon_motor_off = r("valve_off")
+   End If
+   If r("valve_kod") = 5 Then
+     Cold_Water_On = r("valve_on")
+     Cold_Water_Off = r("valve_off")
+   End If
+   If r("valve_kod") = 6 Then
+     Hot_Water_On = r("valve_on")
+     Hot_Water_Off = r("valve_off")
+   End If
+   If r("valve_kod") = 7 Then
+     mixer_on = r("valve_on")
+     mixer_off = r("valve_off")
+   End If
+   If r("valve_kod") = 8 Then
+     Balance_Port = r("valve_on")
+  End If
+  If r("valve_kod") = 9 Then
+     valve_1_on = r("valve_on")
+     valve_1_off = r("valve_off")
+   End If
+      If r("valve_kod") = 10 Then
+     valve_2_on = r("valve_on")
+     valve_2_off = r("valve_off")
+   End If
+   If r("valve_kod") = 11 Then
+     Alarm1_on = r("valve_on")
+     Alarm1_off = r("valve_off")
+  End If
+   If r("valve_kod") = 12 Then
+     Pause_input = r("valve_on")
+     Air_Input = r("valve_off")
+  End If
+    If r("valve_kod") = 13 Then
+     Door_input = r("valve_on")
+  End If
+  If r("valve_kod") = 14 Then
+    Gripper_Input = r("valve_on")
+  End If
+   If r("valve_kod") = 15 Then
+    Talos_Fonts = r("valve_on")
+    Talos_Language = r("valve_off")
+  End If
+  If r("valve_kod") = 16 Then
+    Motor_Input = r("valve_on")
+    Motor_Preheating = r("valve_off")
+  End If
+   If r("valve_kod") = 17 Then
+    Motor_Output_on = r("valve_on")
+    Motor_Output_off = r("valve_off")
+    Motor_Output_Number = Val(Mid(Motor_Output_on, 5, 1))
+  End If
+    If r("valve_kod") = 18 Then
+    Alarm2_on = r("valve_on")
+    Alarm2_off = r("valve_off")
+  End If
+    If r("valve_kod") = 19 Then
+    Alarm3_On = r("valve_on")
+    Alarm3_Off = r("valve_off")
+  End If
+   If r("valve_kod") = 20 Then
+    Central_Water_On = r("valve_on")
+    Central_Water_Off = r("valve_off")
+  End If
+  If r("valve_kod") = 21 Then
+    Balance_Settings = r("valve_on")
+    Balance_Asking = r("valve_off")
+ End If
+  If r("valve_kod") = 22 Then
+    Balance_2_Digits = r("valve_on")
+    Balance_3_Digits = r("valve_off")
+ End If
+    If r("valve_kod") = 23 Then
+    Balance_Zero = r("valve_on")
+    Balance_Clear = r("valve_off")
+ End If
+    If r("valve_kod") = 24 Then
+    Water_Bypass = r("valve_on")
+  End If
+  If r("valve_kod") = 25 Then
+    Balance_Type = r("valve_on")
+    Balance_Mode = r("valve_off")
+ End If
+  If r("valve_kod") = 26 Then
+    Program1 = r("valve_on")
+    Program2 = r("valve_off")
+ End If
+   If r("valve_kod") = 27 Then
+    Program3 = r("valve_on")
+  If IsNull(r("valve_off")) Then Program4 = "" Else Program4 = r("valve_off")
+ End If
+If r("valve_kod") = 28 Then
+    Beaker_Bottle = r("valve_on")
+End If
+r.MoveNext
+Loop
+r.Close
+
+Exit Sub
+er_c:
+If Err = 13 Then Resume Next
+If Err = 94 Then Resume Next
+Err_Ck (Err)
+Resume Next
+End Sub
+
+
+Public Sub RobSend(cmd$)
+If system_ready = 0 Then Exit Sub
+           '  Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\watch.mdb")
+           '  Set r = dbsJet.OpenRecordset("moves")
+           '  r.AddNew
+           '    r("movement") = left$(cmd$, 150)
+           '    r("datetime") = Now
+           '  r.Update
+           '  r.Close
+
+        m_Cmd$ = cmd$
+       temp% = SendATBlock(768, cmd$, 0)
+End Sub
+Public Sub RobSend_w(cmd$)
+Dim a
+
+3333
+'15-11
+arxikox = axe(1)
+arxikoY = axe(2)
+arxikoZ = axe(3)
+arxikow = axe(4)
+onlyZ = 0
+If arxikox + arxikoY + arxikow = x0 + y0 + w0 Then 'kineitai mono z
+    If Abs(arxikoZ - z0) > 65000 Then  'oxi droubanisma
+        onlyZ = 1
+    End If
+End If
+'15-11
+
+
+t1 = GetCurrentTime()
+
+If system_ready = 0 Then Exit Sub
+       m_Cmd$ = cmd$
+       temp% = SendATBlock(768, cmd$, 0)
+       MilSec 500
+  
+  
+  Do While Bit_Axona(1, 1) + Bit_Axona(2, 1) + Bit_Axona(3, 1) + Bit_Axona(4, 1) > 0
+       DoEvents
+  Loop
+  
+  Do While True
+     
+     If Abs(axe(1) - x0) < 1 And Abs(axe(2) - y0) < 1 And Abs(axe(3) - z0) < 1 And Abs(axe(4) - w0) < 1 Then
+          Exit Do
+     End If
+       
+             '15-11  αυτοματο HOME
+       If GetCurrentTime() - t1 > 15000 And onlyZ = 1 Then
+       '   stam = 1
+       '   mlim1 = Lim1
+       '  If Lim1 = 15 Then
+       '      Lim1 = 17
+       '   Else
+       '      RobSend ("!lh 3,3,3,3:")
+       '      RobSend ("!ls 0,0,0,0:")
+       '   End If
+       '   temp% = SendAT6400Block(768, "!hom,,0:", 0)
+       '   MilSec 5000
+          'perimene  mexri na stamathsei na kineitai kai paei sto 0
+       '   Do While Abs(axe(3) - 0) < 1 And Bit_Axona(3, 1) > 0
+       '      DoEvents
+       '   Loop
+       '       MilSec 1000
+       '       If mlim1 = 17 Then
+       '           RobSend ("!lh 0,0,0,0:")
+       '           RobSend ("!ls 3,3,3,3:")
+       '       Else
+       '           Lim1 = 15
+       '       End If
+       '       temp% = SendAT6400Block(768, "!d,," + Str(z0) + ":", 0)
+       '       MilSec 500
+       '       temp% = SendAT6400Block(768, cmd$, 0)
+       '
+       '   t1 = GetCurrentTime()
+
+       End If
+       '15-11
+
+             '15-11  b
+          If GetCurrentTime() - t1 > 10000 And onlyZ = 0 And Abs(axe(4) - w0) < 1 And Abs(axe(3) - z0) < 1 Then
+'          stam = 1
+'          mlim1 = Lim1
+'          If Lim1 = 15 Then
+'             Lim1 = 17
+'          Else
+'             RobSend ("!lh 3,3,3,3:")
+'             RobSend ("!ls 0,0,0,0:")
+'          End If
+          
+          
+'          temp% = SendAT6400Block(768, "!hom,0:", 0)
+'          MilSec 5000
+'          'perimene  mexri na stamathsei na kineitai kai paei sto 0
+'          Do While Abs(axe(2) - 0) < 1 And Bit_Axona(2, 1) > 0
+'             DoEvents
+'          Loop
+              
+'          temp% = SendAT6400Block(768, "!hom1:", 0)
+'          MilSec 5000
+'          'perimene  mexri na stamathsei na kineitai kai paei sto 0
+'          Do While Abs(axe(1) - 0) < 1 And Bit_Axona(1, 1) > 0
+'             DoEvents
+'          Loop
+              
+              
+              
+'              MilSec 1000
+'              If mlim1 = 17 Then
+'                  RobSend ("!lh 0,0,0,0:")
+'                  RobSend ("!ls 3,3,3,3:")
+'              Else
+'                  Lim1 = 15
+'              End If
+'              temp% = SendAT6400Block(768, "!d" + Str(x0) + "," + Str(y0) + ":", 0)
+'              MilSec 500
+'              temp% = SendAT6400Block(768, cmd$, 0)
+'          t1 = GetCurrentTime()
+
+       End If
+       '15-11
+     
+     
+     
+     DoEvents
+  Loop
+  'GoTo 3333
+   a = 1
+End Sub
+
+
+
+
+Public Sub Begin_Work()
+   Dim dbsJet As Database
+   Dim r As Recordset, MHome
+    
+      Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\coord_tb.mdb")
+      Set r = dbsJet.OpenRecordset("mem3")
+
+     r.MoveFirst
+      
+      If r("XRHSTHS") = "JOYSTICK" Then
+           MsgBox mL_Res(73), , "73.Talos"
+           End
+       End If
+      
+      If r("HOME") = "HOME=OK" Then
+        '
+      Else
+             MsgBox mL_Res(74), , "74.Talos"
+             End
+      End If
+      
+      
+      
+      If r("XRHSTHS") = "BUSY" Then
+             MsgBox mL_Res(75), , "75.Talos"
+             End
+       End If
+      
+      r.Edit
+       r("HOME") = "NO HOME"
+       r("XRHSTHS") = "BUSY"
+       r.Update
+       r.Close
+       
+End Sub
+
+
+
+
+Function find_colors(forma)
+ '  find colors of screen
+Dim FI(1 To 15), r, k
+   
+          Select Case UCase(forma.Name)
+          Case "FRMXHM"
+             color_field = "F0"
+          Case "FRMXHMEDIT"
+             color_field = "F1"
+          Case "MJOBLIST"
+             color_field = "F2"
+          Case "FRMSYNT2"
+             color_field = "F3"
+          Case "WAIT"
+             color_field = "F4"
+          Case "SYNTAGES"
+             color_field = "F5"
+          Case "FERE"
+             color_field = "F6"
+          Case "FERESK"
+             color_field = "F7"
+          Case "PANE"
+             color_field = "F8"
+          Case "PELATES"
+             color_field = "F9"
+         End Select
+   
+   Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\syntages.mdb")
+   Set r = dbsJet.OpenRecordset("form_colors")
+          
+      On Error Resume Next
+   
+          'If UCase(obj) = "COLORS" Then
+             r.MoveFirst
+             'find_colors = Val(R(color_field))
+            If allazo_xromata = -1 Then
+               forma.BackColor = Val(r(color_field))
+            End If
+         ' ElseIf UCase(obj) = "FONTS" Then
+                 r.MoveNext
+                 S = r(color_field)
+                 If Not IsNull(r(color_field)) Then
+                    If allazo_fonts = -1 Then
+                       forma.FontBold = IIf(Mid$(r(color_field), 1, 1) = "1", True, False)
+                       forma.FontItalic = IIf(Mid$(r(color_field), 2, 1) = "1", True, False)
+                       forma.FontStrikethru = IIf(Mid$(r(color_field), 3, 1) = "1", True, False)
+                       forma.FontUnderline = IIf(Mid$(r(color_field), 4, 1) = "1", True, False)
+                       forma.FontSize = Val(Mid$(r(color_field), 5, 7))
+                       forma.FontName = Mid$(r(color_field), 12, 30)
+                    End If
+                  End If
+          ' End If
+           r.Close
+                 For k = 1 To forma.Controls.Count
+                     forma.Controls(k).FontSize = forma.FontSize
+                 Next
+      On Error GoTo 0
+      
+End Function
+
+Function save_colors(forma, New_Color As Long)
+ '  find colors of screen
+If allazo_xromata = 0 Then
+   Exit Function
+End If
+         
+         forma.CommonDialog1.ShowColor
+         forma.BackColor = forma.CommonDialog1.Color
+         New_Color = forma.CommonDialog1.Color
+   Set dbsJet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\syntages.mdb")
+     Set r = dbsJet.OpenRecordset("form_colors")
+          
+      On Error Resume Next
+          r.MoveFirst
+          r.Edit
+          Select Case UCase(forma.Name)
+          Case "FRMXHM"
+             r("F0") = New_Color
+          Case "FRMXHMEDIT"
+             r("F1") = New_Color
+          Case "MJOBLIST"
+             r("F2") = New_Color
+          Case "FRMSYNT2"
+            r("F3") = New_Color
+          Case "WAIT"
+           r("F4") = New_Color
+          Case "SYNTAGES"
+             r("F5") = New_Color
+          Case "FERE"
+            r("F6") = New_Color
+          Case "FERESK"
+            r("F7") = New_Color
+          Case "PANE"
+             r("F8") = New_Color
+          Case "PELATES"
+             r("F9") = New_Color
+         End Select
+      On Error GoTo 0
+        r.Update
+      r.Close
+End Function
+
+Function inp(bit)
+    result% = Request_Status(768)
+    Set_Pointer 768, INPUT_STATUS
+    Read_Status 768, status_high%, status_low%, status&
+     z = status_low% And 2 ^ (bit)
+     inp = z
+End Function
+
+Function velocity(axis)
+    ' ******* Update Motor Velocity **************
+     result% = Request_Status(768)
+    Set_Pointer 768, AXIS1_VELOCITY
+    For I = 0 To 3
+        Read_Status Device_Address%, status_high%, status_low%, status&
+        If axis = I Then
+            velocity = Format$(status&)
+            Exit For
+        End If
+    Next I
+End Function
+
+Function axe_encoder(axis As Integer)
+' ******* Update Encoder Position **************
+    result% = Request_Status(768)
+    Set_Pointer 768, AXIS1_ENCODER
+    For I = 0 To 3
+        Read_Status Device_Address%, status_high%, status_low%, status&
+        If axis = I Then
+           axe_encoder = status&
+           Exit For
+        End If
+    Next I
+End Function
+  Function axe(axis As Integer)
+     
+ result% = Request_Status(768)
+  Set_Pointer 768, AXIS1_MOTOR
+      For I = 0 To 3
+      Read_Status 768, status_high%, status_low%, status&
+       If axis = I + 1 Then
+         axe = status&
+        Exit Function
+       End If
+     Next I
+     
+ax_position = -1
+     
+End Function
+
+
+
+
+Function isCutOff(DUM As Integer)
+     Dim X
+     
+      result% = Request_Status(768)
+   ' ******* Update Pulse Cutoff Status ****************
+    Set_Pointer 768, INO_STATUS
+    Read_Status 768, status_high%, status_low%, status&
+    If (status_high% And PCUT_MASK) > 0 Then
+         isCutOff = 0  ' οχι πατημένο
+    Else
+         isCutOff = 1 ' πατημένο
+    End If
+End Function
+
+
+
+
+
+Function Pause_Check() As Integer
+   ' ελέγχω το βιτ  2o   ( porta )
+   '    pause = 1   σημαίνει ότι δουλεύει κανονικά
+   '    Pause = 1   σημαίνει ότι  σταμάτησε
+    
+    Pause_Check = FindInput(Pause_input)
+    
+End Function
+
+
+Public Function find_old_Coordin(Eidos As Integer, Number As Long, Typos_Kinhshs As Integer) As String
+'*************************************
+   Dim dbsJet As Database
+   Dim r As Recordset
+' Typos_kinhshs = 1  όλες εκτός μπουκάλι-μπουκάλι         2=  μπουκάλι-μπουκάλι
+' Εidos=1  μπουκάλι       2=ποτήρι
+    Set MyDB = Workspaces(0).OpenDatabase("c:\talos\coord_tb.mdb")
+    Set r = MyDB.OpenRecordset("Συντεταγμενες", dbOpenSnapshot)
+    
+
+Do Until r.EOF
+If r("ΑΑ_Item") = Eidos Then
+ If r("Νο_Τεμαχιου") = Number Then
+   SYN_X = r("Συντεταγμένη_Χ_user")
+   SYN_Y = r("Συντεταγμένη_Υ_user")
+   syn_z = r("Συντεταγμένη_Ζ_user")
+   Exit Do
+   End If
+ End If
+  r.MoveNext
+ Loop
+  
+ If SYN_X = 0 And SYN_Y = 0 And syn_z = 0 Then
+     MsgBox mL_Res(608), , "Talos(608)" 'sΤΑΜΑΤΗΜΑ ΛΟΓΩ ΛΑΘΟΥΣ ΣΥΝΤΕΤΑΓΜΕΝΩΝ"
+     Stamathma_Talos "λαθος συντεταγμένες"
+     End
+  End If
+  Select Case Eidos
+    Case 1   ' μπουκάλι
+        If Typos_Kinhshs = 1 Then
+             find_old_Coordin = "!var36=" + LTrim(Str(SYN_X)) + ":!var37=" + LTrim(Str(SYN_Y)) + ":"
+             Exit Function
+        Else
+             find_old_Coordin = "!var38=" + LTrim(Str(SYN_X)) + ":!var39=" + LTrim(Str(SYN_Y)) + ":"
+             Exit Function
+        End If
+        
+     Case 2    ' ποτηρι
+        If Typos_Kinhshs = 1 Then
+             find_old_Coordin = "!var24=" + LTrim(Str(SYN_X)) + ":!var77=" + LTrim(Str(SYN_Y)) + ":" + "!var89=" + LTrim(Str(syn_z)) + ":"
+             Exit Function
+        End If
+End Select
+
+End Function
+
+
+Public Function find_Coordin(Eidos As Integer, Number As Long, Typos_Kinhshs As Integer) As String
+'*************************************
+   Dim dbsJet As Database
+   Dim r As Recordset
+' Typos_kinhshs = 1  όλες εκτός μπουκάλι-μπουκάλι         2=  μπουκάλι-μπουκάλι
+' Εidos=1  μπουκάλι       2=ποτήρι
+    Set MyDB = Workspaces(0).OpenDatabase("c:\talos\coord_tb.mdb")
+    Set r = MyDB.OpenRecordset("Συντεταγμενες", dbOpenSnapshot)
+    
+
+Do Until r.EOF
+If r("ΑΑ_Item") = Eidos Then
+ If r("Νο_Τεμαχιου") = Number Then
+   SYN_X = r("Συντεταγμένη_Χ_user")
+   SYN_Y = r("Συντεταγμένη_Υ_user")
+   syn_z = r("Συντεταγμένη_Ζ_user")
+   Exit Do
+   End If
+ End If
+  r.MoveNext
+ Loop
+  
+ If SYN_X = 0 And SYN_Y = 0 And syn_z = 0 Then
+     MsgBox mL_Res(608), , "Talos(608)" 'sΤΑΜΑΤΗΜΑ ΛΟΓΩ ΛΑΘΟΥΣ ΣΥΝΤΕΤΑΓΜΕΝΩΝ"
+     Stamathma_Talos "wrong coordinates"
+     End
+  End If
+  Select Case Eidos
+    Case 1   ' μπουκάλι
+        If Typos_Kinhshs = 1 Then
+             find_Coordin = "!var36=" + LTrim(Str(SYN_X)) + ":!var37=" + LTrim(Str(SYN_Y)) + ":"
+              var(35) = syn_z
+              var(36) = SYN_X
+              var(37) = SYN_Y
+             Exit Function
+        Else
+             find_Coordin = "!var38=" + LTrim(Str(SYN_X)) + ":!var39=" + LTrim(Str(SYN_Y)) + ":"
+             var(38) = SYN_X
+             var(39) = SYN_Y
+             var(40) = syn_z
+             Exit Function
+        End If
+        
+     Case 2    ' ποτηρι
+        If Typos_Kinhshs = 1 Then
+             find_Coordin = "!var24=" + LTrim(Str(SYN_X)) + ":!var77=" + LTrim(Str(SYN_Y)) + ":" + "!var89=" + LTrim(Str(syn_z)) + ":"
+             
+                 var(24) = SYN_X
+                 var(77) = SYN_Y
+                 var(89) = syn_z
+             Exit Function
+        End If
+End Select
+
+End Function
+Sub get_uesh(aritmos)
+ 
+    Set db = OpenDatabase("c:\talos\coord_tb.mdb")
+    Set r = db.OpenRecordset("Συντεταγμενες")
+       Do Until r.EOF
+           If r("ΑΑ_Item") = 1 Then
+           If r("Νο_Τεμαχιου") = aritmos Then
+                x0 = r("Συντεταγμένη_Χ_user")
+                y0 = r("Συντεταγμένη_Υ_user")
+                z0 = r("Συντεταγμένη_Ζ_user")
+                Exit Do
+            End If
+           End If
+           r.MoveNext
+       Loop
+    r.Close
+
+End Sub
+

@@ -1,0 +1,33 @@
+Line 558: Class MSCommLib.MSComm of control MSComm1 was not a loaded control class.
+Line 21: Property Icon in Joystick had an invalid file reference.
+Line 26: Property Picture in Joystick had an invalid file reference.
+Line 74: Property Picture in term had an invalid file reference.
+Line 99: Property Picture in term had an invalid file reference.
+Line 124: Property Picture in term had an invalid file reference.
+Line 149: Property Picture in term had an invalid file reference.
+Line 174: Property Picture in term had an invalid file reference.
+Line 198: Property Picture in term had an invalid file reference.
+Line 222: Property Picture in term had an invalid file reference.
+Line 247: Property Picture in term had an invalid file reference.
+Line 289: Property Picture in Image2 had an invalid file reference.
+Line 322: Property Picture in Image1 had an invalid file reference.
+Line 561: The property name _version in MSComm1 is invalid.
+Line 562: The property name _extentx in MSComm1 is invalid.
+Line 563: The property name _extenty in MSComm1 is invalid.
+Line 564: The property name _stockprops in MSComm1 is invalid.
+Line 565: The property name cdtimeout in MSComm1 is invalid.
+Line 566: The property name commport in MSComm1 is invalid.
+Line 567: The property name ctstimeout in MSComm1 is invalid.
+Line 568: The property name dsrtimeout in MSComm1 is invalid.
+Line 569: The property name dtrenable in MSComm1 is invalid.
+Line 570: The property name handshaking in MSComm1 is invalid.
+Line 571: The property name inbuffersize in MSComm1 is invalid.
+Line 572: The property name inputlen in MSComm1 is invalid.
+Line 573: The property name interval in MSComm1 is invalid.
+Line 574: The property name nulldiscard in MSComm1 is invalid.
+Line 575: The property name outbuffersize in MSComm1 is invalid.
+Line 576: The property name parityreplace in MSComm1 is invalid.
+Line 577: The property name rthreshold in MSComm1 is invalid.
+Line 578: The property name rtsenable in MSComm1 is invalid.
+Line 579: The property name settings in MSComm1 is invalid.
+Line 580: The property name sthreshold in MSComm1 is invalid.

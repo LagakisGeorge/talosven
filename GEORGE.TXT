@@ -1,0 +1,394 @@
+Dim APOBARO, Apoklish, DIADROMH_BOLAN, ARXH, TIME_ANOXH, Z, ok, TaxyThtes
+Dim counter, FIRST_TIME, Motori_On, Xam_Ligo, Xam_Poly, Reystothta
+Dim FLAG1
+
+ '¡ÀÀ¡√«   DIADROMH_BOLAN = DIADROMH_BOLAN / 60 => 40   17/04/2001
+' XRONIKO PERIUVRIO SE 10MIN
+
+FLAG1 = 0
+FLAG2 = 0
+FLAG3 = 0
+BHMA = 10
+Z = 0
+Motori_On = 0
+FIRST_TIME = True
+counter = 0   'ƒ≈” ‘œ   VAR88     !!!!!!!!
+
+M_ALATI = 8000
+Target = M_ALATI
+
+If Target < 1100 Then
+   Reystothta = 20
+   BHMA = 5
+Else
+   Reystothta = 0
+End If
+Apoklish = 20
+
+Set mydb = Workspaces(0).OpenDatabase("c:\talos\coord_tb.MDB")
+Set r = mydb.OpenRecordset("var")
+Do Until r.EOF
+ If r("field_name") = "VAR93" Then
+    var93 = r("field_val")
+End If
+ If r("field_name") = "VAR88" Then
+    var88 = r("field_val")
+End If
+ 
+If r("field_name") = "VAR99" Then
+    Skacimo = r("field_val")
+End If
+
+ 
+ 
+r.MoveNext
+  Loop
+  r.Close
+
+
+
+
+
+
+DIADROMH_BOLAN = var93 - var88 ' 10000 BHMATA
+
+If DIADROMH_BOLAN > 16000 Then '=40 MM = megisto ·ÌÔÈ„Ï· ÏÔıÍ·ÎÈÔ˝ ÛÍ¸ÌÁÚ
+    DIADROMH_BOLAN = 16000
+End If
+
+TIME_ANOXH = 600000   '10 MIN
+'MSComm1.Output = Balance_3_Digits + Chr(13)
+'Target = 2000
+Set mydb = Workspaces(0).OpenDatabase("c:\talos\coord_tb.MDB")
+Set r = mydb.OpenRecordset("‘·˜ıÙÁÙÂÚ")
+Do Until r.EOF
+     If r("id_tax") = 7 Then
+        v_Z = r("‘·˜ıÙÁÙ·")
+     End If
+     r.MoveNext
+  Loop
+r.Close
+  
+
+
+
+TaxyThtes = "!V,," + Str(v_Z) + ",0.3:"
+    
+    ' –¡Õ≈ ”‘œ ¬œÀ¡Õ  ¡…  –…¡”‘œ   94
+    'Œ≈ …ÕÃ¡ ‘œ Ãœ‘œ—…  "SKON_MOTOR_ON"
+    ' —¡‘¡ ¡–œ¬¡—œ
+    
+    '1 .ANEBASE TO BOLAN ”…√¡-”…√¡
+    '    ƒ≈” ∆’√¡—…¡
+   '–À«”…¡”≈ –œÀ’    œ◊… ->1
+   ' ¡‘≈¬¡  ¡‘Ÿ ”…√¡-”…√¡
+   '≈÷‘¡”≈” ”‘œ◊œ   œ◊… =>1
+   '  ¡‘≈¬¡”≈ ¬œÀ¡Õ ”‘«Õ »≈”« ‘œ’
+   '¡Õœ…Œ≈ √ —…––≈—
+   '¡ÕŸ ∆
+    
+    
+    
+    ' –¡Õ≈ ”‘œ ¬œÀ¡Õ  ¡…  –…¡”‘œ   94
+    ' dum = wait_to_understand("!var12=94:")
+     
+        ' —¡‘¡ ¡–œ¬¡—œ
+   
+     DUM = wait_to_understand("!var12=94:")
+     
+     
+     APOBARO = Zygis0(0)
+     
+     DUM = Wait_Robot(0)
+
+
+    
+ARXH = GetCurrentTime()
+  
+  
+Xam_Ligo = "!v, , .5:"    '0.1
+Xam_Poly = "!v, , .01:"   '0.01
+
+If Target > 1100 And Reystothta = 0 Then
+   xam_tax = Xam_Ligo      '  "!v, , .1:"
+ '  DIADROMH_BOLAN = DIADROMH_BOLAN / 60    17/04/2001
+   
+   
+   If Target > 4500 Then
+       DIADROMH_BOLAN = DIADROMH_BOLAN / 25
+   Else
+       DIADROMH_BOLAN = DIADROMH_BOLAN / 40
+   End If
+Else
+
+   xam_tax = Xam_Poly    '  "!v, , .01:"
+   If Reystothta <= 10 Then
+      DIADROMH_BOLAN = DIADROMH_BOLAN / 40
+   ElseIf Reystothta > 10 And Reystothta < 20 Then
+       DIADROMH_BOLAN = DIADROMH_BOLAN / 400
+   Else
+       DIADROMH_BOLAN = 800
+   End If
+   If Reystothta >= 10 And Target < 1100 Then
+       DIADROMH_BOLAN = 10
+       
+   End If
+End If
+ARX_DIADROMH = DIADROMH_BOLAN
+  
+  RobSend (xam_tax)
+   MilSec 500
+  RobSend (xam_tax)
+var88 = axe(3)
+
+    'Œ≈ …Õ¡ ‘œ Ãœ‘œ—…  "SKON_MOTOR_ON"
+        RobSend ("!" + skon_motor_on + ":")
+Motori_On = 1
+
+var88 = axe(3) ' giati exei kai skacimo kai se mperdeyei
+
+ok = 0
+' ‘œ ‘≈—Ã¡ ‘œ’ ¬œÀ¡Õ  ≈…Õ¡…    VAR(88)+12000 bhmata
+Do While True
+  
+  '----ANEBASMA ------------------------ anebasma -----------·ÌÂ‚·ÛÏ·1
+  RobSend ("!d , ," + Str(var88 + DIADROMH_BOLAN) + ":!go,,1:")
+  Do While axe(3) < Int(var88 + DIADROMH_BOLAN)
+       'RobSend ("!d , ," + Str(var88 + DIADROMH_BOLAN) + ":!go,,1:")
+       
+        'CurQ_Dis = Z
+       ' RobSend ("!d , ," + Str(var88 + DIADROMH_BOLAN) + ":!go,,1:")
+        Z = Zygis0(0) - APOBARO
+        Label8.Caption = Z
+        If Z > 0 Then frmSYNT.Caption = Format(Z, "#####")
+        counter = counter + 1
+        
+        If GetCurrentTime() - ARXH > TIME_ANOXH Then Exit Do
+        
+        
+        
+        If Z < -999000000 Then
+             RobSend ("!" + skon_motor_off + ":!k:")
+              Do While Z < -999000000
+                    MilSec 500
+                   Z = Zygis0(0) - APOBARO
+              Loop
+              RobSend ("!" + skon_motor_on + ":!go,,1:")
+        End If
+          
+      'If FLAG1 = 0 And z > Target * 0.8 Then
+       '    FLAG1 = 1
+        '   DIADROMH_BOLAN = 100
+         '  Exit Do
+     ' End If
+          
+          
+          
+          If Z >= M_ALATI - Apoklish * 10 And FIRST_TIME = True Then
+            DIADROMH_BOLAN = DIADROMH_BOLAN / 2
+            'RobSend ("!" + skon_motor_off + ":!k:")
+            FIRST_TIME = False
+
+            Exit Do
+        End If
+        If Z >= M_ALATI - Apoklish * 5 Then
+                DOS_ALATI_DOK = Z
+                ok = 1
+                Exit Do
+        End If
+        
+  Loop
+  
+            If Target > 900 Then   'TARGET-Z
+                xam_tax = Xam_Ligo   ' "!v, , .1:"
+            Else
+                xam_tax = Xam_Poly     '  "!v, , .01:"
+            End If
+
+            RobSend (xam_tax)
+'            MilSec 500
+            RobSend (xam_tax)
+  
+  
+  
+ If FLAG2 = 0 And Z > Target / 2 Then
+         FLAG2 = 1
+         DIADROMH_BOLAN = ARX_DIADROMH
+ End If
+  
+  
+  
+  
+If FLAG1 = 0 And Z > Target - 300 Then
+     FLAG1 = 1
+     DIADROMH_BOLAN = ARX_DIADROMH / 4
+     BHMA = 20
+End If
+  
+  
+If FLAG3 = 0 And Z > Target - 700 Then
+     FLAG1 = 1
+     DIADROMH_BOLAN = ARX_DIADROMH / 4
+     BHMA = 20
+End If
+  
+  
+  
+    If ok = 1 Then Exit Do
+  
+  
+  
+  ' Í·ÙÂ‚·ÛÏ·
+  m_axe3 = 0
+  RobSend ("!d , ," + Str(var88) + ":!go,,1:")
+  
+  '---------------------------- katebasma  -----------·ÌÂ‚·ÛÏ·1
+  
+  Do While Abs(axe(3) - var88) > 10   ' axe(3)>var88
+          Z = Zygis0(0) - APOBARO
+           Label8.Caption = Z
+          
+          If m_axe3 = axe(3) Then
+              RobSend ("!d , ," + Str(var88) + ":!go,,1:")
+          End If
+          counter = counter + 1
+          m_axe3 = axe(3)
+          
+           'RobSend ("!d , ," + Str(var88) + ":!go,,1:")
+          'Z = Zygis0_time(500) - APOBARO
+          If Z > 0 Then CurQ_Dis = Format(Z, "#####")
+          If Z < -999000000 Then
+               RobSend ("!" + skon_motor_off + ":!k:")
+               Do While Z < -999000000
+                MilSec 100
+                   Z = Zygis0(0) - APOBARO
+              Loop
+              RobSend ("!" + skon_motor_on + ":!go,,1:")
+        End If
+
+
+      'If FLAG1 = 0 And z > Target * 0.8 Then
+       '    FLAG1 = 1
+        '   DIADROMH_BOLAN = 100
+         '  Exit Do
+      'End If
+
+
+
+        If GetCurrentTime() - ARXH > TIME_ANOXH Then Exit Do
+        
+        If Z >= M_ALATI - Apoklish * 10 And FIRST_TIME = True Then
+            
+            DIADROMH_BOLAN = DIADROMH_BOLAN / 2
+            FIRST_TIME = False
+             RobSend ("!v, ,0.1:")
+            MilSec 300
+            RobSend ("!v, ,0.1:")
+        End If
+
+
+
+        If Z >= M_ALATI - Apoklish * 5 Then
+                DOS_ALATI_DOK = Z
+                ok = 1
+                Exit Do
+        End If
+  Loop
+     
+     If GetCurrentTime() - ARXH > TIME_ANOXH Then Exit Do
+  
+     If ok = 1 Then Exit Do
+     ' If FLAG1 = 0 And z > Target * 0.8 Then
+      '     FLAG1 = 1
+       '    DIADROMH_BOLAN = 100
+     ' End If
+     
+If FLAG1 = 0 And Z > Target - 300 Then
+     FLAG1 = 1
+     DIADROMH_BOLAN = ARX_DIADROMH / 4
+     BHMA = 20  '25-4-200  APO 5 TO EKANA 20
+End If
+     
+If FLAG3 = 0 And Z > Target - 700 Then
+     FLAG3 = 1
+     DIADROMH_BOLAN = ARX_DIADROMH / 4
+     BHMA = 20 '25-4
+End If
+     
+If Z > Target - 1500 And DIADROMH_BOLAN > 350 Then   ' 25-4-2001
+     DIADROMH_BOLAN = DIADROMH_BOLAN * 0.5
+     BHMA = 20  ' APO 5 TO EKANA 20     25-4-2001
+End If
+     
+     
+     
+     If FLAG2 = 0 And Z > Target / 2 Then
+         FLAG2 = 1
+         DIADROMH_BOLAN = ARX_DIADROMH
+     End If
+     
+     If Z < Target / 2 Or FLAG1 = 1 Then
+          DIADROMH_BOLAN = DIADROMH_BOLAN + BHMA
+          If DIADROMH_BOLAN > var93 - var88 Then
+              DIADROMH_BOLAN = var93 - var88
+          End If
+     Else
+            'DIADROMH_BOLAN = DIADROMH_BOLAN - DIADROMH_BOLAN / 10
+     End If
+     If Motori_On = 0 Then RobSend ("!" + skon_motor_on + ":!k:")
+
+            If Target > 1000 Then   '-Z
+                xam_tax = Xam_Ligo    '  "!v, , .1:"
+            Else
+                xam_tax = Xam_Poly    ' "!v, , .01:"
+            End If
+
+            RobSend (xam_tax)
+            MilSec 500
+            RobSend (xam_tax)
+
+
+Command1.Caption = DIADROMH_BOLAN
+
+
+  Loop
+   
+RobSend ("!" + skon_motor_off + ":!k:")
+
+ ' RobSend ("!v, , .4:")
+ ' MilSec 300
+ 'RobSend ("!v, , .4:")
+  RobSend (TaxyThtes)
+    MilSec 500
+  RobSend (TaxyThtes)
+  
+
+
+'RobSend ("!" + skon_motor_on + ":!k:")
+
+MilSec 100
+' kleisto to mpoykali
+  RobSend ("!d , ," + Str(var88) + ":go,,1:")
+MilSec 2000
+ RobSend ("!" + skon_motor_off + ":!k:")
+  
+  
+  
+  
+  
+  DOS_ALATI_DOK = Zygis0(0) - APOBARO
+  
+  Do While DOS_ALATI_DOK < -APOBARO / 2  ' À¡»œ” ∆’√…”«
+          MilSec 100
+          DOS_ALATI_DOK = Zygis0(0) - APOBARO
+          If GetCurrentTime() - ARXH > TIME_ANOXH Then Exit Do
+  Loop
+  
+  
+  frmSYNT.Caption = Format(DOS_ALATI_DOK, "#####")
+  Label8.Caption = Format(DOS_ALATI_DOK, "#####")
+ 
+ 'MSComm1.Output = Balance_2_Digits + Chr(13)
+MilSec 100
+
+End Function
