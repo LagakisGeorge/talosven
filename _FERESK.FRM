@@ -3790,7 +3790,7 @@ End Sub
 Private Sub DBCombo1_Click(Area As Integer)
  Dim x
    x = DBCombo1.SelectedItem
-   ximitech.Recordset.Bookmark = x
+   XIMITECH.Recordset.Bookmark = x
 End Sub
 
 Private Sub Command1_Click()
@@ -3812,8 +3812,8 @@ End If
     Command2.Enabled = False
 If system_ready = 1 Then PreHeating
 
-  dum = begin_talos(0)
-  If dum = 0 Then
+  DUM = begin_talos(0)
+  If DUM = 0 Then
         response = MsgBox(mL_Res(547), 64, "Talos")
         ' 547 "Πρόβλημα επικοινωνίας Robot-Προγράμματος "
         Exit Sub
@@ -3847,8 +3847,8 @@ If Pathma_Koympioy = 0 Then
        
        
        cmd$ = "!var12=" + str(6000 + Val(Label3(k).Caption)) + ":!var13=" + str(k) + ":"
-       dum = wait_to_understand(cmd$)
-       dum = Wait_Robot(0)
+       DUM = wait_to_understand(cmd$)
+       DUM = Wait_Robot(0)
        
        
        Label3(k).BackColor = &HFFFF80
@@ -3856,8 +3856,8 @@ If Pathma_Koympioy = 0 Then
     End If
   Next
   cmd$ = "!var12=82:"   'Park
-  dum = wait_to_understand(cmd$)
-  dum = Wait_Robot(0)
+  DUM = wait_to_understand(cmd$)
+  DUM = Wait_Robot(0)
   
   
   
@@ -3875,7 +3875,7 @@ If Pathma_Koympioy = 0 Then
 If Pathma_Koympioy = 1 Then
      Command2.Caption = mL_CapRes(536) '"Επιστροφή Διαλυμάτων"
      Command2.Enabled = False
-           ximitech.Recordset.Index = "KOD"
+           XIMITECH.Recordset.Index = "KOD"
            Set mydb = Workspaces(0).OpenDatabase("C:\TALOS\SKON_TB.MDB")
            ' Open table.
            Set MyTable = mydb.OpenRecordset("entoles", dbOpenTable)
@@ -3885,10 +3885,10 @@ If Pathma_Koympioy = 1 Then
            
      For k = 1 To ar_real_pothr
          If Label3(k).BackColor = &HFFFF80 Then
-            ximitech.Recordset.Seek "=", kodikos(Label3(k).Caption)
+            XIMITECH.Recordset.Seek "=", kodikos(Label3(k).Caption)
             MyTable.AddNew  ' Create new record.
-            MyTable("nerostox") = ximitech.Recordset("nerostox") * 1000 'ποσο διαλυμα θα παρασκευασθεί σε mgr
-            MyTable("periek") = val2(ximitech.Recordset("MORFH")) / 100 'περιεκτικότης στόχου
+            MyTable("nerostox") = XIMITECH.Recordset("nerostox") * 1000 'ποσο διαλυμα θα παρασκευασθεί σε mgr
+            MyTable("periek") = val2(XIMITECH.Recordset("MORFH")) / 100 'περιεκτικότης στόχου
             
             If MyTable("periek") <= 0 Then
             ' MyTable("periek") = val2(XIMITECH.Recordset("MORFH")) / 100 'περιεκτικότης στόχου
@@ -3896,14 +3896,14 @@ If Pathma_Koympioy = 1 Then
             End If
             
             
-            MyTable("buk") = Val(ximitech.Recordset("ADDR_old"))    'Νο μπουκαλιού σκόνης
+            MyTable("buk") = Val(XIMITECH.Recordset("ADDR_old"))    'Νο μπουκαλιού σκόνης
             MyTable("pot") = k         'Νο ποτηριού (μπουκαλιού διαλύματος
-            MyTable("mixtim") = ximitech.Recordset("MIXTIM")  'Χρόνος διαλυσης
-            MyTable("mixtim_fin") = ximitech.Recordset("MIXTIM_FIN")  'Χρόνος τελικής διάλυσης
-            MyTable("thermo1") = ximitech.Recordset("THERMO1") 'Θερμοκρασία νερού διάλυσης 1=κρύο ,2=χλιαρό 3= ζεστο
-            MyTable("thermo2") = ximitech.Recordset("THERMO2") 'Θερμοκρασία νερού αραίωσης 1=κρύο ,2=χλιαρό 3= ζεστο
-            MyTable("nero_dial") = ximitech.Recordset("nero_dial") 'νερό διάλυσης
-            MyTable("ximiko") = ximitech.Recordset("kod") + "-" + ximitech.Recordset("perigrafh") 'περιγραφή
+            MyTable("mixtim") = XIMITECH.Recordset("MIXTIM")  'Χρόνος διαλυσης
+            MyTable("mixtim_fin") = XIMITECH.Recordset("MIXTIM_FIN")  'Χρόνος τελικής διάλυσης
+            MyTable("thermo1") = XIMITECH.Recordset("THERMO1") 'Θερμοκρασία νερού διάλυσης 1=κρύο ,2=χλιαρό 3= ζεστο
+            MyTable("thermo2") = XIMITECH.Recordset("THERMO2") 'Θερμοκρασία νερού αραίωσης 1=κρύο ,2=χλιαρό 3= ζεστο
+            MyTable("nero_dial") = XIMITECH.Recordset("nero_dial") 'νερό διάλυσης
+            MyTable("ximiko") = XIMITECH.Recordset("kod") + "-" + XIMITECH.Recordset("perigrafh") 'περιγραφή
             MyTable.update          'Επιστέφεται nero_act=ποσότης νερού και color_act =ποσότης χρώματος
          End If
      Next
@@ -3912,7 +3912,7 @@ If Pathma_Koympioy = 1 Then
  If Check1.value = 1 Then
     araiosh.Show
  Else
-'    If Balance_Type = "ADAMEQ" Then
+'    If Balance_Type = "ADAM" Then
  '      skones2.Show
   '  Else
        skones.Show
@@ -3946,52 +3946,52 @@ If Pathma_Koympioy = 2 Then
               k = MyTable("pot")
               
                             
-              ximitech.Recordset.Index = "KOD"
-              ximitech.Recordset.Seek "=", left$(MyTable("ximiko"), 6)   ' kodikos(Val(Label3(k).Caption))
+              XIMITECH.Recordset.Index = "KOD"
+              XIMITECH.Recordset.Seek "=", left$(MyTable("ximiko"), 6)   ' kodikos(Val(Label3(k).Caption))
               
-              cmd$ = "!var12=" + str(12000 + ximitech.Recordset("addr_prot")) + ":!var13=" + str(k) + ":"
-              dum = wait_to_understand(cmd$)
-              dum = Wait_Robot(0)
-              ximitech.Recordset.Index = "KOD"
-              ximitech.Recordset.Seek "=", left$(MyTable("ximiko"), 6)
-                ximitech.Recordset.EDIT
+              cmd$ = "!var12=" + str(12000 + XIMITECH.Recordset("addr_prot")) + ":!var13=" + str(k) + ":"
+              DUM = wait_to_understand(cmd$)
+              DUM = Wait_Robot(0)
+              XIMITECH.Recordset.Index = "KOD"
+              XIMITECH.Recordset.Seek "=", left$(MyTable("ximiko"), 6)
+                XIMITECH.Recordset.EDIT
                'If XIMITECH.Recordset.NoMatch Then
                 
                 
                 
-                ximitech.Recordset("real_cons") = 0
-                 ximitech.Recordset("ypol_PROT") = 0
-                mADD_ster = ximitech.Recordset("addr_old")
-                ximitech.Recordset.update
+                XIMITECH.Recordset("real_cons") = 0
+                 XIMITECH.Recordset("ypol_PROT") = 0
+                mADD_ster = XIMITECH.Recordset("addr_old")
+                XIMITECH.Recordset.update
                  
            If IsNull(MyTable("COLOR_ACT")) Or IsNull(MyTable("NERO_ACT")) Then
                  TELIKO = 0
             Else
-                 If IsNull(ximitech.Recordset("bohu_xhm")) Then
+                 If IsNull(XIMITECH.Recordset("bohu_xhm")) Then
                                 TELIKO = MyTable("color_act") + MyTable("nero_act")
                 Else
                     If gXimikaDial Then  ' aytomata ximika
                         TELIKO = MyTable("color_act") + MyTable("nero_act")
                     Else
                        ' manual
-                        TELIKO = MyTable("color_act") + MyTable("nero_act") + ximitech.Recordset("bohu_xhm")
+                        TELIKO = MyTable("color_act") + MyTable("nero_act") + XIMITECH.Recordset("bohu_xhm")
                     End If
                 End If
             End If
                ' teliko = MyTable("color_act") + MyTable("nero_act") + XIMITECH.Recordset("bohu_xhm")
                 If TELIKO > 0 And MyTable("color_act") > 0 Then
-                      ximitech.Recordset.EDIT
-                      ximitech.Recordset("ypol_PROT") = TELIKO / 1000
-                      ximitech.Recordset("LHJ_PROT") = Date + ximitech.Recordset("ZVH_PROT")
-                      ximitech.Recordset("real_cons") = 100 * MyTable("color_act") / TELIKO
-                      ximitech.Recordset.update
+                      XIMITECH.Recordset.EDIT
+                      XIMITECH.Recordset("ypol_PROT") = TELIKO / 1000
+                      XIMITECH.Recordset("LHJ_PROT") = Date + XIMITECH.Recordset("ZVH_PROT")
+                      XIMITECH.Recordset("real_cons") = 100 * MyTable("color_act") / TELIKO
+                      XIMITECH.Recordset.update
                       
                       ' ενημέρωση στερεού με ποσότητα που  καταναλώθηκε
                        If Check1.value = 0 Then
-                          ximitech.Recordset.Seek "=", kodikos(mADD_ster)
-                          ximitech.Recordset.EDIT
-                          ximitech.Recordset("ypol_prot") = ximitech.Recordset("ypol_prot") - MyTable("color_act") / 1000
-                          ximitech.Recordset.update
+                          XIMITECH.Recordset.Seek "=", kodikos(mADD_ster)
+                          XIMITECH.Recordset.EDIT
+                          XIMITECH.Recordset("ypol_prot") = XIMITECH.Recordset("ypol_prot") - MyTable("color_act") / 1000
+                          XIMITECH.Recordset.update
                       End If
                       
                       
@@ -4014,8 +4014,8 @@ If Pathma_Koympioy = 2 Then
      kod6400 = 82
     ' "ΠΑΡΚΑΡΙΣΕ "
      cmd$ = "!var12=" + str(kod6400) + ":"
-     dum = wait_to_understand(cmd$)
-     dum = Wait_Robot(0)
+     DUM = wait_to_understand(cmd$)
+     DUM = Wait_Robot(0)
      Command1.Enabled = True
      
 End If
@@ -4026,7 +4026,7 @@ Private Sub Command3_Click()
  If Check1.value = 1 Then
     araiosh.Show
  Else
-  'If Balance_Type = "ADAMEQ" Then
+  'If Balance_Type = "ADAM" Then
    '   skones2.Show
   'Else
       skones.Show
@@ -4213,23 +4213,23 @@ End Sub
 
 Private Sub Form_Paint()
 Dim u
- ximitech.Recordset.Index = "KOD"
+ XIMITECH.Recordset.Index = "KOD"
  
- While Not ximitech.Recordset.eof
+ While Not XIMITECH.Recordset.eof
          u = 0
-         If Not IsNull(ximitech.Recordset("ADDR_PROT")) Then
-                 u = ximitech.Recordset("addr_prot")
+         If Not IsNull(XIMITECH.Recordset("ADDR_PROT")) Then
+                 u = XIMITECH.Recordset("addr_prot")
          End If
          
          If u >= Ar_1_mpoykal And u <= Ar_tel_mpoykal Then    ' =============================================
                                   
-                 If Not IsNull(ximitech.Recordset("LHJ_PROT")) Then   ' ---------------
-                          hmeres = DateDiff("d", Now, ximitech.Recordset("LHJ_PROT"))
+                 If Not IsNull(XIMITECH.Recordset("LHJ_PROT")) Then   ' ---------------
+                          hmeres = DateDiff("d", Now, XIMITECH.Recordset("LHJ_PROT"))
                  Else
                           hmeres = 1000
                  End If
                  
-                If ximitech.Recordset("skonh") = 1 Then ' ΣΤΕΡΕΑ
+                If XIMITECH.Recordset("skonh") = 1 Then ' ΣΤΕΡΕΑ
                                           Label1(u).BackColor = &H808080           '   καφε
                 Else  '    Δ Ι Α Λ Υ Μ Α Τ Α
                           Label1(u).BackColor = FIND_COLOR(hmeres)
@@ -4244,10 +4244,10 @@ Dim u
                            ' End Select
                 End If
                
-                kodikos(u) = ximitech.Recordset("kod")
-                Perigrafh(u) = ximitech.Recordset("perigrafh")
-                LHJH(u) = ximitech.Recordset("Lhj_prot")
-                Ypoloipo(u) = ximitech.Recordset("ypol_prot")
+                kodikos(u) = XIMITECH.Recordset("kod")
+                Perigrafh(u) = XIMITECH.Recordset("perigrafh")
+                LHJH(u) = XIMITECH.Recordset("Lhj_prot")
+                Ypoloipo(u) = XIMITECH.Recordset("ypol_prot")
                 
                  '  αν το υπόλοιπο είναι κάτω των 50 γραμμαρίων να κοκκινίζει
                  If Ypoloipo(u) < 50 Then
@@ -4267,7 +4267,7 @@ Dim u
                  End If
                  OldColor(u) = Label1(u).BackColor
                 
-                MHTRIKO(u) = ximitech.Recordset("addr_old")
+                MHTRIKO(u) = XIMITECH.Recordset("addr_old")
                  ' αναλογα με την ποσότητα να είναι το μέγεθος
                ' Label1(u).height = 100 + h0 * (Ypoloipo(u) / m0)
                ' Label1(u).top = Label1(u).top + (ho - Label1(u).height)
@@ -4277,7 +4277,7 @@ Dim u
                 End If
 
          End If ' ================================================================
-         ximitech.Recordset.MoveNext
+         XIMITECH.Recordset.MoveNext
  Wend
  Screen.MousePointer = 1
 
@@ -4352,11 +4352,11 @@ Else
             If MHTRIKO(Index) = MHTRIKO(k) Then  'idia mana
                If periek(k) > periek(Index) Then 'pyknotero
                   MHTRIKO2(Index) = k
-                  ximitech.Recordset.Index = "KOD"
-                  ximitech.Recordset.Seek "=", kodikos(Index)
-                  ximitech.Recordset.EDIT
-                  ximitech.Recordset("addr_old") = k
-                  ximitech.Recordset.update
+                  XIMITECH.Recordset.Index = "KOD"
+                  XIMITECH.Recordset.Seek "=", kodikos(Index)
+                  XIMITECH.Recordset.EDIT
+                  XIMITECH.Recordset("addr_old") = k
+                  XIMITECH.Recordset.update
                   ok = 1
                   Command2.Enabled = True
                   Exit For

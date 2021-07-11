@@ -4154,8 +4154,8 @@ r.Close
 ' Set db = OpenDatabase("c:\talos\recipies.mdb")
 
 
-prospau2.RecordSource = "select * from prospau2 where status=1 and epil>0 and not perigr like '~~*' order by epil,entolh,aa_prospau,seira"
-prospau2.Refresh
+PROSPAU2.RecordSource = "select * from prospau2 where status=1 and epil>0 and not perigr like '~~*' order by epil,entolh,aa_prospau,seira"
+PROSPAU2.Refresh
 
 
 
@@ -4182,11 +4182,11 @@ For k = 1 To 5: xr(k) = 0: Off_On(k) = 0: Next
 
 
 
-If IsNull(prospau2.Recordset("epil")) Then Exit Sub
-If Not IsNumeric(prospau2.Recordset("epil")) Then Exit Sub
-If prospau2.Recordset("epil") > 50 Then Exit Sub
+If IsNull(PROSPAU2.Recordset("epil")) Then Exit Sub
+If Not IsNumeric(PROSPAU2.Recordset("epil")) Then Exit Sub
+If PROSPAU2.Recordset("epil") > 50 Then Exit Sub
 
- mepil = Int(prospau2.Recordset("epil"))
+ mepil = Int(PROSPAU2.Recordset("epil"))
 
 'Quantity = xr
 for_use = 0
@@ -4212,9 +4212,9 @@ Next
  
 
 
-If Not IsNull(prospau2.Recordset("nero")) Then  ' Exit Sub
+If Not IsNull(PROSPAU2.Recordset("nero")) Then  ' Exit Sub
   
-  q_ner = prospau2.Recordset("nero")
+  q_ner = PROSPAU2.Recordset("nero")
   sum_gr = sum_gr + q_ner
   If a00x(5) = 0 Then
       xr_ner = 0
@@ -4252,7 +4252,7 @@ mz = Zygis0(0)
 Do While Abs(mz) > 30
 '  G_REZERO MSComm1
   
-If Balance_Type = "ADAMEQ" Then
+If Balance_Type = "ADAM" Then
       MSComm1.Output = "ZERO" + Chr(13)
 Else
       MSComm1.Output = "Z" + Chr$(13) + Chr(10)
@@ -4411,11 +4411,11 @@ For k = 1 To 5: xr(k) = 0: Off_On(k) = 0: Next
 
 
 
-If IsNull(prospau2.Recordset("epil")) Then Exit Function
-If Not IsNumeric(prospau2.Recordset("epil")) Then Exit Function
-If prospau2.Recordset("epil") > 50 Then Exit Function
+If IsNull(PROSPAU2.Recordset("epil")) Then Exit Function
+If Not IsNumeric(PROSPAU2.Recordset("epil")) Then Exit Function
+If PROSPAU2.Recordset("epil") > 50 Then Exit Function
 
- mepil = Int(prospau2.Recordset("epil"))
+ mepil = Int(PROSPAU2.Recordset("epil"))
 
 'Quantity = xr
 for_use = 0
@@ -4443,9 +4443,9 @@ Next
  
 
 
-If Not IsNull(prospau2.Recordset("nero")) Then  ' Exit Sub
+If Not IsNull(PROSPAU2.Recordset("nero")) Then  ' Exit Sub
   
-  q_ner = prospau2.Recordset("nero")
+  q_ner = PROSPAU2.Recordset("nero")
   sum_gr = sum_gr + q_ner
   If a00x(5) = 0 Then
       xr_ner = 0
@@ -4558,11 +4558,11 @@ For k = 1 To 5: Off_On(k) = 0: Next
 
 
 
-If IsNull(prospau2.Recordset("epil")) Then Exit Sub
-If Not IsNumeric(prospau2.Recordset("epil")) Then Exit Sub
-If prospau2.Recordset("epil") > 50 Then Exit Sub
+If IsNull(PROSPAU2.Recordset("epil")) Then Exit Sub
+If Not IsNumeric(PROSPAU2.Recordset("epil")) Then Exit Sub
+If PROSPAU2.Recordset("epil") > 50 Then Exit Sub
 
- mepil = Int(prospau2.Recordset("epil"))
+ mepil = Int(PROSPAU2.Recordset("epil"))
 
 'Quantity = xr
 for_use = 0
@@ -4607,7 +4607,7 @@ mz = Zygis0(0)
 Do While Abs(mz) > 30
 '  G_REZERO MSComm1
   
-If Balance_Type = "ADAMEQ" Then
+If Balance_Type = "ADAM" Then
       MSComm1.Output = "ZERO" + Chr(13)
 Else
       MSComm1.Output = "Z" + Chr$(13) + Chr(10)
@@ -5976,43 +5976,60 @@ End Function
 
 
 
-Function zyg_ADAM(Zygis_Kind As Variant)
+Function zyg_ADAM(Zygis_Kind As Variant) As Long
 On Error GoTo er_det
    Dim counter
   Dim tot_counter
-  Dim START
+  Dim start
   Dim FromModem As String
-  Dim DUMMY
+  Dim dummy
   Dim BUF
   
    counter = 0: tot_counter = 0: Label10 = 0
 ' If system_ready = 0 Then zyg_ADAM = "System not Working": Exit Function
-  START = GetCurrentTime()
+  start = GetCurrentTime()
   
   
     Do
-    If GetCurrentTime() - START > 10001 Then zyg_ADAM = " ": Exit Function
+    If GetCurrentTime() - start > 10001 Then zyg_ADAM = -999000999: Exit Function
      MSComm1.InBufferCount = 0
       FromModem$ = ""
            MSComm1.Output = Balance_Asking + Chr$(13)
           MilSec (50)
-          DUMMY = DoEvents()
+          dummy = DoEvents()
           If MSComm1.InBufferCount Then
            BUF = MSComm1.InBufferCount
           FromModem$ = FromModem$ + MSComm1.Input
         '  List1.AddItem FromModem$, 0
+        
+        
+        
+         
+              If InStr(UCase(FromModem$), "OVER") > 0 Then
+                'MsgBox "Scale Overload ...", , "Talos"
+                zyg_ADAM = -7900000  ' "OL"
+                Exit Do
+              End If
+              If InStr(UCase(FromModem$), "UNDER") > 0 Then
+                 'MsgBox "Scale Overload ...", , "Talos"
+                 zyg_ADAM = -9900000 ' "UL"
+                 Exit Do
+              End If
+        
+        
+        
            
-           If InStr(FromModem$, "OL") > 0 Then
-                'MsgBox "Scale Overload ...", , "Talos"
-                zyg_ADAM = "OL"
-                Exit Do
-            End If
-           If InStr(FromModem$, "UL") > 0 Then
-                'MsgBox "Scale Overload ...", , "Talos"
-                zyg_ADAM = "UL"
-                Exit Do
-            End If
-            If GetCurrentTime() - START > 5000 And Zygis_Kind = "OK" Then Zygis_Kind = 0: tot_counter = 0
+'           If InStr(FromModem$, "OL") > 0 Then
+'                'MsgBox "Scale Overload ...", , "Talos"
+'                zyg_ADAM = "OL"
+'                Exit Do
+'            End If
+'           If InStr(FromModem$, "UL") > 0 Then
+'                'MsgBox "Scale Overload ...", , "Talos"
+'                zyg_ADAM = "UL"
+'                Exit Do
+'            End If
+            If GetCurrentTime() - start > 5000 And Zygis_Kind = "OK" Then Zygis_Kind = 0: tot_counter = 0
           
           
           
@@ -6043,11 +6060,11 @@ On Error GoTo er_det
                 Else
                 
                   '  CC = Replace(CC, "?", "0")
-                    zyg_ADAM = CC3
+                    zyg_ADAM = Val(CC3) * 1000
                     Exit Do
                 End If
             Else
-               zyg_ADAM = ""
+               zyg_ADAM = -999000999
             End If
             
                
@@ -6122,8 +6139,8 @@ End Function
 
 
 
-Function Zygis_adamEQ(x As Single)  'OLD ONE
-  Dim counter, START1, FromModem$, DUMMY, ZYG
+Function Zygis_ADAM(x As Single)  'OLD ONE
+  Dim counter, START1, FromModem$, dummy, ZYG
     ' Flush the input buffer.
        MSComm1.Output = Balance_Asking + Chr$(13)
        MSComm1.InBufferCount = 0
@@ -6132,7 +6149,7 @@ Function Zygis_adamEQ(x As Single)  'OLD ONE
     START1 = GetCurrentTime()
     Do
        MilSec 40
-       DUMMY = DoEvents()
+       dummy = DoEvents()
        ' If there is data in the buffer, then read it.
        If MSComm1.InBufferCount Then
           FromModem$ = FromModem$ + MSComm1.Input
@@ -6152,12 +6169,12 @@ Function Zygis_adamEQ(x As Single)  'OLD ONE
              End If
        End If
         If GetCurrentTime() - START1 > 15000 Then
-            Zygis_adamEQ = -999000999
+            Zygis_ADAM = -999000999
             Exit Function
        End If
     Loop
     ZYG = Val(left$(FromModem$, 9))
-    Zygis_adamEQ = ZYG * 1000
+    Zygis_ADAM = ZYG * 1000
 End Function
 '
 '
@@ -6245,7 +6262,7 @@ End Function
 
 
 Function Zygis0OLD(x As Single)
-  Dim counter, starter, DUMMY, FromModem$
+  Dim counter, starter, dummy, FromModem$
   Dim Y
   Ref.Caption = left(Ref.Caption + Space(15), 15) + "Sc"
 
@@ -6253,10 +6270,10 @@ Function Zygis0OLD(x As Single)
       
     '   MSComm1.Output = "UPD 20 " + Chr$(13) + Chr$(10)
     
-    If Balance_Type = "ADAMEQ" Then
-       Zygis0OLD = Zygis0_adamEQ(MSComm1, 0)
+    If Balance_Type = "ADAM" Then
+       Zygis0OLD = Zygis0_ADAM(MSComm1, 0)
        Label3(0).Caption = Zygis0OLD
-       'ZYGIS0OLD = Zygis0_adamEQ(x)
+       'ZYGIS0OLD = Zygis0_ADAM(x)
        Exit Function
     Else
     
@@ -6274,7 +6291,7 @@ Function Zygis0OLD(x As Single)
     counter = 0
     ' Wait for "OK" to come back from the modem.
     Do
-       DUMMY = DoEvents()
+       dummy = DoEvents()
           If GetCurrentTime() - starter > 2000 Then
             Zygis0OLD = -999000999
             Gwrite_zygish "---OverTime---", z0
@@ -6352,31 +6369,31 @@ Function Update2_PROSPAU(mpoykali, UESH, Zygisma)
     Dim m_ek, M_gl, m_gr, m_regr
     Dim KOD_XHM
         ' емглея©мы тис пяацлатий╦с пос╪тгтес поу досол╦тягса
-        prospau2.Recordset.EDIT
-        prospau2.Recordset("REGR") = Zygisma        ' АЯВЕъО prospau
+        PROSPAU2.Recordset.EDIT
+        PROSPAU2.Recordset("REGR") = Zygisma        ' АЯВЕъО prospau
         ' УПОКОЦъФЫ ТА ПЯАЦЛАТИЙэ ПОСОСТэ
-        m_ek = prospau2.Recordset("EK")
-        M_gl = prospau2.Recordset("gl")
-        m_gr = prospau2.Recordset("gr")
-        m_regr = prospau2.Recordset("Regr")
+        m_ek = PROSPAU2.Recordset("EK")
+        M_gl = PROSPAU2.Recordset("gl")
+        m_gr = PROSPAU2.Recordset("gr")
+        m_regr = PROSPAU2.Recordset("Regr")
         If m_gr > 0 Then
-           prospau2.Recordset("REk") = (m_ek + M_gl) * IIf(m_gr = 0, 1, (m_regr / m_gr))
+           PROSPAU2.Recordset("REk") = (m_ek + M_gl) * IIf(m_gr = 0, 1, (m_regr / m_gr))
         End If
        
-        prospau2.Recordset("status") = 2
-        prospau2.Recordset("usere") = User_ID
-        KOD_XHM = prospau2.Recordset("KOD")
-        prospau2.Recordset.update
+        PROSPAU2.Recordset("status") = 2
+        PROSPAU2.Recordset("usere") = User_ID
+        KOD_XHM = PROSPAU2.Recordset("KOD")
+        PROSPAU2.Recordset.update
         Ypoloipo(mpoykali) = Ypoloipo(mpoykali) - Zygisma / 1000   ' ПъМАЙАР
         
-        ximitech.Recordset.Seek "=", KOD_XHM
+        XIMITECH.Recordset.Seek "=", KOD_XHM
          
         On Error Resume Next
-        ximitech.Recordset.EDIT
-        ximitech.Recordset("ypol_prot") = ximitech.Recordset("ypol_prot") - Zygisma / 1000
-           ximitech.Recordset("last_dosom") = CStr(Now)
+        XIMITECH.Recordset.EDIT
+        XIMITECH.Recordset("ypol_prot") = XIMITECH.Recordset("ypol_prot") - Zygisma / 1000
+           XIMITECH.Recordset("last_dosom") = CStr(Now)
                  'XIMITECH.Recordset("katofli") = katofli(MPOYKALI)
-        ximitech.Recordset.update
+        XIMITECH.Recordset.update
         On Error GoTo 0
 End Function
 '
@@ -6394,7 +6411,7 @@ End Function
 
 
 Function gyrise_zygaria(chfia)
-Dim DUMMY
+Dim dummy
 
 ' фуцифеи сто    "HIGH"  2 ДЕЙАДИЙэ АЙЯъБЕИА
  Dim counter, starter, Proeid, FromModem$, a
@@ -6406,7 +6423,7 @@ Dim DUMMY
     counter = 0
     ' Wait for "OK" to come back from the modem.
     Do
-       DUMMY = DoEvents()
+       dummy = DoEvents()
        If GetCurrentTime() - starter > 27000 Then
           '
              MsgBox "аМОъНТЕ ТГМ ФУЦАЯИэ KAI цуяисте тгм ста " + str(chfia) + " патымтас то   F "
@@ -6473,7 +6490,7 @@ Function metrhs2(xr As Double, rixies As Integer) As Double
  '*************************************
 Dim ll, ii$, cmd$, TEMP%
 '***  online  фуцисг
-Dim Poses_Zyg, START, zyg0, blab
+Dim Poses_Zyg, start, zyg0, blab
  ll = 0
 ii$ = ""
 ZYG = 0
@@ -6533,7 +6550,7 @@ On Error Resume Next
    'Kill "C:\TALOS\dokprosp.dbf"
 
 
-If prospau2.Recordset.eof Then prospau2.Recordset.MoveLast
+If PROSPAU2.Recordset.eof Then PROSPAU2.Recordset.MoveLast
 
 Set mydb = Workspaces(0).OpenDatabase("C:\TALOS\RECIPIES.MDB", False, False)
 mydb.Execute "DELETE *FROM DOKPROS2;"
@@ -6783,34 +6800,34 @@ mydb.Close
    Ar_Syntag = IIf(Val(Text1.text) > Ar_Pothr Or Val(Text1.text) < 1, 0, Val(Text1.text) - 1)
    ' ДИАБэФЫ ТОМ ПъМАЙА АПЭ ТИР СУМТАЦщР
    
-   ximitech.Recordset.Index = "KOD"
-   prospau2.Recordset.MoveFirst
+   XIMITECH.Recordset.Index = "KOD"
+   PROSPAU2.Recordset.MoveFirst
    
-   Do While Not prospau2.Recordset.eof
+   Do While Not PROSPAU2.Recordset.eof
        Ar_Syntag = Ar_Syntag + 1
-       m_syntag(Ar_Syntag) = Trim(prospau2.Recordset("ENTOLH")) + "-" + LTrim(prospau2.Recordset("aa_PROSPAU"))
+       m_syntag(Ar_Syntag) = Trim(PROSPAU2.Recordset("ENTOLH")) + "-" + LTrim(PROSPAU2.Recordset("aa_PROSPAU"))
        Count = 0
-       Do While Not prospau2.Recordset.eof And m_syntag(Ar_Syntag) = prospau2.Recordset("ENTOLH") + "-" + LTrim(prospau2.Recordset("aa_prospau"))
-          If prospau2.Recordset("SEIRA") = 1 Then
-             m_nero(Ar_Syntag) = prospau2.Recordset("nero")
+       Do While Not PROSPAU2.Recordset.eof And m_syntag(Ar_Syntag) = PROSPAU2.Recordset("ENTOLH") + "-" + LTrim(PROSPAU2.Recordset("aa_prospau"))
+          If PROSPAU2.Recordset("SEIRA") = 1 Then
+             m_nero(Ar_Syntag) = PROSPAU2.Recordset("nero")
           End If
-          If Not IsNull(prospau2.Recordset("GR")) Then
-              mgr = prospau2.Recordset("GR")
+          If Not IsNull(PROSPAU2.Recordset("GR")) Then
+              mgr = PROSPAU2.Recordset("GR")
               If mgr > 0 Then
                    'XIMITECH.Recordset.Index = "KOD"
-                   ximitech.Recordset.Seek "=", prospau2.Recordset("KOD")
-                   If Not IsNull(ximitech.Recordset("ADDr_prot")) Then
+                   XIMITECH.Recordset.Seek "=", PROSPAU2.Recordset("KOD")
+                   If Not IsNull(XIMITECH.Recordset("ADDr_prot")) Then
                      Count = Count + 1
-                     m(Ar_Syntag, Count) = ximitech.Recordset("ADDr_prot")
-                     MilliGrs(Ar_Syntag, Count) = Val(prospau2.Recordset("gr"))
+                     m(Ar_Syntag, Count) = XIMITECH.Recordset("ADDr_prot")
+                     MilliGrs(Ar_Syntag, Count) = Val(PROSPAU2.Recordset("gr"))
                      UeshMpoyk(Ar_Syntag, Count) = k 'ХщСГ ПОУ ХА ЕМГЛЕЯЧСЫ ЛЕТэ ТГМ ФЩЦИСГ
                      End If
               End If
            End If
-           prospau2.Recordset.MoveNext
-           If prospau2.Recordset.eof Then Exit Do
+           PROSPAU2.Recordset.MoveNext
+           If PROSPAU2.Recordset.eof Then Exit Do
        Loop
-       If prospau2.Recordset.eof Then Exit Do
+       If PROSPAU2.Recordset.eof Then Exit Do
       ' prospau2.Recordset.MoveNext
    Loop
    
@@ -7075,8 +7092,8 @@ Ref.Caption = "--"
      
      
      
-       If Not IsNull(prospau2.Recordset("ALATIGR")) Then
-          If prospau2.Recordset("ALATIGR") > 0 And UESH_ALATIOY > 0 Then
+       If Not IsNull(PROSPAU2.Recordset("ALATIGR")) Then
+          If PROSPAU2.Recordset("ALATIGR") > 0 And UESH_ALATIOY > 0 Then
                alati = 1
          End If
        End If
@@ -7091,14 +7108,14 @@ Ref.Caption = "--"
 '       dum_x=getcurrenttime():while MilSec 1000
          
         
-'If Balance_Type = "ADAMEQ" Then 'metler
+'If Balance_Type = "ADAM" Then 'metler
         Ref.Caption = "ref:Rez_met 1"
         G_REZERO MSComm1
         
         MilSec 1000
            mz = Zygis0(0)
            metr = 0
-                Do While Abs(mz) > 60
+                Do While Abs(Val(mz)) > 60
                      Ref.Caption = "ref:Rez_met 2"
                      G_REZERO MSComm1
                       MilSec 1000
@@ -7137,7 +7154,7 @@ Ref.Caption = "--"
               mz = Zygis0(0)
         
         
-'If Balance_Type <> "ADAMEQ" Then   '16-9-2002 to metefera parapano mazi me to adameq
+'If Balance_Type <> "ADAM" Then   '16-9-2002 to metefera parapano mazi me to ADAM
 '        Do While Abs(mz) > 60
 '             MilSec 2000
 '             G_REZERO MSComm1
@@ -7179,7 +7196,7 @@ Ref.Caption = "--"
         Ref.Caption = "ref:Zyg_beak1"
 
         mz = Zygis0(0)
-        If mz / 1000 < 170 Then
+        If (mz) / 1000 < 170 Then
                 MilSec 1000
                 mz = Zygis0(0)
                 If mz / 1000 < 170 Then
@@ -7199,12 +7216,12 @@ Ref.Caption = "--"
     If alati = 1 And Ektel_kinhsh <> -20 Then
 51100
     
-           Real_Alati = DOS_ALATI_DOK(prospau2.Recordset("ALATIGR"))
+           Real_Alati = DOS_ALATI_DOK(PROSPAU2.Recordset("ALATIGR"))
          '  GoTo 51100
-              prospau2.Recordset.EDIT
-              prospau2.Recordset("AlatiGr") = Real_Alati
+              PROSPAU2.Recordset.EDIT
+              PROSPAU2.Recordset("AlatiGr") = Real_Alati
                  Real_Alati = 0
-              prospau2.Recordset.update
+              PROSPAU2.Recordset.update
          
          
          ' aneba СТО ПАМЫ ф
@@ -7338,10 +7355,10 @@ Case 2 'паме потгяи
            If aritmos_ximikon > 0 Then
                  m_synt = a_Ar_Syntag(Move)
                  real_dos = DISPENSE_XIMIKA(m_synt)
-                 prospau2.Recordset.EDIT
-                 prospau2.Recordset("RENERO") = real_dos
-                 prospau2.Recordset("date_disp") = Now '  time_x / 100
-                 prospau2.Recordset.update
+                 PROSPAU2.Recordset.EDIT
+                 PROSPAU2.Recordset("RENERO") = real_dos
+                 PROSPAU2.Recordset("date_disp") = Now '  time_x / 100
+                 PROSPAU2.Recordset.update
                  
                  If m_ximika(50, 5) = -31 Then
                     Ektel_kinhsh = -31   ' Ektel_kinhsh = -31 Then
@@ -7358,12 +7375,12 @@ Case 2 'паме потгяи
 '          dum = gyrise_zygaria(3)
            MilSec 500
            real_dos = 0
-           If Not IsNull(prospau2.Recordset("nero")) Then
+           If Not IsNull(PROSPAU2.Recordset("nero")) Then
 33:
                If system_ready = 0 Then
-                  real_dos = prospau2.Recordset("nero") + 1
+                  real_dos = PROSPAU2.Recordset("nero") + 1
                Else
-                  real_dos = NER_DOSOMETRHSH(prospau2.Recordset("nero"), Porta_Ner)
+                  real_dos = NER_DOSOMETRHSH(PROSPAU2.Recordset("nero"), Porta_Ner)
                End If
                 
                Get_Gen_xronos "telos neroy"
@@ -7379,15 +7396,15 @@ Case 2 'паме потгяи
            time_x = Mid$(Time$, 1, time_a - 1) + Mid$(Time$, time_a + 1, 2)
            If real_dos < -111000222 Then
                 Ektel_kinhsh = -30
-                prospau2.Recordset.EDIT
-                prospau2.Recordset("RENERO") = 999999
-                prospau2.Recordset("date_disp") = Now   ' time_x / 100
-                prospau2.Recordset.update
+                PROSPAU2.Recordset.EDIT
+                PROSPAU2.Recordset("RENERO") = 999999
+                PROSPAU2.Recordset("date_disp") = Now   ' time_x / 100
+                PROSPAU2.Recordset.update
            Else
-                prospau2.Recordset.EDIT
-                prospau2.Recordset("RENERO") = real_dos
-                prospau2.Recordset("date_disp") = Now '  time_x / 100
-                prospau2.Recordset.update
+                PROSPAU2.Recordset.EDIT
+                PROSPAU2.Recordset("RENERO") = real_dos
+                PROSPAU2.Recordset("date_disp") = Now '  time_x / 100
+                PROSPAU2.Recordset.update
            End If
       Case 9 'досолетягсг вяылатос
              frmSYNT.Caption = frmSYNT.Caption + " dispense  " + str(a_Fere(Move))
@@ -7402,7 +7419,7 @@ Case 2 'паме потгяи
 m_Counter = 0
 111:
                 
-          ' If Balance_Type = "ADAMEQ" Then
+          ' If Balance_Type = "ADAM" Then
           '      Syn_Dos2.Asked_Q = a_Mgrs(Move) '  ZHTOYMENH посоTHTA сE MGRS
           '      Syn_Dos2.Level = Ypoloipo(a_Fere(Move))      'цяалаяиа лпоуйакиоу
           '      Syn_Dos2.Valve_on = IIf(a_Kefalh(Move) = 1, valve_1_on, valve_2_on) ' амоицла бакбидас
@@ -7451,152 +7468,160 @@ m_Counter = 0
 End Select
 
 End Function
+
 Function DOS_ALATI(M_ALATI)
-'------dont use it!!!!!!!!!!!------------------
-Dim APOBARO, Apoklish, DIADROMH_BOLAN, Arxh, TIME_ANOXH, Z, ok, TaxyThtes
-Dim counter, FIRST_TIME, Motori_On, DUM
-Motori_On = 0
-FIRST_TIME = True
-counter = 0   'дес то   VAR88     !!!!!!!!
-Apoklish = 30
-DIADROMH_BOLAN = 12000 ' BHMATA
-TIME_ANOXH = 500000   '50SEC
-TaxyThtes = "!V,,28,0.5:"
-Label3(0).Caption = M_ALATI
+
+    '------dont use it!!!!!!!!!!!------------------
+    Dim APOBARO, Apoklish, DIADROMH_BOLAN, Arxh, TIME_ANOXH, Z, ok, TaxyThtes
+
+    Dim counter, FIRST_TIME, Motori_On, DUM
+
+    Motori_On = 0
+    FIRST_TIME = True
+    counter = 0   'дес то   VAR88     !!!!!!!!
+    Apoklish = 30
+    DIADROMH_BOLAN = 12000 ' BHMATA
+    TIME_ANOXH = 500000   '50SEC
+    TaxyThtes = "!V,,28,0.5:"
+    Label3(0).Caption = M_ALATI
     ' паме сто бокам йаи  пиасто   94
     'нейимла то лотояи  "SKON_MOTOR_ON"
     'йяата апобаяо
     
     '1 .ANEBASE TO BOLAN сица-сица
     '    дес фуцаяиа
-   'пкгсиасе поку    ови ->1
-   'йатеба йаты сица-сица
-   'ежтасес стово   ови =>1
-   ' йатебасе бокам стгм хесг тоу
-   'амоине цйяиппея
-   'амы ф
-    
-    
+    'пкгсиасе поку    ови ->1
+    'йатеба йаты сица-сица
+    'ежтасес стово   ови =>1
+    ' йатебасе бокам стгм хесг тоу
+    'амоине цйяиппея
+    'амы ф
     
     ' паме сто бокам йаи  пиасто   94
-     DUM = wait_to_understand("!var12=94:")
+    DUM = wait_to_understand("!var12=94:")
      
-        'йяата апобаяо
-     APOBARO = Zygis0(0)
+    'йяата апобаяо
+    APOBARO = Zygis0(0)
      
-     DUM = Wait_Robot(0)
-
-
+    DUM = Wait_Robot(0)
     
-Arxh = GetCurrentTime()
+    Arxh = GetCurrentTime()
   
+    RobSend ("!v, , .01:")
+    MilSec 500
   
-  RobSend ("!v, , .01:")
-   MilSec 500
-  
-  
-  RobSend ("!v, , .01:")
+    RobSend ("!v, , .01:")
 
     'нейима то лотояи  "SKON_MOTOR_ON"
-        RobSend ("!" + skon_motor_on + ":")
-Motori_On = 1
+    RobSend ("!" + skon_motor_on + ":")
+    Motori_On = 1
 
+    DIADROMH_BOLAN = DIADROMH_BOLAN / 30
+    ok = 0
 
-
-DIADROMH_BOLAN = DIADROMH_BOLAN / 30
-ok = 0
-' то теяла тоу бокам  еимаи    VAR(88)+12000 bhmata
-Do While True
+    ' то теяла тоу бокам  еимаи    VAR(88)+12000 bhmata
+    Do While True
   
-  ' АМЕБАСЛА1
-  RobSend ("!d , ," + str((-500 + var88) + DIADROMH_BOLAN) + ":!go,,1:")
-  Do While axe(3) < (-500 + var88) + DIADROMH_BOLAN
-        Z = Zygis0(0) - APOBARO
-        counter = counter + 1
-        frmSYNT.Caption = str(counter) + "  ^   " + str(Z)
-        If Z < -999000000 Then
-             RobSend ("!" + skon_motor_off + ":!k:")
-              
-              
-              Do While Z < -999000000
-                   Z = Zygis0(0) - APOBARO
-              Loop
-              
-              RobSend ("!" + skon_motor_on + ":!go,,1:")
-        End If
-          If Z >= M_ALATI - Apoklish * 10 And FIRST_TIME = True Then
-            DIADROMH_BOLAN = DIADROMH_BOLAN / 10
-            RobSend ("!" + skon_motor_off + ":!k:")
-            FIRST_TIME = False
-            RobSend ("!v, ,0.1:")
-            MilSec 300
-            RobSend ("!v, ,0.1:")
-            Motori_On = 0
+        ' АМЕБАСЛА1
+        RobSend ("!d , ," + str((-500 + var88) + DIADROMH_BOLAN) + ":!go,,1:")
 
-            Exit Do
-        End If
-        If Z >= M_ALATI - Apoklish Then
+        Do While axe(3) < (-500 + var88) + DIADROMH_BOLAN
+            Z = Zygis0(0) - APOBARO
+            counter = counter + 1
+            frmSYNT.Caption = str(counter) + "  ^   " + str(Z)
+
+            If Z < -999000000 Then
+                RobSend ("!" + skon_motor_off + ":!k:")
+              
+                Do While Z < -999000000
+                    Z = Zygis0(0) - APOBARO
+                Loop
+              
+                RobSend ("!" + skon_motor_on + ":!go,,1:")
+            End If
+
+            If Z >= M_ALATI - Apoklish * 10 And FIRST_TIME = True Then
+                DIADROMH_BOLAN = DIADROMH_BOLAN / 10
+                RobSend ("!" + skon_motor_off + ":!k:")
+                FIRST_TIME = False
+                RobSend ("!v, ,0.1:")
+                MilSec 300
+                RobSend ("!v, ,0.1:")
+                Motori_On = 0
+
+                Exit Do
+
+            End If
+
+            If Z >= M_ALATI - Apoklish Then
                 DOS_ALATI = Z
                 ok = 1
+
                 Exit Do
-        End If
-  Loop
+
+            End If
+
+        Loop
   
-    If ok = 1 Then Exit Do
-  ' ЙАТЕБАСЛА
-  RobSend ("!d , ," + str(-500 + var88) + ":!go,,1:")
-  Do While Abs(axe(3) - (-500 + var88)) > 10 ' axe(3)>var88
-          Z = Zygis0(0) - APOBARO
-          counter = counter + 1
-          frmSYNT.Caption = str(counter) + "     " + str(Z)
+        If ok = 1 Then Exit Do
+        ' ЙАТЕБАСЛА
+        RobSend ("!d , ," + str(-500 + var88) + ":!go,,1:")
+
+        Do While Abs(axe(3) - (-500 + var88)) > 10 ' axe(3)>var88
+            Z = Zygis0(0) - APOBARO
+            counter = counter + 1
+            frmSYNT.Caption = str(counter) + "     " + str(Z)
           
-          If Z < -999000000 Then
-               RobSend ("!" + skon_motor_off + ":!k:")
-               Do While Z < -999000000
-                   Z = Zygis0(0) - APOBARO
-              Loop
-              RobSend ("!" + skon_motor_on + ":!go,,1:")
-        End If
+            If Z < -999000000 Then
+                RobSend ("!" + skon_motor_off + ":!k:")
 
+                Do While Z < -999000000
+                    Z = Zygis0(0) - APOBARO
+                Loop
+
+                RobSend ("!" + skon_motor_on + ":!go,,1:")
+            End If
         
-        If Z >= M_ALATI - Apoklish * 10 And FIRST_TIME = True Then
-            DIADROMH_BOLAN = DIADROMH_BOLAN / 10
-            FIRST_TIME = False
-             RobSend ("!v, ,0.1:")
-            MilSec 300
-            RobSend ("!v, ,0.1:")
-        End If
+            If Z >= M_ALATI - Apoklish * 10 And FIRST_TIME = True Then
+                DIADROMH_BOLAN = DIADROMH_BOLAN / 10
+                FIRST_TIME = False
+                RobSend ("!v, ,0.1:")
+                MilSec 300
+                RobSend ("!v, ,0.1:")
+            End If
 
-
-
-        If Z >= M_ALATI - Apoklish Then
+            If Z >= M_ALATI - Apoklish Then
                 DOS_ALATI = Z
                 ok = 1
+
                 Exit Do
-        End If
-  Loop
-  
-     If ok = 1 Then Exit Do
-  
-     If Motori_On = 0 Then RobSend ("!" + skon_motor_on + ":!k:")
 
-  Loop
+            End If
+
+        Loop
+  
+        If ok = 1 Then Exit Do
+  
+        If Motori_On = 0 Then RobSend ("!" + skon_motor_on + ":!k:")
+
+    Loop
    
-  RobSend ("!" + skon_motor_off + ":!k:")
+    RobSend ("!" + skon_motor_off + ":!k:")
   
-  RobSend (TaxyThtes)
-  MilSec 300
- RobSend (TaxyThtes)
+    RobSend (TaxyThtes)
+    MilSec 300
+    RobSend (TaxyThtes)
 
-' kleisto to mpoykali   GMPA@STIAFILCO.COM   DONTAS
-  RobSend ("!d , ," + str(-500 + var88) + ":go,,1:")
+    ' kleisto to mpoykali   GMPA@STIAFILCO.COM   DONTAS
+    RobSend ("!d , ," + str(-500 + var88) + ":go,,1:")
   
-  MilSec 1500
-   RobSend ("!" + skon_motor_off + ":!k:")
-  DOS_ALATI = Zygis0(0) - APOBARO
-  Label8.Caption = DOS_ALATI
+    MilSec 1500
+    RobSend ("!" + skon_motor_off + ":!k:")
+    DOS_ALATI = Zygis0(0) - APOBARO
+    Label8.Caption = DOS_ALATI
 
 End Function
+
 '
 '
 '
@@ -7623,18 +7648,18 @@ Dim mm_Synt
  End If
  
  ' Sort_Recipes
- prospau2.Refresh
+ PROSPAU2.Refresh
  MilSec 1000
  
  
  
  SYN_ALATIOY = 0
- prospau2.Recordset.MoveFirst
- Do While Not prospau2.Recordset.eof
-    If Not IsNull(prospau2.Recordset("ALATIGR")) Then
-        SYN_ALATIOY = SYN_ALATIOY + prospau2.Recordset("ALATIGR")
+ PROSPAU2.Recordset.MoveFirst
+ Do While Not PROSPAU2.Recordset.eof
+    If Not IsNull(PROSPAU2.Recordset("ALATIGR")) Then
+        SYN_ALATIOY = SYN_ALATIOY + PROSPAU2.Recordset("ALATIGR")
     End If
-    prospau2.Recordset.MoveNext
+    PROSPAU2.Recordset.MoveNext
     'Grid.Refresh
  Loop
  If DOYLEYO_ALATI = 0 Or UESH_ALATIOY = 0 Then SYN_ALATIOY = 0
@@ -7715,8 +7740,8 @@ Timer1.Enabled = True
 XALASE_NERO = 0
 
    'лаяйаяы тис йимгсеис поу ейтекоумтаи таутовяома
- prospau2.Recordset.MoveFirst
- Last_Epil = prospau2.Recordset("epil")
+ PROSPAU2.Recordset.MoveFirst
+ Last_Epil = PROSPAU2.Recordset("epil")
 
 PHDHMENA_POTHRIA = Val(Text1.text) - 1
 PHDHMENA_POTHRIA = IIf(PHDHMENA_POTHRIA < 0, 0, PHDHMENA_POTHRIA)
@@ -7776,8 +7801,8 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                     result = Ektel_kinhsh(2)
                     result = Ektel_kinhsh(1) 'досолетягсг
                     
-                           Last_Epil = prospau2.Recordset("epil")
-                           prospau2.Recordset.MoveNext
+                           Last_Epil = PROSPAU2.Recordset("epil")
+                           PROSPAU2.Recordset.MoveNext
                            'Grid.Refresh
                     
                     
@@ -7810,8 +7835,8 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
            
                    result = Ektel_kinhsh(1)
                    result = Ektel_kinhsh(2) 'досолетягсг
-                   Last_Epil = prospau2.Recordset("epil")
-                   prospau2.Recordset.MoveNext
+                   Last_Epil = PROSPAU2.Recordset("epil")
+                   PROSPAU2.Recordset.MoveNext
                    'Grid.Refresh
                    DOSO_MPOYK = a_Fere(2)
                    DUM = Wait_Robot(0)
@@ -7858,8 +7883,8 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                If a_Kinhsh(1) <> 9 Then
                     DUM = Wait_Robot(0)
                Else
-                    Last_Epil = prospau2.Recordset("epil")
-                    prospau2.Recordset.MoveNext
+                    Last_Epil = PROSPAU2.Recordset("epil")
+                    PROSPAU2.Recordset.MoveNext
                     'Grid.Refresh
                End If
        End If
@@ -8029,16 +8054,16 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
         
        On Error Resume Next
        
-       Last_Epil = prospau2.Recordset("epil")
+       Last_Epil = PROSPAU2.Recordset("epil")
         
-       prospau2.Recordset.MoveFirst
-        Do While Not prospau2.Recordset.eof
-            If Last_Epil = prospau2.Recordset("epil") Then
-                prospau2.Recordset.EDIT
-                  prospau2.Recordset("status") = 1
-                prospau2.Recordset.update
+       PROSPAU2.Recordset.MoveFirst
+        Do While Not PROSPAU2.Recordset.eof
+            If Last_Epil = PROSPAU2.Recordset("epil") Then
+                PROSPAU2.Recordset.EDIT
+                  PROSPAU2.Recordset("status") = 1
+                PROSPAU2.Recordset.update
             End If
-            prospau2.Recordset.MoveNext
+            PROSPAU2.Recordset.MoveNext
         Loop
         
        On Error GoTo 0
@@ -8111,18 +8136,18 @@ Dim mm_Synt
  End If
  
  ' Sort_Recipes
- prospau2.Refresh
+ PROSPAU2.Refresh
  MilSec 1000
  
  
  
  SYN_ALATIOY = 0
- prospau2.Recordset.MoveFirst
- Do While Not prospau2.Recordset.eof
-    If Not IsNull(prospau2.Recordset("ALATIGR")) Then
-        SYN_ALATIOY = SYN_ALATIOY + prospau2.Recordset("ALATIGR")
+ PROSPAU2.Recordset.MoveFirst
+ Do While Not PROSPAU2.Recordset.eof
+    If Not IsNull(PROSPAU2.Recordset("ALATIGR")) Then
+        SYN_ALATIOY = SYN_ALATIOY + PROSPAU2.Recordset("ALATIGR")
     End If
-    prospau2.Recordset.MoveNext
+    PROSPAU2.Recordset.MoveNext
     'Grid.Refresh
  Loop
  If DOYLEYO_ALATI = 0 Or UESH_ALATIOY = 0 Then SYN_ALATIOY = 0
@@ -8203,8 +8228,8 @@ Timer1.Enabled = True
 XALASE_NERO = 0
 
    'лаяйаяы тис йимгсеис поу ейтекоумтаи таутовяома
- prospau2.Recordset.MoveFirst
- Last_Epil = prospau2.Recordset("epil")
+ PROSPAU2.Recordset.MoveFirst
+ Last_Epil = PROSPAU2.Recordset("epil")
 
 PHDHMENA_POTHRIA = Val(Text1.text) - 1
 PHDHMENA_POTHRIA = IIf(PHDHMENA_POTHRIA < 0, 0, PHDHMENA_POTHRIA)
@@ -8287,8 +8312,8 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                     result = Ektel_kinhsh(2)
                     result = Ektel_kinhsh(1) 'досолетягсг
                     
-                           Last_Epil = prospau2.Recordset("epil")
-                           prospau2.Recordset.MoveNext
+                           Last_Epil = PROSPAU2.Recordset("epil")
+                           PROSPAU2.Recordset.MoveNext
                            'Grid.Refresh
                     
                     
@@ -8339,8 +8364,8 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
            
                    result = Ektel_kinhsh(1)
                    result = Ektel_kinhsh(2) 'досолетягсг
-                   Last_Epil = prospau2.Recordset("epil")
-                   prospau2.Recordset.MoveNext
+                   Last_Epil = PROSPAU2.Recordset("epil")
+                   PROSPAU2.Recordset.MoveNext
                    'Grid.Refresh
                    DOSO_MPOYK = a_Fere(2)
                    DUM = Wait_Robot(0)
@@ -8406,8 +8431,8 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                If a_Kinhsh(1) <> 9 Then
                     DUM = Wait_Robot(0)
                Else
-                    Last_Epil = prospau2.Recordset("epil")
-                    prospau2.Recordset.MoveNext
+                    Last_Epil = PROSPAU2.Recordset("epil")
+                    PROSPAU2.Recordset.MoveNext
                     'Grid.Refresh
                End If
        End If
@@ -8594,16 +8619,16 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
         
        On Error Resume Next
        
-       Last_Epil = prospau2.Recordset("epil")
+       Last_Epil = PROSPAU2.Recordset("epil")
         
-       prospau2.Recordset.MoveFirst
-        Do While Not prospau2.Recordset.eof
-            If Last_Epil = prospau2.Recordset("epil") Then
-                prospau2.Recordset.EDIT
-                  prospau2.Recordset("status") = 1
-                prospau2.Recordset.update
+       PROSPAU2.Recordset.MoveFirst
+        Do While Not PROSPAU2.Recordset.eof
+            If Last_Epil = PROSPAU2.Recordset("epil") Then
+                PROSPAU2.Recordset.EDIT
+                  PROSPAU2.Recordset("status") = 1
+                PROSPAU2.Recordset.update
             End If
-            prospau2.Recordset.MoveNext
+            PROSPAU2.Recordset.MoveNext
         Loop
         
        On Error GoTo 0
@@ -8909,39 +8934,39 @@ End If
   v.Close
   
   
- ximitech.Recordset.Index = "KOD"
- ximitech.Recordset.MoveFirst
- While Not ximitech.Recordset.eof
+ XIMITECH.Recordset.Index = "KOD"
+ XIMITECH.Recordset.MoveFirst
+ While Not XIMITECH.Recordset.eof
          u = 0
-         If Not IsNull(ximitech.Recordset("ADDR_PROT")) Then
-                 u = ximitech.Recordset("addr_prot")
+         If Not IsNull(XIMITECH.Recordset("ADDR_PROT")) Then
+                 u = XIMITECH.Recordset("addr_prot")
          End If
          
          If u > 0 And u <= Ar_Mpoykal Then    ' =============================================
                                   
-                 If Not IsNull(ximitech.Recordset("LHJ_PROT")) Then   ' ---------------
-                          hmeres = DateDiff("d", Now, ximitech.Recordset("LHJ_PROT"))
+                 If Not IsNull(XIMITECH.Recordset("LHJ_PROT")) Then   ' ---------------
+                          hmeres = DateDiff("d", Now, XIMITECH.Recordset("LHJ_PROT"))
                  Else
                           hmeres = 1000
                  End If
                  
-                If ximitech.Recordset("skonh") = 1 Then ' стеяеа
+                If XIMITECH.Recordset("skonh") = 1 Then ' стеяеа
                                           Label1(u).BackColor = &H808080           '   ЙАЖЕ
                 Else  '    д и а к у л а т а
                       Label1(u).BackColor = FIND_COLOR(hmeres)
                 End If
                 
                 OldColor(u) = Label1(u).BackColor
-                kodikos(u) = IIf(Not IsNull(ximitech.Recordset("kod")), ximitech.Recordset("kod"), "0000")
-                Perigrafh(u) = IIf(Not IsNull(ximitech.Recordset("perigrafh")), ximitech.Recordset("perigrafh"), "  ")
-                LHJH(u) = IIf(Not IsNull(ximitech.Recordset("Lhj_prot")), ximitech.Recordset("Lhj_prot"), "00/00/00")
-                Ypoloipo(u) = IIf(Not IsNull(ximitech.Recordset("ypol_prot")), ximitech.Recordset("ypol_prot"), 0)
+                kodikos(u) = IIf(Not IsNull(XIMITECH.Recordset("kod")), XIMITECH.Recordset("kod"), "0000")
+                Perigrafh(u) = IIf(Not IsNull(XIMITECH.Recordset("perigrafh")), XIMITECH.Recordset("perigrafh"), "  ")
+                LHJH(u) = IIf(Not IsNull(XIMITECH.Recordset("Lhj_prot")), XIMITECH.Recordset("Lhj_prot"), "00/00/00")
+                Ypoloipo(u) = IIf(Not IsNull(XIMITECH.Recordset("ypol_prot")), XIMITECH.Recordset("ypol_prot"), 0)
                  'АМ ТО УПЭКОИПО ЕъМАИ ЙэТЫ ТЫМ 50 ЦЯАЛЛАЯъЫМ МА ЙОЙЙИМъФЕИ
                  If Ypoloipo(u) < 50 Then
                        Label1(u).BackColor = &HFF&        'ЙОЙЙИМО
                  End If
                 Ypoloipo(u) = IIf(Ypoloipo(u) < 0, 100, Ypoloipo(u))
-                katofli(u) = IIf(Not IsNull(ximitech.Recordset("katofli")), ximitech.Recordset("katofli"), 0)
+                katofli(u) = IIf(Not IsNull(XIMITECH.Recordset("katofli")), XIMITECH.Recordset("katofli"), 0)
                 'katofli(u) = IIf(katofli(u) > 15500, katofli(u), 15500)
                 If Not IsNull(Perigrafh(u)) Then
                      Label1(u).Caption = Format(u, "###") + " " + Perigrafh(u)
@@ -8951,24 +8976,24 @@ End If
                ' Label1(u).top = find_top(Label1(u).top, Label1(u).height, Ypoloipo(u))
                ' Label1(u).height = find_height(Label1(u).top, Label1(u).height, Ypoloipo(u))
          End If ' ================================================================
-         ximitech.Recordset.MoveNext
+         XIMITECH.Recordset.MoveNext
  Wend
 
 
-prospau2.Recordset.MoveLast
+PROSPAU2.Recordset.MoveLast
 
-If prospau2.Recordset.RecordCount = 0 Then
+If PROSPAU2.Recordset.RecordCount = 0 Then
    MsgBox mL_Res(889) ' "дЕМ щВОУМ ПЕЯэСЕИ ОИ СУМТАЦщР АПЭ ТГМ ФЩЦИСГ ПАМИЧМ "
    Com_file_exec.Enabled = False
 End If
 
- prospau2.Recordset.MoveFirst
+ PROSPAU2.Recordset.MoveFirst
 m_CC = 0
-Do While Not prospau2.Recordset.eof
-    If prospau2.Recordset("seira") = 1 Then
+Do While Not PROSPAU2.Recordset.eof
+    If PROSPAU2.Recordset("seira") = 1 Then
         m_CC = m_CC + 1
     End If
-    prospau2.Recordset.MoveNext
+    PROSPAU2.Recordset.MoveNext
 Loop
 
  
@@ -9544,3 +9569,54 @@ rRd("hme") = Now
 rRd.update
 
 End Sub
+
+
+Sub G_REZERO(porta)
+Dim Zero
+
+
+On Error Resume Next
+If system_ready = 0 Then Exit Sub
+ 
+ If Balance_Type = "ADAM" Then
+    
+       porta.Output = "ON" + Chr(13)
+        MilSec 4000  '4 OK
+         porta.Output = "T" + Chr(13)
+       If Abs(Zygis0(0)) < 2 Then
+          ' OK
+       Else
+         ' гтам сбгстг йаи тгм амоицеи
+          porta.Output = "ON" + Chr(13)
+          MilSec 4000  '4 OK
+          porta.Output = "T" + Chr(13)
+       End If
+       
+       
+    
+    
+      
+ Else
+      Zero = "Z" + Chr$(13) + Chr(10)
+      porta.Output = Zero
+ End If
+
+
+'secwait (1)
+'MSComm1.Output = Zero
+'secwait (1)'
+
+'secwait (1)
+'asw1 = ZYGIS3()
+'secwait (1)
+'asw2 = ZYGIS3()
+'If Abs(asw1) + Abs(asw2) > 10 Then
+'   MilSec 1000
+'   GoTo 17
+'End If
+  
+  
+End Sub
+
+
+

@@ -1593,8 +1593,8 @@ Function zygisi4(Zygis_Kind As Variant)
 On Error GoTo er_det
    Dim counter, m_start
  
-   If Balance_Type = "ADAMEQ" Then
-      m_start = Format(Zygis0_adamEQ(MSComm1, 0) / 1000, "#####.000")
+   If Balance_Type = "ADAM" Then
+      m_start = Format(Zygis0_ADAM(MSComm1, 0) / 1000, "#####.000")
       zygisi4 = m_start
       Exit Function
    End If
@@ -1629,7 +1629,7 @@ End If
        MilSec (40)
       dummy = DoEvents()
        If MSComm1.InBufferCount Then
-           buf = MSComm1.InBufferCount
+           BUF = MSComm1.InBufferCount
           FromModem$ = FromModem$ + MSComm1.Input
            If InStr(FromModem$, "OL") > 0 Then
                 'MsgBox "Scale Overload ...", , "Talos"
@@ -1815,7 +1815,7 @@ If InStr(Syn_Dos.Caption, "&&") Then EINAI_Ximiko = 1 Else EINAI_Ximiko = 0
 metrhma_1_balbidas = 0
 STR_DOS = ""
 
- If Balance_Type = "ADAMEQ" Then
+ If Balance_Type = "ADAM" Then
     AVANCE_ONLINE_SYNTAGHS = 1200
  Else
     AVANCE_ONLINE_SYNTAGHS = 1600
@@ -1929,7 +1929,7 @@ Valve_Off_Click
    
    EL_TIME = GetCurrentTime() - start
    
-If Balance_Type = "ADAMEQ" Then
+If Balance_Type = "ADAM" Then
    MilSec 5000  '2000
 
 Else
@@ -1941,7 +1941,7 @@ End If
    STR_DOS = STR_DOS + str(Int(asw)) + "-"
    
 If metrhma_1_balbidas = 1 Then
-   dum = katax_katofli(mpoykali, Level, Val(Rate))
+   DUM = katax_katofli(mpoykali, Level, Val(Rate))
 Else
    
    
@@ -1961,7 +1961,7 @@ Else
        End If
    End If
    
-   dum = katax_katofli(mpoykali, Level, logos)
+   DUM = katax_katofli(mpoykali, Level, logos)
    
 End If
 
@@ -2024,7 +2024,7 @@ Loop
    m_Asw2 = asw2
    real_q_dis = asw2
    
-   dum = 0 'stop debug
+   DUM = 0 'stop debug
         
 '   STR_DOS = STR_DOS + str(Int(asw2)) + "-" + LTrim(str(Int(Rate))) + "//"
         
@@ -2199,7 +2199,7 @@ If asw > 700 Then
    End If
    
    
-   dum = katax_katofli(mpoykali, Level, logos)
+   DUM = katax_katofli(mpoykali, Level, logos)
                        rate1 = Val(Rate)   'pliroforiako
 
 Else
@@ -2275,7 +2275,7 @@ Loop
    dz = asw2 - m_Asw2
    
    m_Asw2 = asw2
-   dum = 0 'stop debug
+   DUM = 0 'stop debug
    logos = 1
         
   If asw2 - Val(real_q_dis) > 100 Then
@@ -2290,7 +2290,7 @@ Loop
             Target_Approach_dis = "Y-"
 
     End If
-     dum = katax_katofli(mpoykali, Level, logos)
+     DUM = katax_katofli(mpoykali, Level, logos)
   End If
   
     real_q_dis = asw2
@@ -2576,7 +2576,7 @@ If InStr(Syn_Dos.Caption, "&&") Then EINAI_Ximiko = 1 Else EINAI_Ximiko = 0
 metrhma_1_balbidas = 0
 STR_DOS = ""
 
- If Balance_Type = "ADAMEQ" Then
+ If Balance_Type = "ADAM" Then
     AVANCE_ONLINE_SYNTAGHS = 1200
  Else
     AVANCE_ONLINE_SYNTAGHS = 1200
@@ -2667,7 +2667,7 @@ Valve_Off_Click
    
    EL_TIME = GetCurrentTime() - start
    
-If Balance_Type = "ADAMEQ" Then
+If Balance_Type = "ADAM" Then
    MilSec 2000  '2000
 
 Else
@@ -2679,7 +2679,7 @@ End If
    STR_DOS = STR_DOS + str(Int(asw)) + "-"
    
 If metrhma_1_balbidas = 1 Then
-   dum = katax_katofli(mpoykali, Level, Rate)
+   DUM = katax_katofli(mpoykali, Level, Rate)
 Else
    
    
@@ -2699,7 +2699,7 @@ Else
        End If
    End If
    
-   dum = katax_katofli(mpoykali, Level, logos)
+   DUM = katax_katofli(mpoykali, Level, logos)
    
 End If
 
@@ -2752,7 +2752,7 @@ Loop
    m_Asw2 = asw2
    real_q_dis = asw2
    
-   dum = 0 'stop debug
+   DUM = 0 'stop debug
         
 '   STR_DOS = STR_DOS + str(Int(asw2)) + "-" + LTrim(str(Int(Rate))) + "//"
         
@@ -2903,7 +2903,7 @@ If asw > 700 Then
    End If
    
    
-   dum = katax_katofli(mpoykali, Level, logos)
+   DUM = katax_katofli(mpoykali, Level, logos)
                        rate1 = Rate   'pliroforiako
 
 Else
@@ -2983,7 +2983,7 @@ Loop
   dz = asw2 - m_Asw2
    
   m_Asw2 = asw2
-  dum = 0 'stop debug
+  DUM = 0 'stop debug
   logos = 1
         
   If asw2 - Val(real_q_dis) > 100 Then
@@ -2996,7 +2996,7 @@ Loop
             logos = 0.985
             Target_Approach_dis = "Y-"
     End If
-    dum = katax_katofli(mpoykali, Level, logos)
+    DUM = katax_katofli(mpoykali, Level, logos)
   End If
   real_q_dis = asw2
 

@@ -227,7 +227,7 @@ Begin VB.Form WAIT
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   12
-         Charset         =   0
+         Charset         =   161
          Weight          =   700
          Underline       =   0   'False
          Italic          =   0   'False
@@ -245,7 +245,7 @@ Begin VB.Form WAIT
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   9.75
-         Charset         =   0
+         Charset         =   161
          Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
@@ -275,7 +275,7 @@ Begin VB.Form WAIT
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   9.75
-         Charset         =   0
+         Charset         =   161
          Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
@@ -303,7 +303,7 @@ Begin VB.Form WAIT
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
-         Charset         =   0
+         Charset         =   161
          Weight          =   700
          Underline       =   0   'False
          Italic          =   0   'False
@@ -378,8 +378,8 @@ Function Zygis0(x As Single)
   Dim counter, mstarter
   
   
-   If Balance_Type = "ADAMEQ" Then
-       Zygis0 = Zygis0_adamEQ(MSComm1, x)
+   If Balance_Type = "ADAM" Then
+       Zygis0 = Zygis0_ADAM(MSComm1, x)
        Exit Function
     End If
     
@@ -668,7 +668,7 @@ Screen.MousePointer = 11
 Can_Zero = 1
 ' амоицы сеияиайг поята йаи лгдемифы фуцаяиа
 On Error Resume Next
-       MSComm1.CommPort = Balance_Port
+       MSComm1.commport = Balance_Port
        MSComm1.Settings = Balance_Settings
        MSComm1.InputLen = 0
        MSComm1.PortOpen = False
@@ -1441,7 +1441,7 @@ ans = vbYes ' MsgBox(mL_Res(483), vbYesNo)
       End If
       
       
-'If Balance_Type = "ADAMEQ" Then
+'If Balance_Type = "ADAM" Then
 '      frmSYNTadam.Show  ' syntages
 'Else
       frmSYNT.Show  ' syntages

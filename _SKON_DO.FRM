@@ -2846,7 +2846,7 @@ Loop
          skones.Refresh
 End Sub
 
-Function Zygis0_adam(x As Single)
+Function Zygis0_ADAM(x As Single)
   Dim counter, START1
     ' Flush the input buffer.
        MSComm1.Output = "SEND" + Chr$(13)
@@ -2882,21 +2882,21 @@ Function Zygis0_adam(x As Single)
         End If
         
         If GetCurrentTime() - START1 > 15000 Then
-            Zygis0_adam = -999000999
+            Zygis0_ADAM = -999000999
             Exit Function
        End If
         
     Loop
          ZYG = Val(left$(FromModem$, 9))
-         Zygis0_adam = ZYG * 1000
-         Me.Caption = Format(Zygis0_adam, "###0.000")
+         Zygis0_ADAM = ZYG * 1000
+         Me.Caption = Format(Zygis0_ADAM, "###0.000")
 End Function
 
 Function Zygis0(x As Single)
   Dim counter, starter
   
    If Balance_Type = "ADAM" Then
-        Zygis0 = Zygis0_adamEQ(MSComm1, x)
+        Zygis0 = Zygis0_ADAM(MSComm1, x)
         Me.Caption = Format(Zygis0, "###0.000")
         Exit Function
    Else
@@ -4554,7 +4554,7 @@ End If
 
 MilSec 200
 
-If Balance_Type = "ADAMEQ" Then
+If Balance_Type = "ADAM" Then
 
 Do
     On Error Resume Next
@@ -4878,7 +4878,7 @@ asw1 = ZYGIS3()
 If Abs(asw1) <= 20 Then Exit Sub
  
  
- If Balance_Type = "ADAMEQ" Then
+ If Balance_Type = "ADAM" Then
       Zero = "ZERO" + Chr(13)
  Else
       Zero = "Z" + Chr$(13) + Chr(10)

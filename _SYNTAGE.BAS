@@ -546,7 +546,7 @@ Function zyg_neo(porta)
 
 
 
-Dim FromModem$, buf As String
+Dim FromModem$, BUF As String
 Dim D As Integer, s As Integer, tel As Integer
 Dim k As Integer, ZYG As String
 
@@ -559,7 +559,7 @@ ZYG = "-999999"
 For k = 1 To 10
      
  If porta.InBufferCount Then
-           buf = porta.InBufferCount
+           BUF = porta.InBufferCount
            FromModem$ = FromModem$ + porta.Input
            D = InStr(FromModem$, "D")
            s = InStr(2, FromModem$, "S")
@@ -667,11 +667,11 @@ Sub G_Balance_Digits(porta, DIG)
 On Error Resume Next
 If system_ready = 0 Then Exit Sub
  
- If Balance_Type = "ADAMEQ" Then
+ If Balance_Type = "ADAM" Then
     If DIG = 2 Then
-        porta.Output = Balance_2_Digits + Chr$(13)
+       ' porta.Output = Balance_2_Digits + Chr$(13)
     Else
-        porta.Output = Balance_3_Digits + Chr$(13)
+       ' porta.Output = Balance_3_Digits + Chr$(13)
     End If
     MilSec 500
  End If
@@ -870,7 +870,7 @@ On Error GoTo er_det
           MilSec (50)
           dummy = DoEvents()
           If MSComm1.InBufferCount Then
-           buf = MSComm1.InBufferCount
+           BUF = MSComm1.InBufferCount
           FromModem$ = FromModem$ + MSComm1.Input
           List1.AddItem FromModem$, 0
            
@@ -990,9 +990,9 @@ Resume er_ex
 End Function
 
 
-Function Zygis0_adamEQ(g_PORTa, x As Single)
+Function Zygis0_ADAM(g_PORTa, x As Single)
   Dim counter, START1, FromModem$, dummy, ZYG
-  Dim Zygis0_adam
+  Dim Zygis0_ADAM
     ' Flush the input buffer.
        g_PORTa.Output = "SEND" + Chr$(13)
        g_PORTa.InBufferCount = 0
@@ -1021,18 +1021,18 @@ Function Zygis0_adamEQ(g_PORTa, x As Single)
              End If
        End If
         If GetCurrentTime() - START1 > 1000 Then
-            Zygis0_adamEQ = -999000999
+            Zygis0_ADAM = -999000999
             Exit Function
        End If
     Loop
     
 ' FIERATEX
-         Zygis0_adam = Mid$(FromModem$, InStr(FromModem$, ".") - 4, 8)
+         Zygis0_ADAM = Mid$(FromModem$, InStr(FromModem$, ".") - 4, 8)
          
          If InStr(FromModem$, "-") > 0 Or InStr(FromModem$, "?") > 0 Then
-             Zygis0_adamEQ = -Val(LTrim(Zygis0_adam)) * 1000
+             Zygis0_ADAM = -Val(LTrim(Zygis0_ADAM)) * 1000
          Else
-              Zygis0_adamEQ = Val(LTrim(Zygis0_adam)) * 1000
+              Zygis0_ADAM = Val(LTrim(Zygis0_ADAM)) * 1000
          End If
     
     
@@ -1040,7 +1040,7 @@ Function Zygis0_adamEQ(g_PORTa, x As Single)
     
 'PALIO   2/9/2002   3 SEIRES
 '    ZYG = Val(left$(FromModem$, 9))
- '   Zygis0_adamEQ = ZYG * 1000
+ '   Zygis0_ADAM = ZYG * 1000
 End Function
 
 
@@ -1125,18 +1125,12 @@ On Error Resume Next
 If system_ready = 0 Then Exit Sub
  
  If Balance_Type = "ADAM" Then
-    'If Zygis0(0) = 0 Then 'OK
-    'Else
-    '  Zero = "ON" + Chr(13)
-    '  porta.Output = Zero
-    '  MILEC 1000
-    ' If Zygis0(0) = 0 Then 'OK
-    '
-    ' Else
-    '   porta.Output = Zero
-    ' End If
-     
-    'End If
+    
+       porta.Output = "ON" + Chr(13)
+        MilSec 4000  '4 OK
+         porta.Output = "T" + Chr(13)
+        
+  
     
     
       
