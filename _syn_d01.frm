@@ -1594,7 +1594,7 @@ On Error GoTo er_det
    Dim counter, m_start
  
    If Balance_Type = "ADAM" Then
-      m_start = Format(Zygis0_ADAM(MSComm1, 0) / 1000, "#####.000")
+      m_start = Format(zyg_ADAM(0) / 1000, "#####.000")
       zygisi4 = m_start
       Exit Function
    End If
@@ -1778,705 +1778,737 @@ Sub MilSec(WAIT As Long)
      Loop Until c_tim >= start + WAIT
 End Sub
 
-
 '
 Private Function SERVIRISMA(asked_q As String, Level As String)
-'17-10-02 προστέθηκε     If elax_xronos > 5000 Then elax_xronos = 5000  ' 17-10-2002 για να μην βγαζει λαθος χρόνους
-'
-'
-'
-'
-'
-'
-'
-'
+    '17-10-02 προστέθηκε     If elax_xronos > 5000 Then elax_xronos = 5000  ' 17-10-2002 για να μην βγαζει λαθος χρόνους
+    '
+    '
+    '
+    '
+    '
+    '
+    '
+    '
 
-Dim db As Database, r As Recordset
-Dim asw As String, Real_Q, tara As String, Asked_Stage As Integer, Current_Dosing As String
-Dim Buttom_Step_Reach As Boolean, Dosing_String As String, Real_Dosing_Time As String
-Dim Bottle_Number As Integer, Bottle_Found As Boolean, Buttom_repare As Integer
-Dim gram As String, Tot_Gram As String, ader As Integer
-Dim Target_Safety As Integer, Counters
-Dim Ejatmish, mColor1, AVANCE_ONLINE_SYNTAGHS
-Dim m_time, m_start, m_parox
-Dim Start2, rate1, STR_DOS
-Dim mpoykali, metrhma_1_balbidas, start, zht
-Dim EINAI_Ximiko As Integer
-Dim m_Asw2, dz, acumMul
-Dim abGaltos
-abGaltos = 0
+    Dim db As Database, r As Recordset
 
-On Error Resume Next
-' //////////////////////////////////////
-max_time_wait = Val(asked_q) / 1000 * 5   ' 10 SEC/GR
+    Dim asw As String, Real_Q, tara As String, Asked_Stage As Integer, Current_Dosing As String
 
-mpoykali = Val(Syn_Dos.Caption)
-If InStr(Syn_Dos.Caption, "&&") Then EINAI_Ximiko = 1 Else EINAI_Ximiko = 0
-metrhma_1_balbidas = 0
-STR_DOS = ""
+    Dim Buttom_Step_Reach As Boolean, Dosing_String As String, Real_Dosing_Time As String
 
- If Balance_Type = "ADAM" Then
-    AVANCE_ONLINE_SYNTAGHS = 1200
- Else
-    AVANCE_ONLINE_SYNTAGHS = 1600
- End If
+    Dim Bottle_Number As Integer, Bottle_Found As Boolean, Buttom_repare As Integer
 
+    Dim gram As String, Tot_Gram As String, ader As Integer
 
+    Dim Target_Safety As Integer, Counters
 
-' ELEGXOS LEVEL
-If Level = "" Then Level = 300
-If Level < 50 Then Screen.MousePointer = 1: SERVIRISMA = -10: Exit Function
-G_Balance_Digits MSComm1, 3   ' 3 DIGITS
-Counters = 0
+    Dim Ejatmish, mColor1, AVANCE_ONLINE_SYNTAGHS
+
+    Dim m_time, m_start, m_parox
+
+    Dim Start2, rate1, STR_DOS
+
+    Dim mpoykali, metrhma_1_balbidas, start, zht
+
+    Dim EINAI_Ximiko As Integer
+
+    Dim m_Asw2, dz, acumMul
+
+    Dim abGaltos
+
+    abGaltos = 0
+
+    On Error Resume Next
+
+    ' //////////////////////////////////////
+    max_time_wait = Val(asked_q) / 1000 * 5   ' 10 SEC/GR
+
+    mpoykali = Val(Syn_Dos.Caption)
+
+    If InStr(Syn_Dos.Caption, "&&") Then EINAI_Ximiko = 1 Else EINAI_Ximiko = 0
+    metrhma_1_balbidas = 0
+    STR_DOS = ""
+
+    If Balance_Type = "ADAM" Then
+        AVANCE_ONLINE_SYNTAGHS = 1200
+    Else
+        AVANCE_ONLINE_SYNTAGHS = 1600
+    End If
+
+    ' ELEGXOS LEVEL
+    If Level = "" Then Level = 300
+    If Level < 50 Then Screen.MousePointer = 1: SERVIRISMA = -10: Exit Function
+    G_Balance_Digits MSComm1, 3   ' 3 DIGITS
+    Counters = 0
 8
-If Val(asked_q) < 100 Then
-       arw = diplo_zygi(1000, 0.002) ': If InStr(arw, "Error") > 0 Then GoTo serv_error_exit
-       tara = Int(Val(arw) * 1000 + 0.5)
-Else
-       arw = diplo_zygi(500, 0.004) ': If InStr(arw, "Error") > 0 Then GoTo serv_error_exit
-       tara = Int(Val(arw) * 1000 + 0.5)
-End If
-Text1.text = "Tare " + str(Counters)
-Counters = Counters + 1
-If tara < 1 Then 'debug htan 200  22-10-2001              '  ==> Η ζυγαριά δεν ανταποκρίνεται
-   If Counters >= 2 Then SERVIRISMA = -5: GoTo serv_error_exit
-   MilSec 3000
-   GoTo 8
-End If
 
-start = GetCurrentTime()
-f_start = start
+    If Val(asked_q) < 100 Then
+        arw = diplo_zygi(1000, 0.002) ': If InStr(arw, "Error") > 0 Then GoTo serv_error_exit
+        tara = Int(Val(arw) * 1000 + 0.5)
+    Else
+        arw = diplo_zygi(500, 0.004) ': If InStr(arw, "Error") > 0 Then GoTo serv_error_exit
+        tara = Int(Val(arw) * 1000 + 0.5)
+    End If
 
-Text1.text = "Dispensing..."
-'=====================================================================
-'=====================================================================
-'=====================================================================
-'=====================================================================
-If asked_q >= 2000 Then
-'=====================================================================
-'=====================================================================
-'=====================================================================
-'=====================================================================
-  max_time_wait = Val(asked_q) * 10   ' 10 SEC/GR
-  If max_time_wait < 90000 Then
-     max_time_wait = 90000
-  End If
-  Label1 = "Dosing ..."
+    Text1.text = "Tare " + str(Counters)
+    Counters = Counters + 1
+
+    If tara < 1 Then 'debug htan 200  22-10-2001              '  ==> Η ζυγαριά δεν ανταποκρίνεται
+        If Counters >= 2 Then SERVIRISMA = -5: GoTo serv_error_exit
+        MilSec 3000
+        GoTo 8
+    End If
+
+    start = GetCurrentTime()
+    f_start = start
+
+    Text1.text = "Dispensing..."
+
+    '=====================================================================
+    '=====================================================================
+    '=====================================================================
+    '=====================================================================
+    If asked_q >= 2000 Then
+        '=====================================================================
+        '=====================================================================
+        '=====================================================================
+        '=====================================================================
+        max_time_wait = Val(asked_q) * 10   ' 10 SEC/GR
+
+        If max_time_wait < 90000 Then
+            max_time_wait = 90000
+        End If
+
+        Label1 = "Dosing ..."
   
-asw = 0
-If EINAI_Ximiko Then AVANCE_ONLINE_SYNTAGHS = AVANCE_ONLINE_SYNTAGHS / 2
+        asw = 0
 
+        If EINAI_Ximiko Then AVANCE_ONLINE_SYNTAGHS = AVANCE_ONLINE_SYNTAGHS / 2
 
-Trgt_Safety.Caption = Int(max_time_wait / 1000)
+        Trgt_Safety.Caption = Int(max_time_wait / 1000)
 
+        'on-line
+        '=============
+        Valve_on_Click
 
-'on-line
-'=============
-Valve_on_Click
-'=============
-Do
-      asw = Int(1000 * Val(check_zyg(zygisi4(0)))) - tara 'καθαρό βάρος
-      '      asw = 1000 * Val(zygisi4(0)) - tara 'καθαρό βάρος
+        '=============
+        Do
+            asw = Int(1000 * Val(check_zyg(zygisi4(0)))) - tara 'καθαρό βάρος
+            '      asw = 1000 * Val(zygisi4(0)) - tara 'καθαρό βάρος
       
-      If asw < -100 Then
-         '=============
-          Valve_Off_Click
-         '=============
-          Do While asw < -100
-             asw = 1000 * Val(check_zyg(zygisi4(0))) - tara 'καθαρό βάρος
-             MilSec 1000
-             If GetCurrentTime() > start + max_time_wait Then
-                SERVIRISMA = -2: Screen.MousePointer = 1: Exit Function
-             End If
-             cur_timer = Int((GetCurrentTime() - start) / 1000)
-             ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
+            If asw < -100 Then
+                '=============
+                Valve_Off_Click
+
+                '=============
+                Do While asw < -100
+                    asw = 1000 * Val(check_zyg(zygisi4(0))) - tara 'καθαρό βάρος
+                    MilSec 1000
+
+                    If GetCurrentTime() > start + max_time_wait Then
+                        SERVIRISMA = -2: Screen.MousePointer = 1: Exit Function
+                    End If
+
+                    cur_timer = Int((GetCurrentTime() - start) / 1000)
+                    ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
              
-             DoEvents
-          Loop
-          '=============
-          Valve_on_Click
-          '=============
-      End If
-      
-      cur_timer = Int((GetCurrentTime() - start) / 1000)
-      'If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
-       If FindInput(OverFlowInput) = 0 Then
-               MilSec 200
-               If FindInput(OverFlowInput) = 0 Then
-                  Valve_Off_Click
-                  Stamathma_Talos "OVERFLOW COLOR"
-                  RobSend ("!" + Alarm1_off + ":")
-                  RobSend ("!" + Alarm1_on + ":")
-                  MsgBox "WATER ON SCALE"
-                  End
-               End If
-       End If
-      
-      Me.real_q_dis = Format(Int(asw + 0.5), "######")
-      Me.dif = Val(asked_q) - Val(real_q_dis) 'διαφορά από στόχο
-      
-      If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
-      If GetCurrentTime() > start + max_time_wait Then SERVIRISMA = -2: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
-      
-       ' δείχνει την μπάρα που γεμίζει
-     ' Zyg_Show.width = Int((Val(asw)) / Val(Asked_Q) * 2500)
-     ' Zyg_Show = Int((Val(asw)) / Val(Asked_Q) * 100) & " %"
-Loop Until Val(asked_q) - Val(asw) < AVANCE_ONLINE_SYNTAGHS
-'=============
-Valve_Off_Click
-'=============
-   
-   
-   EL_TIME = GetCurrentTime() - start
-   
-If Balance_Type = "ADAM" Then
-   MilSec 5000  '2000
+                    DoEvents
+                Loop
 
-Else
-   MilSec 2000  'cortesi=3000  16/1/2003         2000
-End If
-   asw = 1000 * diplo_zygi(2000, 0.001) - tara  '1000,1
-   real_q_dis = Format(Int(asw + 0.5), "######")
-   Rate = Val(asw) / EL_TIME
-   STR_DOS = STR_DOS + str(Int(asw)) + "-"
-   
-If metrhma_1_balbidas = 1 Then
-   DUM = katax_katofli(mpoykali, Level, Val(Rate))
-Else
-   
-   
-   prox = anaz_parox(mpoykali, Level)
-   
-   If prox > 0 Then logos = Val(Rate) / prox Else logos = 1
-   
-   If prox > 0 And Abs(Val(Rate) - prox) / prox * 100 > 6 Then
-       If Val(Rate) < prox Then
-            Rate = 0.985 * prox
-            logos = 0.985
-            Target_Approach_dis = "Y-"
-       Else
-            Rate = 1.04 * prox
-            logos = 1.04
-            Target_Approach_dis = "Y+"
-       End If
-   End If
-   
-   DUM = katax_katofli(mpoykali, Level, logos)
-   
-End If
+                '=============
+                Valve_on_Click
+                '=============
+            End If
+      
+            cur_timer = Int((GetCurrentTime() - start) / 1000)
 
+            'If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
+            If FindInput(OverFlowInput) = 0 Then
+                MilSec 200
+
+                If FindInput(OverFlowInput) = 0 Then
+                    Valve_Off_Click
+                    Stamathma_Talos "OVERFLOW COLOR"
+                    RobSend ("!" + Alarm1_off + ":")
+                    RobSend ("!" + Alarm1_on + ":")
+                    MsgBox "WATER ON SCALE"
+
+                    End
+
+                End If
+            End If
+      
+            Me.real_q_dis = Format(Int(asw + 0.5), "######")
+            Me.dif = Val(asked_q) - Val(real_q_dis) 'διαφορά από στόχο
+      
+            If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
+            If GetCurrentTime() > start + max_time_wait Then SERVIRISMA = -2: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
+      
+            ' δείχνει την μπάρα που γεμίζει
+            ' Zyg_Show.width = Int((Val(asw)) / Val(Asked_Q) * 2500)
+            ' Zyg_Show = Int((Val(asw)) / Val(Asked_Q) * 100) & " %"
+        Loop Until Val(asked_q) - Val(asw) < AVANCE_ONLINE_SYNTAGHS
+
+        '=============
+        Valve_Off_Click
+        '=============
+   
+        EL_TIME = GetCurrentTime() - start
+   
+        If Balance_Type = "ADAM" Then
+            MilSec 5000  '2000
+
+        Else
+            MilSec 2000  'cortesi=3000  16/1/2003         2000
+        End If
+
+        asw = 1000 * diplo_zygi(2000, 0.001) - tara  '1000,1
+        real_q_dis = Format(Int(asw + 0.5), "######")
+        Rate = Val(asw) / EL_TIME
+        STR_DOS = STR_DOS + str(Int(asw)) + "-"
+   
+        If metrhma_1_balbidas = 1 Then
+            DUM = katax_katofli(mpoykali, Level, Val(Rate))
+        Else
+   
+            prox = anaz_parox(mpoykali, Level)
+   
+            If prox > 0 Then logos = Val(Rate) / prox Else logos = 1
+   
+            If prox > 0 And Abs(Val(Rate) - prox) / prox * 100 > 6 Then
+                If Val(Rate) < prox Then
+                    Rate = 0.985 * prox
+                    logos = 0.985
+                    Target_Approach_dis = "Y-"
+                Else
+                    Rate = 1.04 * prox
+                    logos = 1.04
+                    Target_Approach_dis = "Y+"
+                End If
+            End If
+   
+            DUM = katax_katofli(mpoykali, Level, logos)
+   
+        End If
                        
         rate1 = Val(Rate)   'pliroforiako
-
-   
-        
-
   
-  
-  If asw + 5 >= Val(asked_q) Then GoTo 101
-  ELAX_XRONOS = (Val(asked_q) - asw - 0) / Val(Rate) ' XRONOS POY MPORO NA KANO DISPENSE XORIS FOBO
+        If asw + 5 >= Val(asked_q) Then GoTo 101
+        ELAX_XRONOS = (Val(asked_q) - asw - 0) / Val(Rate) ' XRONOS POY MPORO NA KANO DISPENSE XORIS FOBO
 
-
-m_Asw2 = 0: acumMul = 1
+        m_Asw2 = 0: acumMul = 1
 
 10
-'1h ypologizomenh
- 
+        '1h ypologizomenh
 
+        If GetCurrentTime() > start + max_time_wait Then SERVIRISMA = -2: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
 
+        cur_timer = Int((GetCurrentTime() - start) / 1000)
+        'If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
 
-If GetCurrentTime() > start + max_time_wait Then SERVIRISMA = -2: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
+        If ELAX_XRONOS > 10000 Then ELAX_XRONOS = 10000
 
- cur_timer = Int((GetCurrentTime() - start) / 1000)
- 'If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
+        '---------------
+        Valve_on_Click
+        '--------------
+        Start2 = GetCurrentTime
 
+        Do While GetCurrentTime() - Start2 < ELAX_XRONOS
+        Loop
 
-If ELAX_XRONOS > 10000 Then ELAX_XRONOS = 10000
+        '=============
+        Valve_Off_Click
 
-'---------------
- Valve_on_Click
-'--------------
-Start2 = GetCurrentTime
-Do While GetCurrentTime() - Start2 < ELAX_XRONOS
-Loop
-'=============
- Valve_Off_Click
-'=============
-   If FindInput(OverFlowInput) = 0 Then
-                  Valve_Off_Click
-                  Stamathma_Talos "OVERFLOW COLOR"
-                  RobSend ("!" + Alarm1_off + ":")
-                  RobSend ("!" + Alarm1_on + ":")
-                  MsgBox "WATER ON SCALE"
-                  End
-   End If
+        '=============
+        If FindInput(OverFlowInput) = 0 Then
+            Valve_Off_Click
+            Stamathma_Talos "OVERFLOW COLOR"
+            RobSend ("!" + Alarm1_off + ":")
+            RobSend ("!" + Alarm1_on + ":")
+            MsgBox "WATER ON SCALE"
+
+            End
+
+        End If
    
-   t2 = GetCurrentTime()
-   tim2 = t2 - Start2
+        t2 = GetCurrentTime()
+        tim2 = t2 - Start2
    
-   'While GetCurrentTime() - t2 < 2500: DoEvents: Wend '
+        'While GetCurrentTime() - t2 < 2500: DoEvents: Wend '
    
-   MilSec 1000  'cortesi=4000   normal=3000
+        MilSec 1000  'cortesi=4000   normal=3000
    
-   asw2 = 1000 * diplo_zygi(1000, 0.001) - tara
+        asw2 = 1000 * diplo_zygi(1000, 0.001) - tara
    
-   dz = asw2 - m_Asw2
-   m_Asw2 = asw2
-   real_q_dis = asw2
+        dz = asw2 - m_Asw2
+        m_Asw2 = asw2
+        real_q_dis = asw2
    
-   DUM = 0 'stop debug
+        DUM = 0 'stop debug
         
-'   STR_DOS = STR_DOS + str(Int(asw2)) + "-" + LTrim(str(Int(Rate))) + "//"
+        '   STR_DOS = STR_DOS + str(Int(asw2)) + "-" + LTrim(str(Int(Rate))) + "//"
         
-'======================================================================
-  zht = (asked_q - asw2 - 25)  '  17-9-2002 zht = (Asked_Q - asw2 - 25)
-
+        '======================================================================
+        zht = (asked_q - asw2 - 25)  '  17-9-2002 zht = (Asked_Q - asw2 - 25)
     
-  zht = IIf(zht <= 0, Val(asked_q) - asw2 - 2, zht)
-   ELAX_XRONOS = zht / Val(Rate) ' XRONOS POY MPORO NA KANO DISPENSE XORIS FOBO
+        zht = IIf(zht <= 0, Val(asked_q) - asw2 - 2, zht)
+        ELAX_XRONOS = zht / Val(Rate) ' XRONOS POY MPORO NA KANO DISPENSE XORIS FOBO
         
-   If ELAX_XRONOS > 5000 Then ELAX_XRONOS = 5000  ' 17-10-2002 για να μην βγαζει λαθος χρόνους
+        If ELAX_XRONOS > 5000 Then ELAX_XRONOS = 5000  ' 17-10-2002 για να μην βγαζει λαθος χρόνους
         
-        
-'If dz <= 0 Then
-'    acumMul = acumMul * 1.1   'htan  1.1 kai to ekana 1.5 25/5/2002
-'    elax_xronos = elax_xronos * acumMul
-'ElseIf dz >= 1 And dz <= 3 Then
-'    acumMul = acumMul * 1.05   'htan  1.1 kai to ekana 1.5 25/5/2002
-'    elax_xronos = elax_xronos * acumMul
-'ElseIf dz >= 4 And dz <= 5 Then
-'    acumMul = acumMul * 1.02   'htan  1.1 kai to ekana 1.5 25/5/2002
-'    elax_xronos = elax_xronos * acumMul
-'Else
-    acumMul = 1
-'End If
+        'If dz <= 0 Then
+        '    acumMul = acumMul * 1.1   'htan  1.1 kai to ekana 1.5 25/5/2002
+        '    elax_xronos = elax_xronos * acumMul
+        'ElseIf dz >= 1 And dz <= 3 Then
+        '    acumMul = acumMul * 1.05   'htan  1.1 kai to ekana 1.5 25/5/2002
+        '    elax_xronos = elax_xronos * acumMul
+        'ElseIf dz >= 4 And dz <= 5 Then
+        '    acumMul = acumMul * 1.02   'htan  1.1 kai to ekana 1.5 25/5/2002
+        '    elax_xronos = elax_xronos * acumMul
+        'Else
+        acumMul = 1
+        'End If
 
-  Target_Value.text = ELAX_XRONOS
+        Target_Value.text = ELAX_XRONOS
   
- If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
+        If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
   
+        If asw2 + 5 >= Val(asked_q) Then GoTo 101
   
-  If asw2 + 5 >= Val(asked_q) Then GoTo 101
-  
-  
-'  If asw2 + 15 >= Asked_Q Then
-'                  Target_Approach_dis = "For"
-'
-'                   Ejatmish = Fornext_big
-'                  For ll = 1 To 90
-'                        Valve_on_Click
-'                              For k = 1 To Ejatmish: Next
-'                        Valve_Off_Click
-'                        MilSec 1000
-'                        asw2 = 1000 * diplo_zygi(1000, 1) - tara
-'                        If asw2 <= real_q_dis Then Ejatmish = Ejatmish * 1.2  ' was 1.5 at 4/7/2002
-'                        Target_Value.text = Ejatmish
-'                        real_q_dis = asw2
-'                        Target_Approach_dis = "For"
-'                        ' STR_DOS = STR_DOS + str(Int(asw)) + "*"
-'                        If asw2 + 5 >= Val(Asked_Q) Then
-'                           Exit For
-'                        End If
-'                  Next
-'   End If
+        '  If asw2 + 15 >= Asked_Q Then
+        '                  Target_Approach_dis = "For"
+        '
+        '                   Ejatmish = Fornext_big
+        '                  For ll = 1 To 90
+        '                        Valve_on_Click
+        '                              For k = 1 To Ejatmish: Next
+        '                        Valve_Off_Click
+        '                        MilSec 1000
+        '                        asw2 = 1000 * diplo_zygi(1000, 1) - tara
+        '                        If asw2 <= real_q_dis Then Ejatmish = Ejatmish * 1.2  ' was 1.5 at 4/7/2002
+        '                        Target_Value.text = Ejatmish
+        '                        real_q_dis = asw2
+        '                        Target_Approach_dis = "For"
+        '                        ' STR_DOS = STR_DOS + str(Int(asw)) + "*"
+        '                        If asw2 + 5 >= Val(Asked_Q) Then
+        '                           Exit For
+        '                        End If
+        '                  Next
+        '   End If
 
-
-
-
-
-
-
-  If asw2 + 5 >= asked_q Then GoTo 101 Else GoTo 10
+        If asw2 + 5 >= asked_q Then GoTo 101 Else GoTo 10
         
+        '=====================================================================
+        '=====================================================================
+        '=====================================================================
+    ElseIf asked_q < 2000 Then
+        '=====================================================================
+        '=====================================================================
+        '=====================================================================
+        '=====================================================================
         
-        
-'=====================================================================
-'=====================================================================
-'=====================================================================
-ElseIf asked_q < 2000 Then
-'=====================================================================
-'=====================================================================
-'=====================================================================
-'=====================================================================
-        
-  max_time_wait = 300000   ' 5 min
-  Label1 = "Dosing ..."
-  Trgt_Safety.Caption = Int(max_time_wait / 1000)
-asw = 0
+        max_time_wait = 300000   ' 5 min
+        Label1 = "Dosing ..."
+        Trgt_Safety.Caption = Int(max_time_wait / 1000)
+        asw = 0
 
-If asked_q < 1000 Then
-   abGaltos = 1
-   GoTo 21
-End If
-'on-line
-Target_Approach_dis = "ON"
-'=============
-Valve_on_Click
-'=============
-Do
-      asw = Int(1000 * Val(check_zyg(zygisi4(0)))) - tara  'καθαρό βάρος
-      If asw < -500 Then
-         '=============
-          Valve_Off_Click
-         '=============
-          Do While asw < -500
-             asw = 1000 * Val(check_zyg(zygisi4(0))) - tara 'καθαρό βάρος
-             MilSec 1000
-             If GetCurrentTime() > start + max_time_wait Then
-                SERVIRISMA = -2: Screen.MousePointer = 1: Exit Function
-             End If
-             DoEvents
-             cur_timer = Int((GetCurrentTime() - start) / 1000)
-             ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
-            ' Exit Do
+        If asked_q < 1000 Then
+            abGaltos = 1
+            GoTo 21
+        End If
+
+        'on-line
+        Target_Approach_dis = "ON"
+        '=============
+        Valve_on_Click
+
+        '=============
+        Do
+            asw = Int(1000 * Val(check_zyg(zygisi4(0)))) - tara  'καθαρό βάρος
+
+            If asw < -500 Then
+                '=============
+                Valve_Off_Click
+
+                '=============
+                Do While asw < -500
+                    asw = 1000 * Val(check_zyg(zygisi4(0))) - tara 'καθαρό βάρος
+                    MilSec 1000
+
+                    If GetCurrentTime() > start + max_time_wait Then
+                        SERVIRISMA = -2: Screen.MousePointer = 1: Exit Function
+                    End If
+
+                    DoEvents
+                    cur_timer = Int((GetCurrentTime() - start) / 1000)
+                    ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
+                    ' Exit Do
              
-          Loop
-          '=============
-          Valve_on_Click
-          '=============
-      End If
+                Loop
+
+                '=============
+              
+                Dim TEST As Integer
+                TEST = 1
+                  Valve_on_Click
+                
+                
+                '=============
+            End If
       
-      If FindInput(OverFlowInput) = 0 Then
-                  Valve_Off_Click
-                  Stamathma_Talos "OVERFLOW COLOR"
-                  RobSend ("!" + Alarm1_off + ":")
-                  RobSend ("!" + Alarm1_on + ":")
-                  MsgBox "WATER ON SCALE"
-                  End
-       End If
+            If FindInput(OverFlowInput) = 0 Then
+                Valve_Off_Click
+                Stamathma_Talos "OVERFLOW COLOR"
+                RobSend ("!" + Alarm1_off + ":")
+                RobSend ("!" + Alarm1_on + ":")
+                MsgBox "WATER ON SCALE"
+
+                End
+
+            End If
       
+            cur_timer = Int((GetCurrentTime() - start) / 1000)
+            ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
       
-       cur_timer = Int((GetCurrentTime() - start) / 1000)
-       ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
-      
-      
-      
-      
-      Me.real_q_dis = Format(Int(asw), "######")
-      Me.dif = Val(asked_q) - Val(real_q_dis) 'διαφορά από στόχο
-      If Me.dif < 0 Then
-          cur_timer = Int((GetCurrentTime() - start) / 1000)
-      End If
-      If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
-      If GetCurrentTime() > start + max_time_wait Then SERVIRISMA = -2: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
-       ' δείχνει την μπάρα που γεμίζει
-     ' Zyg_Show.width = Int((Val(asw)) / Val(Asked_Q) * 2500)
-     ' Zyg_Show = Int((Val(asw)) / Val(Asked_Q) * 100) & " %"
-Loop Until Val(asked_q) - Val(asw) < 1600   ' cortesi=1200 normal=1000
-'=============
-Valve_Off_Click
-'=============
-MilSec 2000
+            Me.real_q_dis = Format(Int(asw), "######")
+            Me.dif = Val(asked_q) - Val(real_q_dis) 'διαφορά από στόχο
+
+            If Me.dif < 0 Then
+                cur_timer = Int((GetCurrentTime() - start) / 1000)
+            End If
+
+            If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
+            If GetCurrentTime() > start + max_time_wait Then SERVIRISMA = -2: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
+            ' δείχνει την μπάρα που γεμίζει
+            ' Zyg_Show.width = Int((Val(asw)) / Val(Asked_Q) * 2500)
+            ' Zyg_Show = Int((Val(asw)) / Val(Asked_Q) * 100) & " %"
+        Loop Until Val(asked_q) - Val(asw) < 1600   ' cortesi=1200 normal=1000
+
+        '=============
+        Valve_Off_Click
+        '=============
+        MilSec 2000
    
-   EL_TIME = GetCurrentTime() - start
-   asw = Int(1000 * diplo_zygi(1000, 0.002) - tara)
-   real_q_dis = Format(Int(asw + 0.5), "######")
-   
-   
+        EL_TIME = GetCurrentTime() - start
+        asw = Int(1000 * diplo_zygi(1000, 0.002) - tara)
+        real_q_dis = Format(Int(asw + 0.5), "######")
    
 21
    
- cur_timer = Int((GetCurrentTime() - start) / 1000)
- ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
+        cur_timer = Int((GetCurrentTime() - start) / 1000)
+        ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
    
-If asw > 700 Then
-   Rate = Val(asw) / EL_TIME
-   prox = anaz_parox(mpoykali, Level)
+        If asw > 700 Then
+            Rate = Val(asw) / EL_TIME  ' NORMAL = 0.8 GR /SEC  Ή 0.8 MG / MILLISEC
+            prox = anaz_parox(mpoykali, Level)
    
-   If prox > 0 Then logos = Val(Rate) / prox Else logos = 1
+            If prox > 0 Then logos = Val(Rate) / prox Else logos = 1
    
-   If prox > 0 And Abs(Val(Rate) - prox) / prox * 100 > 2 Then
-       'If Rate < prox Then Rate = 0.99 * prox Else Rate = 1.01 * prox
+            If prox > 0 And Abs(Val(Rate) - prox) / prox * 100 > 2 Then
+                'If Rate < prox Then Rate = 0.99 * prox Else Rate = 1.01 * prox
        
-       If Rate < prox Then
-            Rate = 0.985 * prox
-            logos = 0.985
-       Else
-            Rate = 1.02 * prox
-            logos = 1.02
-       End If
+                If Rate < prox Then
+                    Rate = 0.985 * prox
+                    logos = 0.985
+                Else
+                    Rate = 1.02 * prox
+                    logos = 1.02
+                End If
        
-   End If
+            End If
    
-   
-   DUM = katax_katofli(mpoykali, Level, logos)
-                       rate1 = Val(Rate)   'pliroforiako
+            DUM = katax_katofli(mpoykali, Level, logos)
+            rate1 = Val(Rate)   'pliroforiako
 
-Else
+        Else
                        
-   Rate = anaz_parox(mpoykali, Level)
+            Rate = anaz_parox(mpoykali, Level)
 
-End If
+        End If
+        
+        
+        
+        If Rate < 0.7 Then Rate = 0.7
+        
+        
+        
+        
 
- If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
+        If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
   
-  
-  If asw + 2 >= asked_q Then GoTo 101
-  If EINAI_Ximiko = 1 And asw + 20 >= asked_q Then GoTo 101
-  
-  
+        If asw + 2 >= asked_q Then GoTo 101
+        If EINAI_Ximiko = 1 And asw + 20 >= asked_q Then GoTo 101
 
-  zht = (asked_q - asw - IIf(asked_q / 10 > 15, asked_q / 10, 15))
+        zht = (asked_q - asw - IIf(asked_q / 10 > 15, asked_q / 10, 15))
   
-If abGaltos = 1 Then
-       abGaltos = 0
-       zht = zht * 0.9  '27.5.200  me stoxo 975 erixne synexeia 1010
-End If
-
+        If abGaltos = 1 Then
+            abGaltos = 0
+            zht = zht * 0.9  '27.5.200  me stoxo 975 erixne synexeia 1010
+        End If
   
-  
-  ELAX_XRONOS = zht / Val(Rate) ' XRONOS POY MPORO NA KANO DISPENSE XORIS FOBO
+        ELAX_XRONOS = zht / Val(Rate) ' XRONOS POY MPORO NA KANO DISPENSE XORIS FOBO
 
-   If EINAI_Ximiko = 1 Then ELAX_XRONOS = (asked_q - asw + 20) / Val(Rate)
-
-
+        If EINAI_Ximiko = 1 Then ELAX_XRONOS = (asked_q - asw + 20) / Val(Rate)
 
 11
 
-  m_Asw2 = 0: acumMul = 1
+        m_Asw2 = 0: acumMul = 1
 
+        If GetCurrentTime() > start + max_time_wait Then SERVIRISMA = -2: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
 
-If GetCurrentTime() > start + max_time_wait Then SERVIRISMA = -2: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
+        cur_timer = Int((GetCurrentTime() - start) / 1000)
+        ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
 
- cur_timer = Int((GetCurrentTime() - start) / 1000)
- ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
+        If ELAX_XRONOS > 10000 Then ELAX_XRONOS = 10000
 
-
-If ELAX_XRONOS > 10000 Then ELAX_XRONOS = 10000
-
-
-'1h ypologizomenh
-'---------------
- Valve_on_Click
-'--------------
+        '1h ypologizomenh
+        '---------------
+        Valve_on_Click
+        '--------------
  
-Start2 = GetCurrentTime
-Do While GetCurrentTime() - Start2 < ELAX_XRONOS
-Loop
-'=============
- Valve_Off_Click
-'=============
+        Start2 = GetCurrentTime
+
+        Do While GetCurrentTime() - Start2 < ELAX_XRONOS
+        Loop
+
+        '=============
+        Valve_Off_Click
+
+        '=============
         If FindInput(OverFlowInput) = 0 Then
-                  Valve_Off_Click
-                  Stamathma_Talos "OVERFLOW COLOR"
-                  RobSend ("!" + Alarm1_off + ":")
-                  RobSend ("!" + Alarm1_on + ":")
-                  MsgBox "WATER ON SCALE"
-                  End
+            Valve_Off_Click
+            Stamathma_Talos "OVERFLOW COLOR"
+            RobSend ("!" + Alarm1_off + ":")
+            RobSend ("!" + Alarm1_on + ":")
+            MsgBox "WATER ON SCALE"
+
+            End
+
         End If
    
-   
-   t2 = GetCurrentTime()
-   tim2 = t2 - Start2
+        t2 = GetCurrentTime()
+        tim2 = t2 - Start2
   
-   MilSec 1000  'cortesi=4000  normal=3000    17-9-2002 HTAN 3000
-   asw2 = 1000 * diplo_zygi(1000, 0.002) - tara
+        MilSec 1000  'cortesi=4000  normal=3000    17-9-2002 HTAN 3000
+        asw2 = 1000 * diplo_zygi(1000, 0.002) - tara
       
-   dz = asw2 - m_Asw2
+        dz = asw2 - m_Asw2
    
-   m_Asw2 = asw2
-   DUM = 0 'stop debug
-   logos = 1
+        m_Asw2 = asw2
+        DUM = 0 'stop debug
+        logos = 1
         
-  If asw2 - Val(real_q_dis) > 100 Then
-    If (asw2 - Val(real_q_dis)) > zht Then
-            Rate = 1.02 * Val(Rate)
-            logos = 1.02
-            Target_Approach_dis = "Y+"
+        If asw2 - Val(real_q_dis) > 100 Then
+            If (asw2 - Val(real_q_dis)) > zht Then
+                Rate = 1.02 * Val(Rate)
+                logos = 1.02
+                Target_Approach_dis = "Y+"
 
-    ElseIf (asw2 - Val(real_q_dis)) < zht Then
-            Rate = 0.985 * Val(Rate)
-            logos = 0.985
-            Target_Approach_dis = "Y-"
+            ElseIf (asw2 - Val(real_q_dis)) < zht Then
+                Rate = 0.985 * Val(Rate)
+                logos = 0.985
+                Target_Approach_dis = "Y-"
 
-    End If
-     DUM = katax_katofli(mpoykali, Level, logos)
-  End If
+            End If
+
+            DUM = katax_katofli(mpoykali, Level, logos)
+        End If
   
-    real_q_dis = asw2
+        real_q_dis = asw2
         
+        '======================================================================
+        zht = (asked_q - asw2 - 15)  ' feli  25   19/9/2002
+        ELAX_XRONOS = zht / Val(Rate) ' XRONOS POY MPORO NA KANO DISPENSE XORIS FOBO
         
-        
-        
-        
-        
-        
-        
-'======================================================================
-   zht = (asked_q - asw2 - 15)  ' feli  25   19/9/2002
-   ELAX_XRONOS = zht / Val(Rate) ' XRONOS POY MPORO NA KANO DISPENSE XORIS FOBO
-        
-    STR_DOS = STR_DOS + str(Int(asw2)) + "-"
+        STR_DOS = STR_DOS + str(Int(asw2)) + "-"
     
-    If EINAI_Ximiko = 1 Then ELAX_XRONOS = (asked_q - asw2 + 20) / Val(Rate)
-    If EINAI_Ximiko = 1 And asw + 20 >= asked_q Then GoTo 101
+        If EINAI_Ximiko = 1 Then ELAX_XRONOS = (asked_q - asw2 + 20) / Val(Rate)
+        If EINAI_Ximiko = 1 And asw + 20 >= asked_q Then GoTo 101
         
-        
-'If dz <= 0 Then
-'    acumMul = acumMul * 1.1   'htan  1.1 kai to ekana 1.5 25/5/2002
-'    elax_xronos = elax_xronos * acumMul
-'ElseIf dz >= 1 And dz <= 3 Then
-'    acumMul = acumMul * 1.05   'htan  1.1 kai to ekana 1.5 25/5/2002
-'    elax_xronos = elax_xronos * acumMul
-'ElseIf dz >= 4 And dz <= 5 Then
-'    acumMul = acumMul * 1.02   'htan  1.1 kai to ekana 1.5 25/5/2002
-'    elax_xronos = elax_xronos * acumMul
-'Else
-    acumMul = 1
-'End If
+        'If dz <= 0 Then
+        '    acumMul = acumMul * 1.1   'htan  1.1 kai to ekana 1.5 25/5/2002
+        '    elax_xronos = elax_xronos * acumMul
+        'ElseIf dz >= 1 And dz <= 3 Then
+        '    acumMul = acumMul * 1.05   'htan  1.1 kai to ekana 1.5 25/5/2002
+        '    elax_xronos = elax_xronos * acumMul
+        'ElseIf dz >= 4 And dz <= 5 Then
+        '    acumMul = acumMul * 1.02   'htan  1.1 kai to ekana 1.5 25/5/2002
+        '    elax_xronos = elax_xronos * acumMul
+        'Else
+        acumMul = 1
+        'End If
   
-  
-  Target_Value.text = ELAX_XRONOS
+        Target_Value.text = ELAX_XRONOS
        
-      If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
+        If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
         
-        
-  If asw2 + 25 <= Val(asked_q) Then GoTo 11
-        
+        If asw2 + 25 <= Val(asked_q) Then GoTo 11
             
-            
-    ' ΧΡΕΙ’ΖΟΜΑΙ ΛΙΓΟΤΕΡΟ ΑΠΟ 20 ΜΓΡ
-               If asw2 + 3 < Val(asked_q) Then
+        ' ΧΡΕΙ’ΖΟΜΑΙ ΛΙΓΟΤΕΡΟ ΑΠΟ 20 ΜΓΡ
+        If asw2 + 3 < Val(asked_q) Then
                   
-                   Ejatmish = Fornext_small
-                  For ll = 1 To 90
-                        Valve_on_Click
-                              For k = 1 To Ejatmish: Next
-                        Valve_Off_Click
-                        If asked_q <= 100 Then
-                           MilSec 2000
-                        Else
-                           If asw + 5 >= Val(asked_q) Then
-                               MilSec 2000
-                           Else
-                               MilSec 1000
-                           End If
-                        End If
-                        asw = Int(1000 * diplo_zygi(1000, 0.001) + 0.5) - tara
-                        If asw <= Val(real_q_dis) Then
-                           Ejatmish = Ejatmish * 1.1  ' was 1.5 at 4/7/2002
-                        End If
-                        Target_Value.text = Ejatmish
-                        
-                        real_q_dis = Format(Int(asw + 0.5), "######")
-                        Target_Approach_dis = "For"
-                        STR_DOS = STR_DOS + str(Int(asw)) + "*"
-                        If asw + 2 >= Val(asked_q) Then
-                           Exit For
-                        End If
-                        If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
-                        cur_timer = Int((GetCurrentTime() - start) / 1000)
-                        ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
+            Ejatmish = Fornext_small
 
-                  Next
-               End If
-End If
+            For ll = 1 To 90
+                Valve_on_Click
+
+                For k = 1 To Ejatmish: Next
+                Valve_Off_Click
+
+                If asked_q <= 100 Then
+                    MilSec 2000
+                Else
+
+                    If asw + 5 >= Val(asked_q) Then
+                        MilSec 2000
+                    Else
+                        MilSec 1000
+                    End If
+                End If
+
+                asw = Int(1000 * diplo_zygi(1000, 0.001) + 0.5) - tara
+
+                If asw <= Val(real_q_dis) Then
+                    Ejatmish = Ejatmish * 1.1  ' was 1.5 at 4/7/2002
+                End If
+
+                Target_Value.text = Ejatmish
+                        
+                real_q_dis = Format(Int(asw + 0.5), "######")
+                Target_Approach_dis = "For"
+                STR_DOS = STR_DOS + str(Int(asw)) + "*"
+
+                If asw + 2 >= Val(asked_q) Then
+
+                    Exit For
+
+                End If
+
+                If cancel_pressed = True Then SERVIRISMA = -9: Valve_Off_Click: Screen.MousePointer = 1: Exit Function
+                cur_timer = Int((GetCurrentTime() - start) / 1000)
+                ' If cur_timer.BackColor = vbMagenta Then cur_timer.BackColor = vbYellow Else cur_timer.BackColor = vbMagenta
+
+            Next
+
+        End If
+    End If
 
 101
 
+    arw = diplo_zygi(2000, 0.002)
+    Real_Q = Int(1000 * Val(arw) + 0.5) - Val(tara)
+    SERVIRISMA = Val(Real_Q)
+    STR_DOS = STR_DOS + "*" + LTrim(str(Real_Q))
 
+    On Error GoTo 0
 
-
-
-
-
-arw = diplo_zygi(2000, 0.002)
-Real_Q = Int(1000 * Val(arw) + 0.5) - Val(tara)
-SERVIRISMA = Val(Real_Q)
-STR_DOS = STR_DOS + "*" + LTrim(str(Real_Q))
-
-
-
-
-On Error GoTo 0
-
-If Abs(asked_q - SERVIRISMA) > 5 Then
+    If Abs(asked_q - SERVIRISMA) > 5 Then
  
-  Set db = OpenDatabase("C:\Talos\katoflia.mdb")
-  Set r = db.OpenRecordset("dosom")
-  r.AddNew
-  r("string") = left(STR_DOS, 150)
-  r("mpoykali") = mpoykali
-  r("hme") = Now
-  r("apotelesma") = asked_q - SERVIRISMA
-  r.update
+        Set db = OpenDatabase("C:\Talos\katoflia.mdb")
+        Set r = db.OpenRecordset("dosom")
+        r.AddNew
+        r("string") = left(STR_DOS, 150)
+        r("mpoykali") = mpoykali
+        r("hme") = Now
+        r("apotelesma") = asked_q - SERVIRISMA
+        r.update
   
-End If
+    End If
 
+    'SERVIRISMA = str(Int(Real_Q))   + " rate:" + str(Int(1000 * rate1))
 
+    Exit Function
 
-
-'SERVIRISMA = str(Int(Real_Q))   + " rate:" + str(Int(1000 * rate1))
-
-
-
-Exit Function
-
- '===================  Τέλος Συνάρτησης  ============================
+    '===================  Τέλος Συνάρτησης  ============================
 serv_error_exit:
-'Servirisma = 0    ==> Ελλειπή Arguments
-'Servirisma = -1   ==> Μηδέν ή αρνητικό Asked_Q
-'Servirisma = -2   ==> η βαλβίδα δεν τρέχει
-'Servirisma = -3   ==> η ζυγαρια υπερφορτώθηκε
-'Servirisma = -4   ==> δεν έγινε διαδικασία Εναρξης
-'Servirisma = -5   ==> Η ζυγαριά δεν ανταποκρίνεται
-'Servirisma = -6   ==> Η ζυγαριά εκτός περιοχής
-'Servirisma = -7   ==> Η ζύγιση έχει αποτύχει
-'Servirisma = -8   ==> Παρουσιάσθηκε απροσδόκητο λάθος στον αλγόρυθμο ζύγισης
-'Servirisma = -9   ==> Η ζύγιση ακυρώθηκε
-'Servirisma = -10   ==> Η στάθμη του μπουκαλιού είναι πολύ χαμηλή <50 gr
-'Servirisma = -11   ==> Υπερβολική  ζητούμενη ποσότητα  (max. 100 gr)
+    'Servirisma = 0    ==> Ελλειπή Arguments
+    'Servirisma = -1   ==> Μηδέν ή αρνητικό Asked_Q
+    'Servirisma = -2   ==> η βαλβίδα δεν τρέχει
+    'Servirisma = -3   ==> η ζυγαρια υπερφορτώθηκε
+    'Servirisma = -4   ==> δεν έγινε διαδικασία Εναρξης
+    'Servirisma = -5   ==> Η ζυγαριά δεν ανταποκρίνεται
+    'Servirisma = -6   ==> Η ζυγαριά εκτός περιοχής
+    'Servirisma = -7   ==> Η ζύγιση έχει αποτύχει
+    'Servirisma = -8   ==> Παρουσιάσθηκε απροσδόκητο λάθος στον αλγόρυθμο ζύγισης
+    'Servirisma = -9   ==> Η ζύγιση ακυρώθηκε
+    'Servirisma = -10   ==> Η στάθμη του μπουκαλιού είναι πολύ χαμηλή <50 gr
+    'Servirisma = -11   ==> Υπερβολική  ζητούμενη ποσότητα  (max. 100 gr)
 
-'anix_zygaria
-'   arw = check_zyg(zygisi4(0))
+    'anix_zygaria
+    '   arw = check_zyg(zygisi4(0))
 
-If Err > 0 Then
-      Resume Next
-      arw = "- 8"
-End If
- Valve_Off_Click
-If InStr(arw, "- 2") Then
-    SERVIRISMA = -2
-    Screen.MousePointer = 1
-    Exit Function
-End If
-If InStr(arw, "- 3") > 0 Then
-    SERVIRISMA = -3
-    Screen.MousePointer = 1
-    Exit Function
-End If
-If InStr(arw, "- 8") > 0 Then
-    SERVIRISMA = -8
-    Screen.MousePointer = 1
-    Exit Function
-End If
-If InStr(arw, "- 6") > 0 Then
-    SERVIRISMA = -6
-    Screen.MousePointer = 1
-    Exit Function
-End If
-If InStr(arw, "- 7") > 0 Then
-    SERVIRISMA = -7
-    Screen.MousePointer = 1
-    Exit Function
-End If
-If InStr(arw, "- 4") Then
-    SERVIRISMA = -4
-    Screen.MousePointer = 1
-    Exit Function
-End If
-If InStr(arw, "- 5") Then
-    SERVIRISMA = -5
-     Screen.MousePointer = 1
-    Exit Function
-End If
-If InStr(arw, "- 9") Then
-    SERVIRISMA = -9
-     Screen.MousePointer = 1
-    Exit Function
-End If
+    If Err > 0 Then
 
+        Resume Next
 
+        arw = "- 8"
+    End If
+
+    Valve_Off_Click
+
+    If InStr(arw, "- 2") Then
+        SERVIRISMA = -2
+        Screen.MousePointer = 1
+
+        Exit Function
+
+    End If
+
+    If InStr(arw, "- 3") > 0 Then
+        SERVIRISMA = -3
+        Screen.MousePointer = 1
+
+        Exit Function
+
+    End If
+
+    If InStr(arw, "- 8") > 0 Then
+        SERVIRISMA = -8
+        Screen.MousePointer = 1
+
+        Exit Function
+
+    End If
+
+    If InStr(arw, "- 6") > 0 Then
+        SERVIRISMA = -6
+        Screen.MousePointer = 1
+
+        Exit Function
+
+    End If
+
+    If InStr(arw, "- 7") > 0 Then
+        SERVIRISMA = -7
+        Screen.MousePointer = 1
+
+        Exit Function
+
+    End If
+
+    If InStr(arw, "- 4") Then
+        SERVIRISMA = -4
+        Screen.MousePointer = 1
+
+        Exit Function
+
+    End If
+
+    If InStr(arw, "- 5") Then
+        SERVIRISMA = -5
+        Screen.MousePointer = 1
+
+        Exit Function
+
+    End If
+
+    If InStr(arw, "- 9") Then
+        SERVIRISMA = -9
+        Screen.MousePointer = 1
+
+        Exit Function
+
+    End If
 
 End Function
 
@@ -2882,6 +2914,8 @@ MilSec 1000
    
 21
    
+   ' RATE = 850MG / SEC
+   ' RATE = 0.85MG /MILLISECCOND
    
 If asw > 700 Then
    Rate = Val(asw) / EL_TIME
@@ -3167,3 +3201,166 @@ End If
 
 
 End Function
+
+
+
+
+
+Function zyg_ADAM(Zygis_Kind As Variant) As Long
+On Error GoTo er_det
+   Dim counter
+  Dim tot_counter
+  Dim start
+  Dim FromModem As String
+  Dim dummy
+  Dim BUF
+  
+   counter = 0: tot_counter = 0: Label10 = 0
+' If system_ready = 0 Then zyg_ADAM = "System not Working": Exit Function
+  start = GetCurrentTime()
+  
+  
+    Do
+    If GetCurrentTime() - start > 10001 Then zyg_ADAM = -999000999: Exit Function
+     MSComm1.InBufferCount = 0
+      FromModem$ = ""
+           MSComm1.Output = Balance_Asking + Chr$(13)
+          MilSec (50)
+          dummy = DoEvents()
+          If MSComm1.InBufferCount Then
+           BUF = MSComm1.InBufferCount
+          FromModem$ = FromModem$ + MSComm1.Input
+        '  List1.AddItem FromModem$, 0
+        
+        
+        
+         
+              If InStr(UCase(FromModem$), "OVER") > 0 Then
+                'MsgBox "Scale Overload ...", , "Talos"
+                zyg_ADAM = -7900000  ' "OL"
+                Exit Do
+              End If
+              If InStr(UCase(FromModem$), "UNDER") > 0 Then
+                 'MsgBox "Scale Overload ...", , "Talos"
+                 zyg_ADAM = -9900000 ' "UL"
+                 Exit Do
+              End If
+        
+        
+        
+           
+'           If InStr(FromModem$, "OL") > 0 Then
+'                'MsgBox "Scale Overload ...", , "Talos"
+'                zyg_ADAM = "OL"
+'                Exit Do
+'            End If
+'           If InStr(FromModem$, "UL") > 0 Then
+'                'MsgBox "Scale Overload ...", , "Talos"
+'                zyg_ADAM = "UL"
+'                Exit Do
+'            End If
+            If GetCurrentTime() - start > 5000 And Zygis_Kind = "OK" Then Zygis_Kind = 0: tot_counter = 0
+          
+          
+          
+          
+          
+    If InStr(FromModem$, ".") > 0 Then
+          
+            Dim NN As Integer
+            NN = InStr(FromModem$, ".")
+            Dim CC3 As String
+            Dim DD As String
+            
+           If NN > 3 Then
+            
+            
+            '    CC = Mid(FromModem$, NN - 3, 7)
+             '   DD = Mid(FromModem$, NN, 4)
+              '  If InStr(DD, "?") > 0 Then
+               '    DD = Replace(DD, "?", "0")
+               ' End If
+                
+                
+                CC3 = Mid(FromModem$, NN - 3, 7)
+                
+                If InStr(CC3, "?") > 0 Then
+                 
+                   
+                Else
+                
+                  '  CC = Replace(CC, "?", "0")
+                    zyg_ADAM = Val(CC3) * 1000
+                    Exit Do
+                End If
+            Else
+               zyg_ADAM = -999000999
+            End If
+            
+               
+          
+     End If
+
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          If InStr(FromModem$, Chr$(13)) >= 5 Then
+                 If InStr(FromModem$, ".") >= 5 Then
+                       Exit Do
+                End If
+          End If
+       
+       
+       
+       
+       counter = counter + 1
+       If counter >= 15 Then tot_counter = tot_counter + 1
+            Label10 = counter
+          If tot_counter >= 20 And Zygis_Kind <> "OK" Then
+          counter = 0: tot_counter = tot_counter + 1
+               zyg_ADAM = " "
+               Exit Function
+           End If
+          If counter >= 50 Then  ' 500
+             counter = 0: tot_counter = tot_counter + 1
+               MSComm1.InBufferCount = 0
+              MSComm1.Output = Balance_Asking + Chr$(13)
+              End If
+     End If
+     If Zygis_Kind = "OK" Then
+             'Me.Zyg_Show.Width = (GetCurrentTime() - start) / 1000 * 650
+              'Me.Zyg_Show.Caption = Int(((GetCurrentTime() - start) / 1000) + 0.5) & " Sec"
+             'Me.Zyg_Show.Refresh
+      End If
+      
+    Loop
+         
+       '  zyg_ADAM = Mid$(FromModem$, InStr(FromModem$, ".") - 4, 8)
+        ' If InStr(FromModem$, "-") > 0 Or InStr(FromModem$, "?") > 0 Then
+         '    zyg_ADAM = Str(-Val(LTrim(zyg_ADAM)))
+        ' End If
+er_ex:
+Exit Function
+er_det:
+ zyg_ADAM = " "
+Resume er_ex
+End Function
+

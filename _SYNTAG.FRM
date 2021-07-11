@@ -17,6 +17,14 @@ Begin VB.Form frmSYNT
    ScaleHeight     =   7080
    ScaleWidth      =   9480
    WindowState     =   2  'Maximized
+   Begin VB.CommandButton cmdNERO 
+      Caption         =   "NERO"
+      Height          =   360
+      Left            =   4320
+      TabIndex        =   355
+      Top             =   5280
+      Width           =   990
+   End
    Begin VB.PictureBox StatusBar1 
       Align           =   2  'Align Bottom
       Height          =   255
@@ -6130,7 +6138,7 @@ On Error GoTo er_det
 er_ex:
 Exit Function
 er_det:
- zyg_ADAM = " "
+ zyg_ADAM = -999000999  '" "
 Resume er_ex
 End Function
 
@@ -6736,6 +6744,37 @@ Private Sub Check1_Click()
 'Else
 '      DBGrid1.Visible = True
 'End If
+End Sub
+
+Private Sub cmdNERO_Click()
+' G_REZERO MSComm1
+' G_REZERO MSComm1
+
+'  NER_DOSOMETRHSH 8000, MSComm1
+
+If MSComm1.PortOpen = False Then
+
+Else
+  MSComm1.PortOpen = False
+End If
+
+
+  
+   Syn_Dos.asked_q = 1900   ' a_Mgrs(Move) '  ZHTOYMENH посоTHTA сE MGRS
+                Syn_Dos.Level = 500  ' Ypoloipo(a_Fere(Move))      'цяалаяиа лпоуйакиоу
+                Syn_Dos.Valve_On = valve_2_on    '  , valve_2_on) ' амоицла бакбидас
+                Syn_Dos.Valve_Off = valve_2_off    '  , valve_2_off)   ' йкеисило бакбидас
+                Syn_Dos.Caption = "TEST"   '    str(a_Fere(Move)) + " : " + Perigrafh(a_Fere(Move)) 'ПЕЯИЦЯАЖГ ВЯЧЛАТОР ПОУ ДОСОЛЕТЯЕъТАИ
+                Syn_Dos.Show 1
+  
+  
+  
+  
+  
+  
+  
+  
+  
 End Sub
 
 Private Sub Command1_Click()
@@ -9295,7 +9334,7 @@ End Sub
 
 Private Sub Label1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
 If Not IsNull(Perigrafh(Index)) Then
-     SXOLIA1.Caption = Perigrafh(Index)
+     sxolia1.Caption = Perigrafh(Index)
  End If
 If Not IsNull(Format(Ypoloipo(Index), "###") + "              " + Format(LHJH(Index), "dd/mm/yy")) Then
      SXOLIA2.Caption = Format(Ypoloipo(Index), "###") + "              " + Format(LHJH(Index), "dd/mm/yy")
@@ -9580,17 +9619,25 @@ If system_ready = 0 Then Exit Sub
  
  If Balance_Type = "ADAM" Then
     
-       porta.Output = "ON" + Chr(13)
-        MilSec 4000  '4 OK
-         porta.Output = "T" + Chr(13)
-       If Abs(Zygis0(0)) < 2 Then
-          ' OK
-       Else
-         ' гтам сбгстг йаи тгм амоицеи
-          porta.Output = "ON" + Chr(13)
-          MilSec 4000  '4 OK
           porta.Output = "T" + Chr(13)
-       End If
+          MilSec 2000
+        If Abs(zyg_ADAM(0)) < 2 Then
+            ' OK
+        Else
+            porta.Output = "ON" + Chr(13)
+            MilSec 4000  '4 OK
+            porta.Output = "T" + Chr(13)
+            MilSec 2000
+            If Abs(zyg_ADAM(0)) < 2 Then
+                ' OK
+            Else
+                ' гтам сбгстг йаи тгм амоицеи
+                porta.Output = "ON" + Chr(13)
+                MilSec 4000  '4 OK
+                porta.Output = "T" + Chr(13)
+            End If
+       
+        End If
        
        
     
