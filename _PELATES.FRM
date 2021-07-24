@@ -160,12 +160,12 @@ Private Sub Add_Click()
 ' καταχώρησ
 
 If ADD.Caption = katax Then
-   maskedbox1.Enabled = False
+   MaskEdBox1.Enabled = False
    Data1.Recordset.AddNew
    Data1.Recordset.update
    Data1.Recordset.Move 0, Data1.Recordset.LastModified
    Data1.Recordset.EDIT
-   Data1.Recordset(field) = Trim(maskedbox1)
+   Data1.Recordset(field) = Trim(MaskEdBox1)
    If field2 <> " " Then
       Data1.Recordset(field2) = Val(Text1.text)
    End If
@@ -179,9 +179,9 @@ If ADD.Caption = katax Then
    EDIT.Enabled = True
    DELETE.Enabled = True
    ADD.Caption = Addcaption
-   maskedbox1.BackColor = ASPRO
-   maskedbox1.ForeColor = BLE
-   maskedbox1.text = String(Data1.Recordset(field).Size, " ")
+   MaskEdBox1.BackColor = ASPRO
+   MaskEdBox1.ForeColor = BLE
+   MaskEdBox1.text = String(Data1.Recordset(field).Size, " ")
    validate = False
    Text1.text = Space(Data1.Recordset(field).Size)
    validate = True
@@ -191,10 +191,10 @@ Else 'νεα εγγραφή
    EDIT.Enabled = False
    DELETE.Enabled = False
    ADD.Caption = katax '"Καταχώρηση"
-   maskedbox1.BackColor = BLE
-   maskedbox1.ForeColor = ASPRO
-    maskedbox1.Enabled = True
-    maskedbox1.SetFocus
+   MaskEdBox1.BackColor = BLE
+   MaskEdBox1.ForeColor = ASPRO
+    MaskEdBox1.Enabled = True
+    MaskEdBox1.SetFocus
 End If
 
 End Sub
@@ -212,11 +212,11 @@ Private Sub Delete_Click()
    End If
 
    If IsNull(Data1.Recordset(field)) Then
-      maskedbox1 = String(Data1.Recordset(field).Size, " ")
+      MaskEdBox1 = String(Data1.Recordset(field).Size, " ")
    Else
-      maskedbox1 = left(Data1.Recordset(field) + Space(50), Data1.Recordset(field).Size)
+      MaskEdBox1 = left(Data1.Recordset(field) + Space(50), Data1.Recordset(field).Size)
    End If
-   response = MsgBox(maskedbox1 + Chr(13) + mL_Res(203), vbYesNo)
+   response = MsgBox(MaskEdBox1 + Chr(13) + mL_Res(203), vbYesNo)
       '203   "Να Διαγραφή ; "
    If response = vbYes Then
       Data1.Recordset.DELETE
@@ -227,7 +227,7 @@ Private Sub Delete_Click()
         End If
       End If
    End If
-   maskedbox1.text = String(Data1.Recordset(field).Size, " ")
+   MaskEdBox1.text = String(Data1.Recordset(field).Size, " ")
 
 
 End Sub
@@ -237,7 +237,7 @@ Private Sub Edit_Click()
  On Error Resume Next
  
 If IsNull(Data1.Recordset(field)) Then
-      maskedbox1.Enabled = True
+      MaskEdBox1.Enabled = True
      Data1.Recordset.EDIT
      Data1.Recordset(field) = "."
      Data1.Recordset.update
@@ -248,11 +248,11 @@ End If
  
  ' καταχώρηση
 If EDIT.Caption = katax Then
-    maskedbox1.Enabled = False
+    MaskEdBox1.Enabled = False
    DBGrid1.Enabled = True
    Data1.Recordset.EDIT
-  If IsNumeric(maskedbox1) Then maskedbox1 = str(maskedbox1)
-     Data1.Recordset(field) = Trim(maskedbox1)
+  If IsNumeric(MaskEdBox1) Then MaskEdBox1 = str(MaskEdBox1)
+     Data1.Recordset(field) = Trim(MaskEdBox1)
     If field2 <> " " Then
       Data1.Recordset("apor") = Val(Text1.text)
    End If
@@ -266,10 +266,10 @@ If EDIT.Caption = katax Then
    ADD.Enabled = True
    DELETE.Enabled = True
    EDIT.Caption = Editcaption
-   maskedbox1.BackColor = ASPRO
-   maskedbox1.ForeColor = BLE
+   MaskEdBox1.BackColor = ASPRO
+   MaskEdBox1.ForeColor = BLE
    
-   maskedbox1.text = String(Data1.Recordset(field).Size, " ")
+   MaskEdBox1.text = String(Data1.Recordset(field).Size, " ")
  If field2 <> " " Then
    validate = False
    Text1.text = Space(Data1.Recordset(field2).Size)
@@ -277,7 +277,7 @@ If EDIT.Caption = katax Then
  End If
 
 Else ' εγγραφή
-    maskedbox1.Enabled = True
+    MaskEdBox1.Enabled = True
    If Data1.Recordset.RecordCount = 0 Then
       MsgBox mL_Res(204)
       ' 204"Δεν υπάρχουν εγγραφές στο αρχείο."
@@ -290,7 +290,7 @@ Else ' εγγραφή
    End If
    
    DBGrid1.Enabled = False
-   maskedbox1.text = left(Data1.Recordset(field) + Space(50), Data1.Recordset(field).Size)
+   MaskEdBox1.text = left(Data1.Recordset(field) + Space(50), Data1.Recordset(field).Size)
    
 If field2 <> " " Then
    validate = False
@@ -305,7 +305,7 @@ End If
    ADD.Enabled = False
    DELETE.Enabled = False
    EDIT.Caption = katax '"Καταχώρηση"
-   maskedbox1.SetFocus
+   MaskEdBox1.SetFocus
 End If
  
  On Error GoTo 0
@@ -361,7 +361,7 @@ Deletecaption = mL_CapRes(213) '213 "Διαγραφή"
 ADD.Caption = Addcaption
 EDIT.Caption = Editcaption
 DELETE.Caption = Deletecaption
-exodos.Caption = mL_CapRes(212) '"Εξοδος"
+EXODOS.Caption = mL_CapRes(212) '"Εξοδος"
 validate = True
    
 If Menu = 1 Then  'pelates
@@ -437,7 +437,7 @@ End Sub
 Private Sub Form_Paint()
      Screen.MousePointer = 1
      L = Data1.Recordset(field).Size
-     maskedbox1.mask = String$(L, "C")
+   ' MaskEdBox1.mask = String$(L, "C")
 
      
 End Sub
@@ -456,14 +456,14 @@ MDIForm1.ejodos(40).Visible = True
 End Sub
 
 Private Sub MaskEdBox1_GotFocus()
-   maskedbox1.BackColor = BLE
-   maskedbox1.ForeColor = ASPRO
+   MaskEdBox1.BackColor = BLE
+   MaskEdBox1.ForeColor = ASPRO
 
 End Sub
 
 Private Sub MaskEdBox1_LostFocus()
-   maskedbox1.ForeColor = BLE
-   maskedbox1.BackColor = ASPRO
+   MaskEdBox1.ForeColor = BLE
+   MaskEdBox1.BackColor = ASPRO
 
 End Sub
 

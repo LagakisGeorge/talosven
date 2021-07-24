@@ -548,7 +548,7 @@ Function zyg_neo(porta)
 
 Dim FromModem$, BUF As String
 Dim D As Integer, s As Integer, tel As Integer
-Dim k As Integer, ZYG As String
+Dim K As Integer, ZYG As String
 
 ZYG = "-999999"
      porta.InBufferCount = 0
@@ -556,7 +556,7 @@ ZYG = "-999999"
      porta.Output = "SI" + Chr$(13) + Chr$(10)
      MilSec (70)
        
-For k = 1 To 10
+For K = 1 To 10
      
  If porta.InBufferCount Then
            BUF = porta.InBufferCount
@@ -992,7 +992,7 @@ End Function
 
 Function Zygis0_ADAM(g_PORTa, x As Single)
   Dim counter, START1, FromModem$, dummy, ZYG
-  Dim Zygis0_ADAM
+  
     ' Flush the input buffer.
        g_PORTa.Output = "SEND" + Chr$(13)
        g_PORTa.InBufferCount = 0
@@ -1383,15 +1383,15 @@ Dim r As Recordset, MHome
 
   Set dbsjet = DBEngine.Workspaces(0).OpenDatabase("c:\talos\coord_tb.mdb")
      Set r = dbsjet.OpenRecordset("var")
-            For k = 1 To 99: var(k) = 0: Next
+            For K = 1 To 99: var(K) = 0: Next
             Do Until r.eof
               v = r("field_name")
               t = r("field_val")
               If IsNull(t) Then
                 t = 0
               End If
-                k = Val(Mid$(v, 4, 2))
-                If k > 0 And k < 100 Then var(k) = t
+                K = Val(Mid$(v, 4, 2))
+                If K > 0 And K < 100 Then var(K) = t
               
               'cmd$ = "" + V + "=" + Str$(t) + ":"
               
@@ -1742,7 +1742,7 @@ If Lim1 < 17 And Lim2 < 17 Then ' αν hard limits
     'Set_Pointer 768, LIMIT_STATUS
     'Read_Status 768, status_high%, status_low%, status&
         
-    For k = 1 To 4
+    For K = 1 To 4
      '   If (status_high% And 2 ^ (2 * k - 2)) = 0 Then
      '       Stamathma_Talos mL_Res(639) + str(k) '639 "Τερματικό άξονα "
      '       MsgBox mL_Res(639) + str(k)
@@ -2143,10 +2143,10 @@ Set mydb = Workspaces(0).OpenDatabase("c:\TALOS\RECIPIES.MDB", False, False)
 '-------------------------prospau2 ---------------------------------------------------
 Set r = mydb.OpenRecordset("prospau2")
 ok = 0
-For k = 0 To r.Fields.Count - 1
-     If UCase(r.Fields(k).Name) = "APOXRVSH" Then M_AP = 1
-     If UCase(r.Fields(k).Name) = "KOD_PEL" Then M_KO = 1
-     If UCase(r.Fields(k).Name) = "HME_PARAD" Then M_HM = 1
+For K = 0 To r.Fields.Count - 1
+     If UCase(r.Fields(K).Name) = "APOXRVSH" Then M_AP = 1
+     If UCase(r.Fields(K).Name) = "KOD_PEL" Then M_KO = 1
+     If UCase(r.Fields(K).Name) = "HME_PARAD" Then M_HM = 1
 Next
 r.Close
 
@@ -2172,10 +2172,10 @@ mydb.Execute SQL
 Set r = mydb.OpenRecordset("prospau3")
 ok = 0
 M_AP = 0: M_KO = 0: M_HM = 0
-For k = 0 To r.Fields.Count - 1
-     If UCase(r.Fields(k).Name) = "APOXRVSH" Then M_AP = 1
-     If UCase(r.Fields(k).Name) = "KOD_PEL" Then M_KO = 1
-     If UCase(r.Fields(k).Name) = "HME_PARAD" Then M_HM = 1
+For K = 0 To r.Fields.Count - 1
+     If UCase(r.Fields(K).Name) = "APOXRVSH" Then M_AP = 1
+     If UCase(r.Fields(K).Name) = "KOD_PEL" Then M_KO = 1
+     If UCase(r.Fields(K).Name) = "HME_PARAD" Then M_HM = 1
 Next
 r.Close
 
@@ -2423,10 +2423,10 @@ End Function
 
 
 Public Sub MilSec(WAIT As Long)
-Dim start, c_tim, k, k0
+Dim start, c_tim, K, k0
      If WAIT < 1 Then
         k0 = WAIT * ForNexts_Milsec
-        For k = 1 To k0: Next
+        For K = 1 To k0: Next
         Exit Sub
      End If
      start = GetCurrentTime()
@@ -2436,7 +2436,7 @@ Dim start, c_tim, k, k0
      Loop Until c_tim >= start + WAIT
 End Sub
 Function miliseconds(WAIT As Long)
-    Dim start, c_tim, k, k0
+    Dim start, c_tim, K, k0
      start = GetCurrentTime()
      Do
         c_tim = GetCurrentTime()
@@ -2690,7 +2690,7 @@ End Sub
 
 Function find_colors(forma)
  '  find colors of screen
-Dim FI(1 To 15), r, k
+Dim FI(1 To 15), r, K
    
           Select Case UCase(forma.Name)
           Case "FRMXHM"
@@ -2741,8 +2741,8 @@ Dim FI(1 To 15), r, k
                   End If
           ' End If
            r.Close
-                 For k = 1 To forma.Controls.Count
-                     forma.Controls(k).FontSize = forma.FontSize
+                 For K = 1 To forma.Controls.Count
+                     forma.Controls(K).FontSize = forma.FontSize
                  Next
       On Error GoTo 0
       

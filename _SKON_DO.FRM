@@ -2189,10 +2189,15 @@ Target = Int(m_periek * m_nerostox + 0.5): Target_Dis = Val(Target): CurQ_Dis = 
   G_get_uesh Mpoyk1: x_buk = x0: y_buk = y0: z_buk = z0: Buk = Mpoyk1
   fere_buk 'cmd$ = "!var12=" + str(Buk + 1000) + ":" + "!var36=" + Trim(str(x_buk)) + ":" + "!var37=" + Trim(str(y_buk)) + ":"
 
-'9999                                    'ÄïóïìÝôñçóç Óêüíçò
+9999                                    'ÄïóïìÝôñçóç Óêüíçò
 
 ' Command2.Enabled = False
    CurQ = DOS_ALATI(Target)  'lagakis 24-2-2000
+   
+' GoTo 9999  'TEST
+   
+   
+   
 MilSec 1000
 If CurQ <= 0 Then ' Ôï ìðïõêÜëé óêüíçò äåí ôñïöïäïôåß ìå óêüíç
        Rob_FeedBack (59)  ' ÐÅÑÉÌÅÍÅÉ 59 SEC NA ÔÅËÅÉÙÓÅÉ ÔÏ ROBOT
@@ -2208,13 +2213,20 @@ End If
 
 arx_y = axe(2)
 cmd$ = "!var12=" + str(20000 + Mpoyk1) + ":": RobSend (cmd$) ' apom mpoyk sko
-
+Dim DD As Long
+DD = GetCurrentTime()
 Do While Abs(axe(2) - arx_y) < 10000 ' gia na paro teliki zygisi
    DoEvents
+   If GetCurrentTime() - DD > 10000 Then   ' ÃÉÁ ÍÁ ÌÇÍ ÊÏËÁÅÉ
+       Exit Do
+   End If
+   
+   
+   
 Loop
 
 
-'MilSec 2000
+MilSec 5000
 
 
 Me.Caption = "Final weight of dyestuff"
@@ -2892,12 +2904,189 @@ Function Zygis0_ADAM(x As Single)
          Me.Caption = Format(Zygis0_ADAM, "###0.000")
 End Function
 
+
+
+
+
+Function zyg_ADAM(Zygis_Kind As Variant) As Long
+On Error GoTo er_det
+   Dim counter
+  Dim tot_counter
+  Dim start
+  Dim FromModem As String
+  Dim dummy
+  Dim BUF
+  
+   counter = 0: tot_counter = 0: Label10 = 0
+' If system_ready = 0 Then zyg_ADAM = "System not Working": Exit Function
+  start = GetCurrentTime()
+  
+  
+    Do
+    If GetCurrentTime() - start > 10001 Then zyg_ADAM = -999000999: Exit Function
+     MSComm1.InBufferCount = 0
+      FromModem$ = ""
+           MSComm1.Output = Balance_Asking + Chr$(13)
+          MilSec (50)
+          dummy = DoEvents()
+          If MSComm1.InBufferCount Then
+           BUF = MSComm1.InBufferCount
+          FromModem$ = FromModem$ + MSComm1.Input
+        '  List1.AddItem FromModem$, 0
+        
+        
+        
+         
+              If InStr(UCase(FromModem$), "OVER") > 0 Then
+                'MsgBox "Scale Overload ...", , "Talos"
+                zyg_ADAM = -7900000  ' "OL"
+                Exit Do
+              End If
+              If InStr(UCase(FromModem$), "UNDER") > 0 Then
+                 'MsgBox "Scale Overload ...", , "Talos"
+                 zyg_ADAM = -9900000 ' "UL"
+                 Exit Do
+              End If
+        
+        
+        
+           
+'           If InStr(FromModem$, "OL") > 0 Then
+'                'MsgBox "Scale Overload ...", , "Talos"
+'                zyg_ADAM = "OL"
+'                Exit Do
+'            End If
+'           If InStr(FromModem$, "UL") > 0 Then
+'                'MsgBox "Scale Overload ...", , "Talos"
+'                zyg_ADAM = "UL"
+'                Exit Do
+'            End If
+            If GetCurrentTime() - start > 5000 And Zygis_Kind = "OK" Then Zygis_Kind = 0: tot_counter = 0
+          
+          
+          
+          
+          
+    If InStr(FromModem$, ".") > 0 Then
+          
+            Dim NN As Integer
+            NN = InStr(FromModem$, ".")
+            Dim CC3 As String
+            Dim DD As String
+            
+           If NN > 3 Then
+            
+            
+            '    CC = Mid(FromModem$, NN - 3, 7)
+             '   DD = Mid(FromModem$, NN, 4)
+              '  If InStr(DD, "?") > 0 Then
+               '    DD = Replace(DD, "?", "0")
+               ' End If
+                
+                
+                CC3 = Mid(FromModem$, NN - 5, 9)
+                
+                If InStr(CC3, "?") > 0 Then
+                 
+                   
+                Else
+                
+                  '  CC = Replace(CC, "?", "0")
+                    zyg_ADAM = Val(CC3) * 1000
+                    Exit Do
+                End If
+            Else
+               zyg_ADAM = -999000999
+            End If
+            
+               
+          
+     End If
+
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          If InStr(FromModem$, Chr$(13)) >= 5 Then
+                 If InStr(FromModem$, ".") >= 5 Then
+                       Exit Do
+                End If
+          End If
+       
+       
+       
+       
+       counter = counter + 1
+       If counter >= 15 Then tot_counter = tot_counter + 1
+            Label10 = counter
+          If tot_counter >= 20 And Zygis_Kind <> "OK" Then
+          counter = 0: tot_counter = tot_counter + 1
+               zyg_ADAM = " "
+               Exit Function
+           End If
+          If counter >= 50 Then  ' 500
+             counter = 0: tot_counter = tot_counter + 1
+               MSComm1.InBufferCount = 0
+              MSComm1.Output = Balance_Asking + Chr$(13)
+              End If
+     End If
+     If Zygis_Kind = "OK" Then
+             'Me.Zyg_Show.Width = (GetCurrentTime() - start) / 1000 * 650
+              'Me.Zyg_Show.Caption = Int(((GetCurrentTime() - start) / 1000) + 0.5) & " Sec"
+             'Me.Zyg_Show.Refresh
+      End If
+      
+    Loop
+         
+       '  zyg_ADAM = Mid$(FromModem$, InStr(FromModem$, ".") - 4, 8)
+        ' If InStr(FromModem$, "-") > 0 Or InStr(FromModem$, "?") > 0 Then
+         '    zyg_ADAM = Str(-Val(LTrim(zyg_ADAM)))
+        ' End If
+er_ex:
+Exit Function
+er_det:
+ zyg_ADAM = -999000999  '" "
+Resume er_ex
+End Function
+
+
+
+
+
+
+
 Function Zygis0(x As Single)
   Dim counter, starter
   
    If Balance_Type = "ADAM" Then
-        Zygis0 = Zygis0_ADAM(MSComm1, x)
+       ' Zygis0 = Zygis0_ADAM(MSComm1, x)
+       ' Me.Caption = Format(Zygis0, "###0.000")
+        
+        
+        Zygis0 = zyg_ADAM(0)
         Me.Caption = Format(Zygis0, "###0.000")
+       ' Label3(0).Caption = Zygis0
+        Exit Function
+        
+        
+        
         Exit Function
    Else
 '        Zygis0 = zyg_neo(MSComm1) * 1000
@@ -2952,7 +3141,7 @@ Function Zygis0(x As Single)
        Zygis0 = -999000999
        Exit Function
    End If
-   zygisi0 = FromModem$
+   ZYGISI0 = FromModem$
      
       If InStr(FromModem$, ".") < 5 Then
          x = InStr(6, FromModem$, ".")
@@ -4554,19 +4743,19 @@ End If
 
 MilSec 200
 
-If Balance_Type = "ADAM" Then
-
-Do
-    On Error Resume Next
-    MSComm1.Output = "HI RANGE" + Chr$(13)
-     secwait (1)
-    met = met + 1
-   dec = 3 'zyg_decimals()
-         If met = 10 Then
-                Exit Do
-       End If
-Loop Until dec = 3
-End If
+'If Balance_Type = "ADAM" Then
+'
+'Do
+'    On Error Resume Next
+'    MSComm1.Output = "HI RANGE" + Chr$(13)
+'     secwait (1)
+'    met = met + 1
+'   dec = 3 'zyg_decimals()
+'         If met = 10 Then
+'                Exit Do
+'       End If
+'Loop Until dec = 3
+'End If
 
 Data1.Refresh
 DBGrid1.Refresh
@@ -4868,6 +5057,14 @@ Label8.Visible = True
 End Sub
 
 Private Sub rezero_Click()
+
+    G_REZERO MSComm1
+Exit Sub
+
+
+
+
+
 Dim Zero, asw1, asw2
 On Error Resume Next
 Me.Caption = "Rezero"
@@ -4900,6 +5097,185 @@ If Abs(asw1) + Abs(asw2) > 20 Then
 End If
   
 End Sub
+
+
+
+
+Sub G_REZERO(porta)
+
+Dim K As Integer
+
+
+    Dim Zero
+
+    Dim ZZ As Long
+
+    On Error Resume Next
+
+    If system_ready = 0 Then Exit Sub
+ 
+    If Balance_Type = "ADAM" Then  ' OVER =zyg_ADAM = -7900000  '
+    
+        ZZ = zyg_ADAM(0)
+
+        If Abs(ZZ) = 9900000 Then  ' uNDER
+            porta.Output = "ON" + Chr(13)  'KLEINO KAI ANOOIGV
+            MilSec 4000  '4 O
+            '
+            porta.Output = "ON" + Chr(13)
+            MilSec 4000  '4 O
+                
+        Else
+            If Abs(ZZ) = 999000999 Then ' ÓÂÇÓÔÇ ¹ ×ÁËÁÓÌÅÍÇ
+                For K = 1 To 4
+                    porta.Output = "ON" + Chr(13)  'ÔÇÍ ÁÍÁÂÙ
+                    MilSec 4000  '4 OK
+                    porta.Output = "T" + Chr(13)
+                    MilSec 2000
+
+                    If Abs(zyg_ADAM(0)) < 2 Then
+
+                        ' OK
+                        Exit For
+
+                    Else
+                        ' ÇÔÁÍ ÓÂÇÓÔÇ ÊÁÉ ÔÇÍ ÁÍÏÉÃÅÉ
+                        porta.Output = "ON" + Chr(13)
+                        MilSec 4000  '4 OK
+                        porta.Output = "T" + Chr(13)
+                    End If
+
+                Next
+       
+        
+        
+      
+            Else  '     Then ZZ > 0 And ZZ < 0 Then    ' ÄÅÉ×ÍÅÉ ÔÉÌÇ ÁËËÁ ÈÅÔÉÊÇ ¹ ÁÑÌÇÔÉÊÇ  Ï×É UNDER KAI OVER
+                'Else
+                'Zero = "Z" + Chr$(13) + Chr(10)
+                'porta.Output = Zero
+                
+                porta.Output = "T" + Chr(13)
+                   MilSec 4000
+                For K = 1 To 10
+                
+                    If Abs(zyg_ADAM(0)) < 2 Then
+                        ' OK
+                        Exit For
+                    End If
+                    porta.Output = "T" + Chr(13)
+                    If K > 5 Then
+                       MilSec 6000
+                    Else
+                        MilSec 4000
+                    End If
+                    
+                    
+                Next
+         
+            '     Else ' ÓÂÇÓÔÇ
+       
+                
+            End If
+       
+        End If
+
+
+
+   End If '  Balance_Type = "ADAM" Then
+
+        'secwait (1)
+        'MSComm1.Output = Zero
+        'secwait (1)'
+
+        'secwait (1)
+        'asw1 = ZYGIS3()
+        'secwait (1)
+        'asw2 = ZYGIS3()
+        'If Abs(asw1) + Abs(asw2) > 10 Then
+        '   MilSec 1000
+        '   GoTo 17
+        'End If
+  
+    End Sub
+
+
+
+
+Sub G_OLD_REZERO(porta)
+Dim Zero
+
+
+On Error Resume Next
+If system_ready = 0 Then Exit Sub
+ 
+ If Balance_Type = "ADAM" Then
+    
+          porta.Output = "T" + Chr(13)
+          MilSec 2000
+        If Abs(zyg_ADAM(0)) < 2 Then
+            ' OK
+        Else
+            porta.Output = "ON" + Chr(13)
+            MilSec 4000  '4 OK
+            porta.Output = "T" + Chr(13)
+            MilSec 2000
+            If Abs(zyg_ADAM(0)) < 2 Then
+                ' OK
+            Else
+                ' ÇÔÁÍ ÓÂÇÓÔÇ ÊÁÉ ÔÇÍ ÁÍÏÉÃÅÉ
+                porta.Output = "ON" + Chr(13)
+                MilSec 4000  '4 OK
+                porta.Output = "T" + Chr(13)
+            End If
+       
+        End If
+       
+       
+    
+    
+      
+ Else
+      Zero = "Z" + Chr$(13) + Chr(10)
+      porta.Output = Zero
+ End If
+
+
+'secwait (1)
+'MSComm1.Output = Zero
+'secwait (1)'
+
+'secwait (1)
+'asw1 = ZYGIS3()
+'secwait (1)
+'asw2 = ZYGIS3()
+'If Abs(asw1) + Abs(asw2) > 10 Then
+'   MilSec 1000
+'   GoTo 17
+'End If
+  
+  
+End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Function zyg_decimals()
  Dim counter
