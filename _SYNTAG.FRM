@@ -4162,8 +4162,8 @@ r.Close
 ' Set db = OpenDatabase("c:\talos\recipies.mdb")
 
 
-PROSPAU2.RecordSource = "select * from prospau2 where status=1 and epil>0 and not perigr like '~~*' order by epil,entolh,aa_prospau,seira"
-PROSPAU2.Refresh
+prospau2.RecordSource = "select * from prospau2 where status=1 and epil>0 and not perigr like '~~*' order by epil,entolh,aa_prospau,seira"
+prospau2.Refresh
 
 
 
@@ -4190,11 +4190,11 @@ For k = 1 To 5: xr(k) = 0: Off_On(k) = 0: Next
 
 
 
-If IsNull(PROSPAU2.Recordset("epil")) Then Exit Sub
-If Not IsNumeric(PROSPAU2.Recordset("epil")) Then Exit Sub
-If PROSPAU2.Recordset("epil") > 50 Then Exit Sub
+If IsNull(prospau2.Recordset("epil")) Then Exit Sub
+If Not IsNumeric(prospau2.Recordset("epil")) Then Exit Sub
+If prospau2.Recordset("epil") > 50 Then Exit Sub
 
- mepil = Int(PROSPAU2.Recordset("epil"))
+ mepil = Int(prospau2.Recordset("epil"))
 
 'Quantity = xr
 for_use = 0
@@ -4220,9 +4220,9 @@ Next
  
 
 
-If Not IsNull(PROSPAU2.Recordset("nero")) Then  ' Exit Sub
+If Not IsNull(prospau2.Recordset("nero")) Then  ' Exit Sub
   
-  q_ner = PROSPAU2.Recordset("nero")
+  q_ner = prospau2.Recordset("nero")
   sum_gr = sum_gr + q_ner
   If a00x(5) = 0 Then
       xr_ner = 0
@@ -4419,11 +4419,11 @@ For k = 1 To 5: xr(k) = 0: Off_On(k) = 0: Next
 
 
 
-If IsNull(PROSPAU2.Recordset("epil")) Then Exit Function
-If Not IsNumeric(PROSPAU2.Recordset("epil")) Then Exit Function
-If PROSPAU2.Recordset("epil") > 50 Then Exit Function
+If IsNull(prospau2.Recordset("epil")) Then Exit Function
+If Not IsNumeric(prospau2.Recordset("epil")) Then Exit Function
+If prospau2.Recordset("epil") > 50 Then Exit Function
 
- mepil = Int(PROSPAU2.Recordset("epil"))
+ mepil = Int(prospau2.Recordset("epil"))
 
 'Quantity = xr
 for_use = 0
@@ -4451,9 +4451,9 @@ Next
  
 
 
-If Not IsNull(PROSPAU2.Recordset("nero")) Then  ' Exit Sub
+If Not IsNull(prospau2.Recordset("nero")) Then  ' Exit Sub
   
-  q_ner = PROSPAU2.Recordset("nero")
+  q_ner = prospau2.Recordset("nero")
   sum_gr = sum_gr + q_ner
   If a00x(5) = 0 Then
       xr_ner = 0
@@ -4566,11 +4566,11 @@ For k = 1 To 5: Off_On(k) = 0: Next
 
 
 
-If IsNull(PROSPAU2.Recordset("epil")) Then Exit Sub
-If Not IsNumeric(PROSPAU2.Recordset("epil")) Then Exit Sub
-If PROSPAU2.Recordset("epil") > 50 Then Exit Sub
+If IsNull(prospau2.Recordset("epil")) Then Exit Sub
+If Not IsNumeric(prospau2.Recordset("epil")) Then Exit Sub
+If prospau2.Recordset("epil") > 50 Then Exit Sub
 
- mepil = Int(PROSPAU2.Recordset("epil"))
+ mepil = Int(prospau2.Recordset("epil"))
 
 'Quantity = xr
 for_use = 0
@@ -6377,31 +6377,31 @@ Function Update2_PROSPAU(mpoykali, UESH, Zygisma)
     Dim m_ek, M_gl, m_gr, m_regr
     Dim KOD_XHM
         ' ≈Õ«Ã≈—øÕŸ ‘…” –—¡√Ã¡‘… ∏” –œ”º‘«‘≈” –œ’ ƒœ”œÃ∏‘—«”¡
-        PROSPAU2.Recordset.EDIT
-        PROSPAU2.Recordset("REGR") = Zygisma        ' ·Ò˜ÂﬂÔ prospau
+        prospau2.Recordset.EDIT
+        prospau2.Recordset("REGR") = Zygisma        ' ·Ò˜ÂﬂÔ prospau
         ' ıÔÎÔ„ﬂÊ˘ Ù· Ò·„Ï·ÙÈÍ‹ ÔÛÔÛÙ‹
-        m_ek = PROSPAU2.Recordset("EK")
-        M_gl = PROSPAU2.Recordset("gl")
-        m_gr = PROSPAU2.Recordset("gr")
-        m_regr = PROSPAU2.Recordset("Regr")
+        m_ek = prospau2.Recordset("EK")
+        M_gl = prospau2.Recordset("gl")
+        m_gr = prospau2.Recordset("gr")
+        m_regr = prospau2.Recordset("Regr")
         If m_gr > 0 Then
-           PROSPAU2.Recordset("REk") = (m_ek + M_gl) * IIf(m_gr = 0, 1, (m_regr / m_gr))
+           prospau2.Recordset("REk") = (m_ek + M_gl) * IIf(m_gr = 0, 1, (m_regr / m_gr))
         End If
        
-        PROSPAU2.Recordset("status") = 2
-        PROSPAU2.Recordset("usere") = User_ID
-        KOD_XHM = PROSPAU2.Recordset("KOD")
-        PROSPAU2.Recordset.update
+        prospau2.Recordset("status") = 2
+        prospau2.Recordset("usere") = User_ID
+        KOD_XHM = prospau2.Recordset("KOD")
+        prospau2.Recordset.update
         Ypoloipo(mpoykali) = Ypoloipo(mpoykali) - Zygisma / 1000   ' ﬂÌ·Í·Ú
         
-        XIMITECH.Recordset.Seek "=", KOD_XHM
+        ximitech.Recordset.Seek "=", KOD_XHM
          
         On Error Resume Next
-        XIMITECH.Recordset.EDIT
-        XIMITECH.Recordset("ypol_prot") = XIMITECH.Recordset("ypol_prot") - Zygisma / 1000
-           XIMITECH.Recordset("last_dosom") = CStr(Now)
+        ximitech.Recordset.EDIT
+        ximitech.Recordset("ypol_prot") = ximitech.Recordset("ypol_prot") - Zygisma / 1000
+           ximitech.Recordset("last_dosom") = CStr(Now)
                  'XIMITECH.Recordset("katofli") = katofli(MPOYKALI)
-        XIMITECH.Recordset.update
+        ximitech.Recordset.update
         On Error GoTo 0
 End Function
 '
@@ -6558,7 +6558,7 @@ On Error Resume Next
    'Kill "C:\TALOS\dokprosp.dbf"
 
 
-If PROSPAU2.Recordset.eof Then PROSPAU2.Recordset.MoveLast
+If prospau2.Recordset.eof Then prospau2.Recordset.MoveLast
 
 Set mydb = Workspaces(0).OpenDatabase("C:\TALOS\RECIPIES.MDB", False, False)
 mydb.Execute "DELETE *FROM DOKPROS2;"
@@ -6760,10 +6760,11 @@ End If
 
 
   
-   Syn_Dos.asked_q = 1900   ' a_Mgrs(Move) '  ZHTOYMENH –œ”œTHTA ”E MGRS
+   Syn_Dos.asked_q = 400   ' a_Mgrs(Move) '  ZHTOYMENH –œ”œTHTA ”E MGRS
+               Fornext_small = 2000
                 Syn_Dos.Level = 500  ' Ypoloipo(a_Fere(Move))      '√—¡Ã¡—…¡ Ã–œ’ ¡À…œ’
-                Syn_Dos.Valve_On = valve_2_on    '  , valve_2_on) ' ¡Õœ…√Ã¡ ¬¡À¬…ƒ¡”
-                Syn_Dos.Valve_Off = valve_2_off    '  , valve_2_off)   '  À≈…”…Ãœ ¬¡À¬…ƒ¡”
+                Syn_Dos.Valve_On = valve_1_on    '  , valve_2_on) ' ¡Õœ…√Ã¡ ¬¡À¬…ƒ¡”
+                Syn_Dos.Valve_Off = valve_1_off    '  , valve_2_off)   '  À≈…”…Ãœ ¬¡À¬…ƒ¡”
                 Syn_Dos.Caption = "TEST"   '    str(a_Fere(Move)) + " : " + Perigrafh(a_Fere(Move)) 'ÂÒÈ„Ò·ˆÁ ˜Ò˛Ï·ÙÔÚ Ôı ‰ÔÛÔÏÂÙÒÂﬂÙ·È
                 Syn_Dos.Show 1
   
@@ -6839,34 +6840,34 @@ mydb.Close
    Ar_Syntag = IIf(Val(Text1.text) > Ar_Pothr Or Val(Text1.text) < 1, 0, Val(Text1.text) - 1)
    ' ‰È·‚‹Ê˘ ÙÔÌ ﬂÌ·Í· ·¸ ÙÈÚ ÛıÌÙ·„›Ú
    
-   XIMITECH.Recordset.Index = "KOD"
-   PROSPAU2.Recordset.MoveFirst
+   ximitech.Recordset.Index = "KOD"
+   prospau2.Recordset.MoveFirst
    
-   Do While Not PROSPAU2.Recordset.eof
+   Do While Not prospau2.Recordset.eof
        Ar_Syntag = Ar_Syntag + 1
-       m_syntag(Ar_Syntag) = Trim(PROSPAU2.Recordset("ENTOLH")) + "-" + LTrim(PROSPAU2.Recordset("aa_PROSPAU"))
+       m_syntag(Ar_Syntag) = Trim(prospau2.Recordset("ENTOLH")) + "-" + LTrim(prospau2.Recordset("aa_PROSPAU"))
        Count = 0
-       Do While Not PROSPAU2.Recordset.eof And m_syntag(Ar_Syntag) = PROSPAU2.Recordset("ENTOLH") + "-" + LTrim(PROSPAU2.Recordset("aa_prospau"))
-          If PROSPAU2.Recordset("SEIRA") = 1 Then
-             m_nero(Ar_Syntag) = PROSPAU2.Recordset("nero")
+       Do While Not prospau2.Recordset.eof And m_syntag(Ar_Syntag) = prospau2.Recordset("ENTOLH") + "-" + LTrim(prospau2.Recordset("aa_prospau"))
+          If prospau2.Recordset("SEIRA") = 1 Then
+             m_nero(Ar_Syntag) = prospau2.Recordset("nero")
           End If
-          If Not IsNull(PROSPAU2.Recordset("GR")) Then
-              mgr = PROSPAU2.Recordset("GR")
+          If Not IsNull(prospau2.Recordset("GR")) Then
+              mgr = prospau2.Recordset("GR")
               If mgr > 0 Then
                    'XIMITECH.Recordset.Index = "KOD"
-                   XIMITECH.Recordset.Seek "=", PROSPAU2.Recordset("KOD")
-                   If Not IsNull(XIMITECH.Recordset("ADDr_prot")) Then
+                   ximitech.Recordset.Seek "=", prospau2.Recordset("KOD")
+                   If Not IsNull(ximitech.Recordset("ADDr_prot")) Then
                      Count = Count + 1
-                     m(Ar_Syntag, Count) = XIMITECH.Recordset("ADDr_prot")
-                     MilliGrs(Ar_Syntag, Count) = Val(PROSPAU2.Recordset("gr"))
+                     m(Ar_Syntag, Count) = ximitech.Recordset("ADDr_prot")
+                     MilliGrs(Ar_Syntag, Count) = Val(prospau2.Recordset("gr"))
                      UeshMpoyk(Ar_Syntag, Count) = k 'Ë›ÛÁ Ôı Ë· ÂÌÁÏÂÒ˛Û˘ ÏÂÙ‹ ÙÁÌ Ê˝„ÈÛÁ
                      End If
               End If
            End If
-           PROSPAU2.Recordset.MoveNext
-           If PROSPAU2.Recordset.eof Then Exit Do
+           prospau2.Recordset.MoveNext
+           If prospau2.Recordset.eof Then Exit Do
        Loop
-       If PROSPAU2.Recordset.eof Then Exit Do
+       If prospau2.Recordset.eof Then Exit Do
       ' prospau2.Recordset.MoveNext
    Loop
    
@@ -7131,8 +7132,8 @@ Ref.Caption = "--"
      
      
      
-       If Not IsNull(PROSPAU2.Recordset("ALATIGR")) Then
-          If PROSPAU2.Recordset("ALATIGR") > 0 And UESH_ALATIOY > 0 Then
+       If Not IsNull(prospau2.Recordset("ALATIGR")) Then
+          If prospau2.Recordset("ALATIGR") > 0 And UESH_ALATIOY > 0 Then
                alati = 1
          End If
        End If
@@ -7255,12 +7256,12 @@ Ref.Caption = "--"
     If alati = 1 And Ektel_kinhsh <> -20 Then
 51100
     
-           Real_Alati = DOS_ALATI_DOK(PROSPAU2.Recordset("ALATIGR"))
+           Real_Alati = DOS_ALATI_DOK(prospau2.Recordset("ALATIGR"))
          '  GoTo 51100
-              PROSPAU2.Recordset.EDIT
-              PROSPAU2.Recordset("AlatiGr") = Real_Alati
+              prospau2.Recordset.EDIT
+              prospau2.Recordset("AlatiGr") = Real_Alati
                  Real_Alati = 0
-              PROSPAU2.Recordset.update
+              prospau2.Recordset.update
          
          
          ' aneba ÛÙÔ ·Ì˘ ∆
@@ -7394,10 +7395,10 @@ Case 2 '–¡Õ≈ –œ‘«—…
            If aritmos_ximikon > 0 Then
                  m_synt = a_Ar_Syntag(Move)
                  real_dos = DISPENSE_XIMIKA(m_synt)
-                 PROSPAU2.Recordset.EDIT
-                 PROSPAU2.Recordset("RENERO") = real_dos
-                 PROSPAU2.Recordset("date_disp") = Now '  time_x / 100
-                 PROSPAU2.Recordset.update
+                 prospau2.Recordset.EDIT
+                 prospau2.Recordset("RENERO") = real_dos
+                 prospau2.Recordset("date_disp") = Now '  time_x / 100
+                 prospau2.Recordset.update
                  
                  If m_ximika(50, 5) = -31 Then
                     Ektel_kinhsh = -31   ' Ektel_kinhsh = -31 Then
@@ -7414,12 +7415,12 @@ Case 2 '–¡Õ≈ –œ‘«—…
 '          dum = gyrise_zygaria(3)
            MilSec 500
            real_dos = 0
-           If Not IsNull(PROSPAU2.Recordset("nero")) Then
+           If Not IsNull(prospau2.Recordset("nero")) Then
 33:
                If system_ready = 0 Then
-                  real_dos = PROSPAU2.Recordset("nero") + 1
+                  real_dos = prospau2.Recordset("nero") + 1
                Else
-                  real_dos = NER_DOSOMETRHSH(PROSPAU2.Recordset("nero"), Porta_Ner)
+                  real_dos = NER_DOSOMETRHSH(prospau2.Recordset("nero"), Porta_Ner)
                End If
                 
                Get_Gen_xronos "telos neroy"
@@ -7435,15 +7436,15 @@ Case 2 '–¡Õ≈ –œ‘«—…
            time_x = Mid$(Time$, 1, time_a - 1) + Mid$(Time$, time_a + 1, 2)
            If real_dos < -111000222 Then
                 Ektel_kinhsh = -30
-                PROSPAU2.Recordset.EDIT
-                PROSPAU2.Recordset("RENERO") = 999999
-                PROSPAU2.Recordset("date_disp") = Now   ' time_x / 100
-                PROSPAU2.Recordset.update
+                prospau2.Recordset.EDIT
+                prospau2.Recordset("RENERO") = 999999
+                prospau2.Recordset("date_disp") = Now   ' time_x / 100
+                prospau2.Recordset.update
            Else
-                PROSPAU2.Recordset.EDIT
-                PROSPAU2.Recordset("RENERO") = real_dos
-                PROSPAU2.Recordset("date_disp") = Now '  time_x / 100
-                PROSPAU2.Recordset.update
+                prospau2.Recordset.EDIT
+                prospau2.Recordset("RENERO") = real_dos
+                prospau2.Recordset("date_disp") = Now '  time_x / 100
+                prospau2.Recordset.update
            End If
       Case 9 'ƒœ”œÃ≈‘—«”« ◊—ŸÃ¡‘œ”
              frmSYNT.Caption = frmSYNT.Caption + " dispense  " + str(a_Fere(Move))
@@ -7687,18 +7688,18 @@ Dim mm_Synt
  End If
  
  ' Sort_Recipes
- PROSPAU2.Refresh
+ prospau2.Refresh
  MilSec 1000
  
  
  
  SYN_ALATIOY = 0
- PROSPAU2.Recordset.MoveFirst
- Do While Not PROSPAU2.Recordset.eof
-    If Not IsNull(PROSPAU2.Recordset("ALATIGR")) Then
-        SYN_ALATIOY = SYN_ALATIOY + PROSPAU2.Recordset("ALATIGR")
+ prospau2.Recordset.MoveFirst
+ Do While Not prospau2.Recordset.eof
+    If Not IsNull(prospau2.Recordset("ALATIGR")) Then
+        SYN_ALATIOY = SYN_ALATIOY + prospau2.Recordset("ALATIGR")
     End If
-    PROSPAU2.Recordset.MoveNext
+    prospau2.Recordset.MoveNext
     'Grid.Refresh
  Loop
  If DOYLEYO_ALATI = 0 Or UESH_ALATIOY = 0 Then SYN_ALATIOY = 0
@@ -7779,8 +7780,8 @@ Timer1.Enabled = True
 XALASE_NERO = 0
 
    'Ã¡— ¡—Ÿ ‘…”  …Õ«”≈…” –œ’ ≈ ‘≈Àœ’Õ‘¡… ‘¡’‘œ◊—œÕ¡
- PROSPAU2.Recordset.MoveFirst
- Last_Epil = PROSPAU2.Recordset("epil")
+ prospau2.Recordset.MoveFirst
+ Last_Epil = prospau2.Recordset("epil")
 
 PHDHMENA_POTHRIA = Val(Text1.text) - 1
 PHDHMENA_POTHRIA = IIf(PHDHMENA_POTHRIA < 0, 0, PHDHMENA_POTHRIA)
@@ -7840,8 +7841,8 @@ DOSO_MPOYK = 0  'ƒœ”œÃ≈‘—œ’Ã≈Õœ Ã–œ’ ¡À… ”‘œ œ–œ…œ ”’Õ≈¬« ¬À¡¬«
                     result = Ektel_kinhsh(2)
                     result = Ektel_kinhsh(1) 'ƒœ”œÃ≈‘—«”«
                     
-                           Last_Epil = PROSPAU2.Recordset("epil")
-                           PROSPAU2.Recordset.MoveNext
+                           Last_Epil = prospau2.Recordset("epil")
+                           prospau2.Recordset.MoveNext
                            'Grid.Refresh
                     
                     
@@ -7874,8 +7875,8 @@ DOSO_MPOYK = 0  'ƒœ”œÃ≈‘—œ’Ã≈Õœ Ã–œ’ ¡À… ”‘œ œ–œ…œ ”’Õ≈¬« ¬À¡¬«
            
                    result = Ektel_kinhsh(1)
                    result = Ektel_kinhsh(2) 'ƒœ”œÃ≈‘—«”«
-                   Last_Epil = PROSPAU2.Recordset("epil")
-                   PROSPAU2.Recordset.MoveNext
+                   Last_Epil = prospau2.Recordset("epil")
+                   prospau2.Recordset.MoveNext
                    'Grid.Refresh
                    DOSO_MPOYK = a_Fere(2)
                    DUM = Wait_Robot(0)
@@ -7922,8 +7923,8 @@ DOSO_MPOYK = 0  'ƒœ”œÃ≈‘—œ’Ã≈Õœ Ã–œ’ ¡À… ”‘œ œ–œ…œ ”’Õ≈¬« ¬À¡¬«
                If a_Kinhsh(1) <> 9 Then
                     DUM = Wait_Robot(0)
                Else
-                    Last_Epil = PROSPAU2.Recordset("epil")
-                    PROSPAU2.Recordset.MoveNext
+                    Last_Epil = prospau2.Recordset("epil")
+                    prospau2.Recordset.MoveNext
                     'Grid.Refresh
                End If
        End If
@@ -8093,16 +8094,16 @@ DOSO_MPOYK = 0  'ƒœ”œÃ≈‘—œ’Ã≈Õœ Ã–œ’ ¡À… ”‘œ œ–œ…œ ”’Õ≈¬« ¬À¡¬«
         
        On Error Resume Next
        
-       Last_Epil = PROSPAU2.Recordset("epil")
+       Last_Epil = prospau2.Recordset("epil")
         
-       PROSPAU2.Recordset.MoveFirst
-        Do While Not PROSPAU2.Recordset.eof
-            If Last_Epil = PROSPAU2.Recordset("epil") Then
-                PROSPAU2.Recordset.EDIT
-                  PROSPAU2.Recordset("status") = 1
-                PROSPAU2.Recordset.update
+       prospau2.Recordset.MoveFirst
+        Do While Not prospau2.Recordset.eof
+            If Last_Epil = prospau2.Recordset("epil") Then
+                prospau2.Recordset.EDIT
+                  prospau2.Recordset("status") = 1
+                prospau2.Recordset.update
             End If
-            PROSPAU2.Recordset.MoveNext
+            prospau2.Recordset.MoveNext
         Loop
         
        On Error GoTo 0
@@ -8175,18 +8176,18 @@ Dim mm_Synt
  End If
  
  ' Sort_Recipes
- PROSPAU2.Refresh
+ prospau2.Refresh
  MilSec 1000
  
  
  
  SYN_ALATIOY = 0
- PROSPAU2.Recordset.MoveFirst
- Do While Not PROSPAU2.Recordset.eof
-    If Not IsNull(PROSPAU2.Recordset("ALATIGR")) Then
-        SYN_ALATIOY = SYN_ALATIOY + PROSPAU2.Recordset("ALATIGR")
+ prospau2.Recordset.MoveFirst
+ Do While Not prospau2.Recordset.eof
+    If Not IsNull(prospau2.Recordset("ALATIGR")) Then
+        SYN_ALATIOY = SYN_ALATIOY + prospau2.Recordset("ALATIGR")
     End If
-    PROSPAU2.Recordset.MoveNext
+    prospau2.Recordset.MoveNext
     'Grid.Refresh
  Loop
  If DOYLEYO_ALATI = 0 Or UESH_ALATIOY = 0 Then SYN_ALATIOY = 0
@@ -8267,8 +8268,8 @@ Timer1.Enabled = True
 XALASE_NERO = 0
 
    'Ã¡— ¡—Ÿ ‘…”  …Õ«”≈…” –œ’ ≈ ‘≈Àœ’Õ‘¡… ‘¡’‘œ◊—œÕ¡
- PROSPAU2.Recordset.MoveFirst
- Last_Epil = PROSPAU2.Recordset("epil")
+ prospau2.Recordset.MoveFirst
+ Last_Epil = prospau2.Recordset("epil")
 
 PHDHMENA_POTHRIA = Val(Text1.text) - 1
 PHDHMENA_POTHRIA = IIf(PHDHMENA_POTHRIA < 0, 0, PHDHMENA_POTHRIA)
@@ -8351,8 +8352,8 @@ DOSO_MPOYK = 0  'ƒœ”œÃ≈‘—œ’Ã≈Õœ Ã–œ’ ¡À… ”‘œ œ–œ…œ ”’Õ≈¬« ¬À¡¬«
                     result = Ektel_kinhsh(2)
                     result = Ektel_kinhsh(1) 'ƒœ”œÃ≈‘—«”«
                     
-                           Last_Epil = PROSPAU2.Recordset("epil")
-                           PROSPAU2.Recordset.MoveNext
+                           Last_Epil = prospau2.Recordset("epil")
+                           prospau2.Recordset.MoveNext
                            'Grid.Refresh
                     
                     
@@ -8403,8 +8404,8 @@ DOSO_MPOYK = 0  'ƒœ”œÃ≈‘—œ’Ã≈Õœ Ã–œ’ ¡À… ”‘œ œ–œ…œ ”’Õ≈¬« ¬À¡¬«
            
                    result = Ektel_kinhsh(1)
                    result = Ektel_kinhsh(2) 'ƒœ”œÃ≈‘—«”«
-                   Last_Epil = PROSPAU2.Recordset("epil")
-                   PROSPAU2.Recordset.MoveNext
+                   Last_Epil = prospau2.Recordset("epil")
+                   prospau2.Recordset.MoveNext
                    'Grid.Refresh
                    DOSO_MPOYK = a_Fere(2)
                    DUM = Wait_Robot(0)
@@ -8470,8 +8471,8 @@ DOSO_MPOYK = 0  'ƒœ”œÃ≈‘—œ’Ã≈Õœ Ã–œ’ ¡À… ”‘œ œ–œ…œ ”’Õ≈¬« ¬À¡¬«
                If a_Kinhsh(1) <> 9 Then
                     DUM = Wait_Robot(0)
                Else
-                    Last_Epil = PROSPAU2.Recordset("epil")
-                    PROSPAU2.Recordset.MoveNext
+                    Last_Epil = prospau2.Recordset("epil")
+                    prospau2.Recordset.MoveNext
                     'Grid.Refresh
                End If
        End If
@@ -8658,16 +8659,16 @@ DOSO_MPOYK = 0  'ƒœ”œÃ≈‘—œ’Ã≈Õœ Ã–œ’ ¡À… ”‘œ œ–œ…œ ”’Õ≈¬« ¬À¡¬«
         
        On Error Resume Next
        
-       Last_Epil = PROSPAU2.Recordset("epil")
+       Last_Epil = prospau2.Recordset("epil")
         
-       PROSPAU2.Recordset.MoveFirst
-        Do While Not PROSPAU2.Recordset.eof
-            If Last_Epil = PROSPAU2.Recordset("epil") Then
-                PROSPAU2.Recordset.EDIT
-                  PROSPAU2.Recordset("status") = 1
-                PROSPAU2.Recordset.update
+       prospau2.Recordset.MoveFirst
+        Do While Not prospau2.Recordset.eof
+            If Last_Epil = prospau2.Recordset("epil") Then
+                prospau2.Recordset.EDIT
+                  prospau2.Recordset("status") = 1
+                prospau2.Recordset.update
             End If
-            PROSPAU2.Recordset.MoveNext
+            prospau2.Recordset.MoveNext
         Loop
         
        On Error GoTo 0
@@ -8973,39 +8974,39 @@ End If
   v.Close
   
   
- XIMITECH.Recordset.Index = "KOD"
- XIMITECH.Recordset.MoveFirst
- While Not XIMITECH.Recordset.eof
+ ximitech.Recordset.Index = "KOD"
+ ximitech.Recordset.MoveFirst
+ While Not ximitech.Recordset.eof
          u = 0
-         If Not IsNull(XIMITECH.Recordset("ADDR_PROT")) Then
-                 u = XIMITECH.Recordset("addr_prot")
+         If Not IsNull(ximitech.Recordset("ADDR_PROT")) Then
+                 u = ximitech.Recordset("addr_prot")
          End If
          
          If u > 0 And u <= Ar_Mpoykal Then    ' =============================================
                                   
-                 If Not IsNull(XIMITECH.Recordset("LHJ_PROT")) Then   ' ---------------
-                          hmeres = DateDiff("d", Now, XIMITECH.Recordset("LHJ_PROT"))
+                 If Not IsNull(ximitech.Recordset("LHJ_PROT")) Then   ' ---------------
+                          hmeres = DateDiff("d", Now, ximitech.Recordset("LHJ_PROT"))
                  Else
                           hmeres = 1000
                  End If
                  
-                If XIMITECH.Recordset("skonh") = 1 Then ' ”‘≈—≈¡
+                If ximitech.Recordset("skonh") = 1 Then ' ”‘≈—≈¡
                                           Label1(u).BackColor = &H808080           '   Í·ˆÂ
                 Else  '    ƒ … ¡ À ’ Ã ¡ ‘ ¡
                       Label1(u).BackColor = FIND_COLOR(hmeres)
                 End If
                 
                 OldColor(u) = Label1(u).BackColor
-                kodikos(u) = IIf(Not IsNull(XIMITECH.Recordset("kod")), XIMITECH.Recordset("kod"), "0000")
-                Perigrafh(u) = IIf(Not IsNull(XIMITECH.Recordset("perigrafh")), XIMITECH.Recordset("perigrafh"), "  ")
-                LHJH(u) = IIf(Not IsNull(XIMITECH.Recordset("Lhj_prot")), XIMITECH.Recordset("Lhj_prot"), "00/00/00")
-                Ypoloipo(u) = IIf(Not IsNull(XIMITECH.Recordset("ypol_prot")), XIMITECH.Recordset("ypol_prot"), 0)
+                kodikos(u) = IIf(Not IsNull(ximitech.Recordset("kod")), ximitech.Recordset("kod"), "0000")
+                Perigrafh(u) = IIf(Not IsNull(ximitech.Recordset("perigrafh")), ximitech.Recordset("perigrafh"), "  ")
+                LHJH(u) = IIf(Not IsNull(ximitech.Recordset("Lhj_prot")), ximitech.Recordset("Lhj_prot"), "00/00/00")
+                Ypoloipo(u) = IIf(Not IsNull(ximitech.Recordset("ypol_prot")), ximitech.Recordset("ypol_prot"), 0)
                  '·Ì ÙÔ ı¸ÎÔÈÔ ÂﬂÌ·È Í‹Ù˘ Ù˘Ì 50 „Ò·ÏÏ·Òﬂ˘Ì Ì· ÍÔÍÍÈÌﬂÊÂÈ
                  If Ypoloipo(u) < 50 Then
                        Label1(u).BackColor = &HFF&        'ÍÔÍÍÈÌÔ
                  End If
                 Ypoloipo(u) = IIf(Ypoloipo(u) < 0, 100, Ypoloipo(u))
-                katofli(u) = IIf(Not IsNull(XIMITECH.Recordset("katofli")), XIMITECH.Recordset("katofli"), 0)
+                katofli(u) = IIf(Not IsNull(ximitech.Recordset("katofli")), ximitech.Recordset("katofli"), 0)
                 'katofli(u) = IIf(katofli(u) > 15500, katofli(u), 15500)
                 If Not IsNull(Perigrafh(u)) Then
                      Label1(u).Caption = Format(u, "###") + " " + Perigrafh(u)
@@ -9015,24 +9016,24 @@ End If
                ' Label1(u).top = find_top(Label1(u).top, Label1(u).height, Ypoloipo(u))
                ' Label1(u).height = find_height(Label1(u).top, Label1(u).height, Ypoloipo(u))
          End If ' ================================================================
-         XIMITECH.Recordset.MoveNext
+         ximitech.Recordset.MoveNext
  Wend
 
 
-PROSPAU2.Recordset.MoveLast
+prospau2.Recordset.MoveLast
 
-If PROSPAU2.Recordset.RecordCount = 0 Then
+If prospau2.Recordset.RecordCount = 0 Then
    MsgBox mL_Res(889) ' "ƒÂÌ ›˜ÔıÌ ÂÒ‹ÛÂÈ ÔÈ ÛıÌÙ·„›Ú ·¸ ÙÁÌ Ê˝„ÈÛÁ ·ÌÈ˛Ì "
    Com_file_exec.Enabled = False
 End If
 
- PROSPAU2.Recordset.MoveFirst
+ prospau2.Recordset.MoveFirst
 m_CC = 0
-Do While Not PROSPAU2.Recordset.eof
-    If PROSPAU2.Recordset("seira") = 1 Then
+Do While Not prospau2.Recordset.eof
+    If prospau2.Recordset("seira") = 1 Then
         m_CC = m_CC + 1
     End If
-    PROSPAU2.Recordset.MoveNext
+    prospau2.Recordset.MoveNext
 Loop
 
  
@@ -9334,7 +9335,7 @@ End Sub
 
 Private Sub Label1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
 If Not IsNull(Perigrafh(Index)) Then
-     sxolia1.Caption = Perigrafh(Index)
+     SXOLIA1.Caption = Perigrafh(Index)
  End If
 If Not IsNull(Format(Ypoloipo(Index), "###") + "              " + Format(LHJH(Index), "dd/mm/yy")) Then
      SXOLIA2.Caption = Format(Ypoloipo(Index), "###") + "              " + Format(LHJH(Index), "dd/mm/yy")

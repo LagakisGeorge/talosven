@@ -1,7 +1,6 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{00028C01-0000-0000-0000-000000000046}#1.0#0"; "DBGRID32.OCX"
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form PELATES 
    BackColor       =   &H00C0C0C0&
    ClientHeight    =   6975
@@ -16,10 +15,17 @@ Begin VB.Form PELATES
    ScaleHeight     =   6975
    ScaleWidth      =   9645
    WindowState     =   2  'Maximized
+   Begin VB.TextBox MaskEdBox1 
+      Height          =   435
+      Left            =   5160
+      TabIndex        =   9
+      Top             =   1845
+      Width           =   1935
+   End
    Begin VB.TextBox Text1 
       Height          =   435
       Left            =   7230
-      TabIndex        =   6
+      TabIndex        =   5
       Top             =   1845
       Width           =   1830
    End
@@ -85,28 +91,15 @@ Begin VB.Form PELATES
       Height          =   3975
       Left            =   120
       OleObjectBlob   =   "_PELATES.frx":0014
-      TabIndex        =   7
+      TabIndex        =   6
       Top             =   1290
       Width           =   4590
-   End
-   Begin MSMask.MaskEdBox MaskEdBox1 
-      Height          =   420
-      Left            =   5175
-      TabIndex        =   5
-      Top             =   1845
-      Width           =   1905
-      _ExtentX        =   3360
-      _ExtentY        =   741
-      _Version        =   393216
-      AllowPrompt     =   -1  'True
-      Enabled         =   0   'False
-      PromptChar      =   " "
    End
    Begin VB.Label Label3 
       BackStyle       =   0  'Transparent
       Height          =   330
       Left            =   7215
-      TabIndex        =   9
+      TabIndex        =   8
       Top             =   1455
       Width           =   1860
    End
@@ -114,7 +107,7 @@ Begin VB.Form PELATES
       BackStyle       =   0  'Transparent
       Height          =   330
       Left            =   5175
-      TabIndex        =   8
+      TabIndex        =   7
       Top             =   1455
       Width           =   1920
    End
@@ -444,7 +437,7 @@ End Sub
 Private Sub Form_Paint()
      Screen.MousePointer = 1
      L = Data1.Recordset(field).Size
-     maskedbox1.Mask = String$(L, "C")
+     maskedbox1.mask = String$(L, "C")
 
      
 End Sub

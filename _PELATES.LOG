@@ -1,1 +1,6 @@
 Line 92: Class MSMask.MaskEdBox of control MaskEdBox1 was not a loaded control class.
+Line 98: The property name _ExtentX in MaskEdBox1 is invalid.
+Line 99: The property name _ExtentY in MaskEdBox1 is invalid.
+Line 100: The property name _Version in MaskEdBox1 is invalid.
+Line 101: The property name AllowPrompt in MaskEdBox1 is invalid.
+Line 103: The property name PromptChar in MaskEdBox1 is invalid.

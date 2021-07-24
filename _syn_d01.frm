@@ -2352,7 +2352,7 @@ Private Function SERVIRISMA(asked_q As String, Level As String)
             For ll = 1 To 90
                 Valve_on_Click
 
-                For k = 1 To Ejatmish: Next
+                For k = 1 To Ejatmish: DoEvents: Next
                 Valve_Off_Click
 
                 If asked_q <= 100 Then
@@ -2369,7 +2369,7 @@ Private Function SERVIRISMA(asked_q As String, Level As String)
                 asw = Int(1000 * diplo_zygi(1000, 0.001) + 0.5) - tara
 
                 If asw <= Val(real_q_dis) Then
-                    Ejatmish = Ejatmish * 1.1  ' was 1.5 at 4/7/2002
+                    Ejatmish = Ejatmish * 1.5  ' was 1.5 at 4/7/2002
                 End If
 
                 Target_Value.text = Ejatmish
