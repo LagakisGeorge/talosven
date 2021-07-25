@@ -4078,15 +4078,15 @@ Function calc_ximika()
 '-------------------------------------------------
 Dim mydb, r, counter
 Dim use_valve(1 To 5) As Integer
-Dim mepil, r2, K, L
+Dim mepil, r2, k, l
 
 calc_ximika = 1 'OK
 
-For L = 1 To aritmos_ximikon: use_valve(L) = 0: Next
+For l = 1 To aritmos_ximikon: use_valve(l) = 0: Next
 
-For K = 1 To 50
-   For L = 1 To aritmos_ximikon
-       m_ximika(K, L) = 0
+For k = 1 To 50
+   For l = 1 To aritmos_ximikon
+       m_ximika(k, l) = 0
    Next
 Next
 
@@ -4141,17 +4141,17 @@ Else
        If IsEmpty(a00x(5)) Or a00x(5) = 0 Then calc_ximika = 0 'OK
 End If
 
-For K = 1 To aritmos_ximikon
+For k = 1 To aritmos_ximikon
     r.MoveNext
     If IsNull(r("Colormatchdir")) Or IsNull(r("colormatchfilename")) Then
        r.Close
        MsgBox mLResnew(933, "Calibrate valves for chemicals*", 1)
        Exit Function
     Else
-       a00x(K) = Val(r("Colormatchdir"))
-       b00x(K) = Val(r("colormatchfilename"))
-       If IsEmpty(a00x(K)) Or a00x(K) = 0 Then
-          If use_valve(K) = 1 Then
+       a00x(k) = Val(r("Colormatchdir"))
+       b00x(k) = Val(r("colormatchfilename"))
+       If IsEmpty(a00x(k)) Or a00x(k) = 0 Then
+          If use_valve(k) = 1 Then
              calc_ximika = 0 'OK
           End If
        End If
@@ -4162,8 +4162,8 @@ r.Close
 ' Set db = OpenDatabase("c:\talos\recipies.mdb")
 
 
-PROSPAU2.RecordSource = "select * from prospau2 where status=1 and epil>0 and not perigr like '~~*' order by epil,entolh,aa_prospau,seira"
-PROSPAU2.Refresh
+prospau2.RecordSource = "select * from prospau2 where status=1 and epil>0 and not perigr like '~~*' order by epil,entolh,aa_prospau,seira"
+prospau2.Refresh
 
 
 
@@ -4176,7 +4176,7 @@ Sub dispense_old_Ximika()
 
 Dim dr As Long, c, quantity, a00(1 To 5), b00(1 To 5), a2
 Dim mepil, xr(1 To 5), for_use, dokXr(1 To 5), sXr(1 To 5)
-Dim K, L, megas, amax, Off_On(1 To 5), per
+Dim k, l, megas, amax, Off_On(1 To 5), per
 Dim max_xronos, mz, mZ1, mz2
 Dim sum_gr, q_ner, xr_ner
 
@@ -4186,33 +4186,33 @@ Max_apoklish = 500 'mgr
 ' m_ximika(epil, 1 To 5)  posothtes
 
 max_xronos = 50000
-For K = 1 To 5: xr(K) = 0: Off_On(K) = 0: Next
+For k = 1 To 5: xr(k) = 0: Off_On(k) = 0: Next
 
 
 
-If IsNull(PROSPAU2.Recordset("epil")) Then Exit Sub
-If Not IsNumeric(PROSPAU2.Recordset("epil")) Then Exit Sub
-If PROSPAU2.Recordset("epil") > 50 Then Exit Sub
+If IsNull(prospau2.Recordset("epil")) Then Exit Sub
+If Not IsNumeric(prospau2.Recordset("epil")) Then Exit Sub
+If prospau2.Recordset("epil") > 50 Then Exit Sub
 
- mepil = Int(PROSPAU2.Recordset("epil"))
+ mepil = Int(prospau2.Recordset("epil"))
 
 'Quantity = xr
 for_use = 0
 sum_gr = 0
-For K = 1 To aritmos_ximikon
-  If m_ximika(mepil, K) > 0 Then
+For k = 1 To aritmos_ximikon
+  If m_ximika(mepil, k) > 0 Then
       
-      sum_gr = sum_gr + m_ximika(mepil, K)
+      sum_gr = sum_gr + m_ximika(mepil, k)
       
-      If m_ximika(mepil, K) < 1600 Then
-         m_ximika(mepil, K) = m_ximika(mepil, K) - 70
+      If m_ximika(mepil, k) < 1600 Then
+         m_ximika(mepil, k) = m_ximika(mepil, k) - 70
          for_use = for_use + 1
       End If
       
-      If a00x(K) = 0 Then
-         xr(K) = 0
+      If a00x(k) = 0 Then
+         xr(k) = 0
       Else
-         xr(K) = (m_ximika(mepil, K) - b00x(K)) / a00x(K) 'xrhsimopoionta 2, 0.5 sec
+         xr(k) = (m_ximika(mepil, k) - b00x(k)) / a00x(k) 'xrhsimopoionta 2, 0.5 sec
       End If
       
   End If
@@ -4220,9 +4220,9 @@ Next
  
 
 
-If Not IsNull(PROSPAU2.Recordset("nero")) Then  ' Exit Sub
+If Not IsNull(prospau2.Recordset("nero")) Then  ' Exit Sub
   
-  q_ner = PROSPAU2.Recordset("nero")
+  q_ner = prospau2.Recordset("nero")
   sum_gr = sum_gr + q_ner
   If a00x(5) = 0 Then
       xr_ner = 0
@@ -4234,19 +4234,19 @@ End If
  
  
 's[-arr
-For K = 1 To 4: dokXr(K) = xr(K): Next
+For k = 1 To 4: dokXr(k) = xr(k): Next
 
-For L = 1 To 4
+For l = 1 To 4
     amax = -2
     megas = 1
-   For K = 1 To 4
-      If dokXr(K) > amax Then
-         amax = dokXr(K)
-         megas = K
+   For k = 1 To 4
+      If dokXr(k) > amax Then
+         amax = dokXr(k)
+         megas = k
       End If
    Next
    dokXr(megas) = -1
-   sXr(L) = amax
+   sXr(l) = amax
 Next
  
  
@@ -4399,7 +4399,7 @@ Function DISPENSE_XIMIKA(m_synt)
 
 Dim dr As Long, c, quantity, a00, b00, a2
 Dim mepil, xr(1 To 5), for_use, dokXr(1 To 5), sXr(1 To 5)
-Dim K, L, megas, amax, Off_On(1 To 5), per
+Dim k, l, megas, amax, Off_On(1 To 5), per
 Dim max_xronos, mz, mZ1, mz2
 Dim sum_gr, q_ner, xr_ner, DUM
 
@@ -4415,34 +4415,34 @@ Max_apoklish = 3000 'mgr
 ' m_ximika(epil, 1 To 5)  posothtes
 
 max_xronos = 50000
-For K = 1 To 5: xr(K) = 0: Off_On(K) = 0: Next
+For k = 1 To 5: xr(k) = 0: Off_On(k) = 0: Next
 
 
 
-If IsNull(PROSPAU2.Recordset("epil")) Then Exit Function
-If Not IsNumeric(PROSPAU2.Recordset("epil")) Then Exit Function
-If PROSPAU2.Recordset("epil") > 50 Then Exit Function
+If IsNull(prospau2.Recordset("epil")) Then Exit Function
+If Not IsNumeric(prospau2.Recordset("epil")) Then Exit Function
+If prospau2.Recordset("epil") > 50 Then Exit Function
 
- mepil = Int(PROSPAU2.Recordset("epil"))
+ mepil = Int(prospau2.Recordset("epil"))
 
 'Quantity = xr
 for_use = 0
 sum_gr = 0
-For K = 1 To aritmos_ximikon
-  If m_ximika(mepil, K) > 0 Then
-      quantity = m_ximika(mepil, K)
-      sum_gr = sum_gr + m_ximika(mepil, K)
+For k = 1 To aritmos_ximikon
+  If m_ximika(mepil, k) > 0 Then
+      quantity = m_ximika(mepil, k)
+      sum_gr = sum_gr + m_ximika(mepil, k)
       
-      If m_ximika(mepil, K) < 1600 Then
-         m_ximika(mepil, K) = m_ximika(mepil, K) - 70
+      If m_ximika(mepil, k) < 1600 Then
+         m_ximika(mepil, k) = m_ximika(mepil, k) - 70
          for_use = for_use + 1
       End If
       
-      If a00x(K) = 0 Then
-         xr(K) = 0
+      If a00x(k) = 0 Then
+         xr(k) = 0
       Else
-        a00 = a00x(K): b00 = b00x(K)
-        DUM = DISP_ENA_XIMIKO(K, quantity, a00, b00, m_synt)
+        a00 = a00x(k): b00 = b00x(k)
+        DUM = DISP_ENA_XIMIKO(k, quantity, a00, b00, m_synt)
         'xr(k) = (m_ximika(mepil, k) - b00x(k)) / a00x(k) 'xrhsimopoionta 2, 0.5 sec
       End If
       
@@ -4451,9 +4451,9 @@ Next
  
 
 
-If Not IsNull(PROSPAU2.Recordset("nero")) Then  ' Exit Sub
+If Not IsNull(prospau2.Recordset("nero")) Then  ' Exit Sub
   
-  q_ner = PROSPAU2.Recordset("nero")
+  q_ner = prospau2.Recordset("nero")
   sum_gr = sum_gr + q_ner
   If a00x(5) = 0 Then
       xr_ner = 0
@@ -4553,7 +4553,7 @@ Sub dispenseMONO_Ximika()
 
 Dim dr As Long, c, quantity, a00(1 To 5), b00(1 To 5), a2
 Dim mepil, xr(1 To 5), for_use, dokXr(1 To 5), sXr(1 To 5)
-Dim K, L, megas, amax, Off_On(1 To 5), per
+Dim k, l, megas, amax, Off_On(1 To 5), per
 Dim max_xronos, mz, mZ1, mz2
 Dim sum_gr
 Dim Max_apoklish
@@ -4562,27 +4562,27 @@ Max_apoklish = 200 'mgr
 ' m_ximika(epil, 1 To 5)  posothtes
 
 max_xronos = 50000
-For K = 1 To 5: Off_On(K) = 0: Next
+For k = 1 To 5: Off_On(k) = 0: Next
 
 
 
-If IsNull(PROSPAU2.Recordset("epil")) Then Exit Sub
-If Not IsNumeric(PROSPAU2.Recordset("epil")) Then Exit Sub
-If PROSPAU2.Recordset("epil") > 50 Then Exit Sub
+If IsNull(prospau2.Recordset("epil")) Then Exit Sub
+If Not IsNumeric(prospau2.Recordset("epil")) Then Exit Sub
+If prospau2.Recordset("epil") > 50 Then Exit Sub
 
- mepil = Int(PROSPAU2.Recordset("epil"))
+ mepil = Int(prospau2.Recordset("epil"))
 
 'Quantity = xr
 for_use = 0
 sum_gr = 0
-For K = 1 To aritmos_ximikon
-  If m_ximika(mepil, K) > 0 Then
-      sum_gr = sum_gr + m_ximika(mepil, K)
-      If m_ximika(mepil, K) < 1600 Then
-         m_ximika(mepil, K) = m_ximika(mepil, K) - 70
+For k = 1 To aritmos_ximikon
+  If m_ximika(mepil, k) > 0 Then
+      sum_gr = sum_gr + m_ximika(mepil, k)
+      If m_ximika(mepil, k) < 1600 Then
+         m_ximika(mepil, k) = m_ximika(mepil, k) - 70
          for_use = for_use + 1
       End If
-      xr(K) = (m_ximika(mepil, K) - b00x(K)) / a00x(K) 'xrhsimopoionta 2, 0.5 sec
+      xr(k) = (m_ximika(mepil, k) - b00x(k)) / a00x(k) 'xrhsimopoionta 2, 0.5 sec
   End If
 Next
  
@@ -4590,18 +4590,18 @@ Next
  
  
 's[-arr
-For K = 1 To 5: dokXr(K) = xr(K): Next
+For k = 1 To 5: dokXr(k) = xr(k): Next
 
-For L = 1 To 5
+For l = 1 To 5
    amax = 0
-   For K = 1 To 5
-      If dokXr(K) > amax Then
-         amax = dokXr(K)
-         megas = K
+   For k = 1 To 5
+      If dokXr(k) > amax Then
+         amax = dokXr(k)
+         megas = k
       End If
    Next
    dokXr(megas) = -1
-   sXr(L) = amax
+   sXr(l) = amax
 Next
  
  
@@ -5313,22 +5313,22 @@ RobSend (Gripper_On + ":wait(in.1=b0):t0.3:")
 End Sub
 
 Function dos_alati_tests(Target)
-Dim a(1 To 10, 1 To 10), K, j
+Dim a(1 To 10, 1 To 10), k, j
 Dim SUMA, MEG, Z
 'μηδενισμος ζυγου
-For K = 1 To 10
+For k = 1 To 10
     For j = 1 To 10
        'ΚΙΝΗΣΗ Π ΚΑΤΑ 10ΜΜ
        'ΖΥΓΙΣΗ  Ζ=
-       a(K, j) = Z - a(K, j)
+       a(k, j) = Z - a(k, j)
     Next
 Next
 
-For K = 1 To 10
+For k = 1 To 10
     SUMA = 0: MEG = 0
     For j = 1 To 10
-       SUMA = SUMA + a(K, j)
-       MEG = IIf(a(K, j) > MEG, a(K, j), MEG)
+       SUMA = SUMA + a(k, j)
+       MEG = IIf(a(k, j) > MEG, a(k, j), MEG)
     Next
    ' mo(k) = SUMA / 10
    ' MEGISTOS(k) = MEG
@@ -5424,13 +5424,13 @@ Sub sort_recipes()
 ' ταξινομει τις συνταγές για να έχει λίγες μετακινήσεις
 Dim kod(1 To 30, 1 To 10), seira(1 To 30, 1 To 10)
 Dim posaX(1 To 30)
-Dim K, r, L, mepil, c_s, c_sys, zygo, mono1, mono2
+Dim k, r, l, mepil, c_s, c_sys, zygo, mono1, mono2
 
 Dim k0, l0, pano, kato, koina, mydb
 
 mydb = OpenDatabase("c:\talos\recipies.mdb")
 Set r = mydb.OpenRecordset("select...")
-For K = 1 To 30: For L = 1 To 10: kod(K, L) = "**": seira(K, L) = 18: Next: Next
+For k = 1 To 30: For l = 1 To 10: kod(k, l) = "**": seira(k, l) = 18: Next: Next
 
 'Set r = data1.Recordset
 If r.RecordCount < 3 Then Exit Sub
@@ -5487,10 +5487,10 @@ For zygo = 2 To c_s Step 2   'TO C_S
     mono2 = zygo + 1
 
 
-For K = 1 To posaX(zygo)
-     For L = 1 To posaX(mono1)    ' EXOYN IDIO KODIKO KAI DEN EINAI KAPAROMENO
-          If kod(zygo, K) = kod(mono1, L) And seira(mono1, L) = 18 Then
-                seira(zygo, K) = 5
+For k = 1 To posaX(zygo)
+     For l = 1 To posaX(mono1)    ' EXOYN IDIO KODIKO KAI DEN EINAI KAPAROMENO
+          If kod(zygo, k) = kod(mono1, l) And seira(mono1, l) = 18 Then
+                seira(zygo, k) = 5
                ' seira(mono1, l) = 5
                 '
                 Exit For
@@ -5502,7 +5502,7 @@ Next
 
 'BLEPO PINAKA    - DEBUG -
 'List1.AddItem "============POSA ME APOPANO =========="
-For k0 = 1 To c_s: For l0 = 1 To posaX(K)
+For k0 = 1 To c_s: For l0 = 1 To posaX(k)
       ' List1.AddItem str(k0) + "/" + str(l0) + "/" + kod(k0, l0) + "--" + str(seira(k0, l0))
 Next: Next
 'List1.AddItem "======================"
@@ -5515,11 +5515,11 @@ Next: Next
 
 
 
-For K = 1 To posaX(zygo)
-     For L = 1 To posaX(mono2)
-          If kod(zygo, K) = kod(mono2, L) Then
+For k = 1 To posaX(zygo)
+     For l = 1 To posaX(mono2)
+          If kod(zygo, k) = kod(mono2, l) Then
                 
-                seira(zygo, K) = IIf(seira(zygo, K) = 5, 15, 20)
+                seira(zygo, k) = IIf(seira(zygo, k) = 5, 15, 20)
                ' seira(mono2, l) = 10
                 Exit For
           End If
@@ -5528,7 +5528,7 @@ Next
           
 'BLEPO PINAKA    - DEBUG -
 'List1.AddItem "============POSA ME APOKATO =========="
-For k0 = 1 To c_s: For l0 = 1 To posaX(K)
+For k0 = 1 To c_s: For l0 = 1 To posaX(k)
        'List1.AddItem str(k0) + "/" + str(l0) + "/" + kod(k0, l0) + "--" + str(seira(k0, l0))
 Next: Next
 'List1.AddItem "======================"
@@ -5542,17 +5542,17 @@ Next: Next
 pano = 0
 kato = 0
 koina = 0
-For K = 1 To posaX(zygo)
-      If seira(zygo, K) = 5 Then pano = pano + 1
-      If seira(zygo, K) = 20 Then kato = kato + 1
-      If seira(zygo, K) = 15 Then koina = koina + 1
+For k = 1 To posaX(zygo)
+      If seira(zygo, k) = 5 Then pano = pano + 1
+      If seira(zygo, k) = 20 Then kato = kato + 1
+      If seira(zygo, k) = 15 Then koina = koina + 1
 Next
 
 
 Do While pano > 2
-    For K = 1 To posaX(zygo)
-        If seira(zygo, K) = 5 Then
-           seira(zygo, K) = 18
+    For k = 1 To posaX(zygo)
+        If seira(zygo, k) = 5 Then
+           seira(zygo, k) = 18
            pano = pano - 1
            Exit For
         End If
@@ -5560,9 +5560,9 @@ Do While pano > 2
 Loop
 
 Do While kato > 2
-    For K = 1 To posaX(zygo)
-        If seira(zygo, K) = 20 Then
-           seira(zygo, K) = 18
+    For k = 1 To posaX(zygo)
+        If seira(zygo, k) = 20 Then
+           seira(zygo, k) = 18
            kato = kato - 1
            Exit For
         End If
@@ -5599,18 +5599,18 @@ End If
 
 
 
-For K = 1 To posaX(zygo)
+For k = 1 To posaX(zygo)
    ' List1.AddItem str(seira(zygo, k))
 Next
 
 
 
 'dino sta mona pano thn telikh ariumhsh
-For K = 1 To posaX(zygo)
-   If seira(zygo, K) = 5 Then
-          For L = 1 To posaX(mono1)
-                If kod(zygo, K) = kod(mono1, L) Then
-                   seira(mono1, L) = 20
+For k = 1 To posaX(zygo)
+   If seira(zygo, k) = 5 Then
+          For l = 1 To posaX(mono1)
+                If kod(zygo, k) = kod(mono1, l) Then
+                   seira(mono1, l) = 20
                    Exit For
                 End If
           Next
@@ -5618,11 +5618,11 @@ For K = 1 To posaX(zygo)
 Next
 
 'dino sta mona Kato thn telikh ariumhsh
-For K = 1 To posaX(zygo)
-   If seira(zygo, K) = 20 Then
-          For L = 1 To posaX(mono2)
-                If kod(zygo, K) = kod(mono2, L) Then
-                   seira(mono2, L) = 5
+For k = 1 To posaX(zygo)
+   If seira(zygo, k) = 20 Then
+          For l = 1 To posaX(mono2)
+                If kod(zygo, k) = kod(mono2, l) Then
+                   seira(mono2, l) = 5
                    Exit For
                 End If
           Next
@@ -5647,8 +5647,8 @@ Next zygo
 
 
 'BLEPO PINAKA
-For K = 1 To c_s
-    For L = 1 To posaX(K)
+For k = 1 To c_s
+    For l = 1 To posaX(k)
       ' List1.AddItem kod(k, L) + "--" + str(seira(k, L))
     Next
     Next
@@ -5661,10 +5661,10 @@ For K = 1 To c_s
 ' ENHMERONO THN DATABASE
 ' JE-fortoma toy pinaka
 r.MoveFirst
-For K = 1 To c_s
-    For L = 1 To posaX(K)
+For k = 1 To c_s
+    For l = 1 To posaX(k)
          r.EDIT
-         r("EPIL") = r("EPIL") + seira(K, L) / 1000 '+ IIf(K Mod 2 = 0, 1000000 - Val(R("KOD")), Val(R("KOD"))) / 1000000000000#
+         r("EPIL") = r("EPIL") + seira(k, l) / 1000 '+ IIf(K Mod 2 = 0, 1000000 - Val(R("KOD")), Val(R("KOD"))) / 1000000000000#
          r.update
          r.MoveNext
          If r.eof Then Exit For
@@ -5688,9 +5688,9 @@ For K = 1 To c_s
 
 Exit Sub
 parePano:
-For K = 1 To posaX(zygo)
-    If seira(zygo, K) = 15 Then
-       seira(zygo, K) = 5
+For k = 1 To posaX(zygo)
+    If seira(zygo, k) = 15 Then
+       seira(zygo, k) = 5
        Exit For
     End If
 Next
@@ -5701,9 +5701,9 @@ Return
 
 pareKato:
 
-For K = 1 To posaX(zygo)
-    If seira(zygo, K) = 15 Then
-       seira(zygo, K) = 20
+For k = 1 To posaX(zygo)
+    If seira(zygo, k) = 15 Then
+       seira(zygo, k) = 20
        Exit For
     End If
 Next
@@ -5727,7 +5727,7 @@ Function NER_DOSOMETRHSH(ByVal gr As Single, ByVal porta As String)
 
 'πιάνω το 95% με την μία
 Dim ssdxx As Single, Y As Double, Z As Double, w As Double, fores
-Dim x As Single, tmax As Double, tmin As Double, t As Double, texcel As Double, stoxos As Double
+Dim X As Single, tmax As Double, tmin As Double, t As Double, texcel As Double, stoxos As Double
 Dim xronos, mxronos
 Dim Poses_Zyg, starter, DEYTEROLEPTA
 Dim proth_fora As Byte, ZYG1, DT
@@ -5762,10 +5762,10 @@ Do While Abs(Val(mz)) > 40
     End If
   End If
   
- ' G_REZERO MSComm1
+   G_REZERO MSComm1
 '    MSComm1.Output = "Z " + Chr$(13) + Chr(10)
      
-     MilSec 200
+     MilSec 2000
      mz = Zygis0(0)
 Loop
 
@@ -6147,7 +6147,7 @@ End Function
 
 
 
-Function Zygis_ADAM(x As Single)  'OLD ONE
+Function Zygis_ADAM(X As Single)  'OLD ONE
   Dim counter, START1, FromModem$, dummy, ZYG
     ' Flush the input buffer.
        MSComm1.Output = Balance_Asking + Chr$(13)
@@ -6188,7 +6188,7 @@ End Function
 '
 '
 
-Function Zygis0(x As Single)
+Function Zygis0(X As Single)
   Dim counter, starter, FromModem$, x0, y0
   
    If Balance_Type = "ADAM" Then
@@ -6253,7 +6253,7 @@ Function Zygis0(x As Single)
      
       If InStr(FromModem$, ".") < 5 Then
          x0 = InStr(6, FromModem$, ".")
-         y0 = InStr(x, FromModem$, "g")
+         y0 = InStr(X, FromModem$, "g")
       Else
          x0 = InStr(FromModem$, ".")
          y0 = InStr(FromModem$, "g")
@@ -6269,7 +6269,7 @@ Function Zygis0(x As Single)
 End Function
 
 
-Function Zygis0OLD(x As Single)
+Function Zygis0OLD(X As Single)
   Dim counter, starter, dummy, FromModem$
   Dim Y
   Ref.Caption = left(Ref.Caption + Space(15), 15) + "Sc"
@@ -6340,13 +6340,13 @@ Function Zygis0OLD(x As Single)
     
  
       If InStr(FromModem$, ".") < 5 Then
-         x = InStr(6, FromModem$, ".")
-         Y = InStr(x, FromModem$, "g")
+         X = InStr(6, FromModem$, ".")
+         Y = InStr(X, FromModem$, "g")
       Else
-         x = InStr(FromModem$, ".")
+         X = InStr(FromModem$, ".")
          Y = InStr(FromModem$, "g")
       End If
-      Zygis0OLD = Val(Mid$(FromModem$, x - 6, 10)) * 1000
+      Zygis0OLD = Val(Mid$(FromModem$, X - 6, 10)) * 1000
 
     
 '    Gwrite_zygish FromModem$, ZYGIS0OLD
@@ -6377,31 +6377,31 @@ Function Update2_PROSPAU(mpoykali, UESH, Zygisma)
     Dim m_ek, M_gl, m_gr, m_regr
     Dim KOD_XHM
         ' ΕΝΗΜΕΡΏΝΩ ΤΙΣ ΠΡΑΓΜΑΤΙΚΈΣ ΠΟΣΌΤΗΤΕΣ ΠΟΥ ΔΟΣΟΜΈΤΡΗΣΑ
-        PROSPAU2.Recordset.EDIT
-        PROSPAU2.Recordset("REGR") = Zygisma        ' αρχείο prospau
+        prospau2.Recordset.EDIT
+        prospau2.Recordset("REGR") = Zygisma        ' αρχείο prospau
         ' υπολογίζω τα πραγματικά ποσοστά
-        m_ek = PROSPAU2.Recordset("EK")
-        M_gl = PROSPAU2.Recordset("gl")
-        m_gr = PROSPAU2.Recordset("gr")
-        m_regr = PROSPAU2.Recordset("Regr")
+        m_ek = prospau2.Recordset("EK")
+        M_gl = prospau2.Recordset("gl")
+        m_gr = prospau2.Recordset("gr")
+        m_regr = prospau2.Recordset("Regr")
         If m_gr > 0 Then
-           PROSPAU2.Recordset("REk") = (m_ek + M_gl) * IIf(m_gr = 0, 1, (m_regr / m_gr))
+           prospau2.Recordset("REk") = (m_ek + M_gl) * IIf(m_gr = 0, 1, (m_regr / m_gr))
         End If
        
-        PROSPAU2.Recordset("status") = 2
-        PROSPAU2.Recordset("usere") = User_ID
-        KOD_XHM = PROSPAU2.Recordset("KOD")
-        PROSPAU2.Recordset.update
+        prospau2.Recordset("status") = 2
+        prospau2.Recordset("usere") = User_ID
+        KOD_XHM = prospau2.Recordset("KOD")
+        prospau2.Recordset.update
         Ypoloipo(mpoykali) = Ypoloipo(mpoykali) - Zygisma / 1000   ' πίνακας
         
-        XIMITECH.Recordset.Seek "=", KOD_XHM
+        ximitech.Recordset.Seek "=", KOD_XHM
          
         On Error Resume Next
-        XIMITECH.Recordset.EDIT
-        XIMITECH.Recordset("ypol_prot") = XIMITECH.Recordset("ypol_prot") - Zygisma / 1000
-           XIMITECH.Recordset("last_dosom") = CStr(Now)
+        ximitech.Recordset.EDIT
+        ximitech.Recordset("ypol_prot") = ximitech.Recordset("ypol_prot") - Zygisma / 1000
+           ximitech.Recordset("last_dosom") = CStr(Now)
                  'XIMITECH.Recordset("katofli") = katofli(MPOYKALI)
-        XIMITECH.Recordset.update
+        ximitech.Recordset.update
         On Error GoTo 0
 End Function
 '
@@ -6544,7 +6544,7 @@ End Function
 Private Sub print_rep(mpot, m_synt)
 
 ' print_rep str(a_Syntagh(Move)), a_Ar_Syntag(Move)
-Dim K, JOBLIST, x, r, ok, a, mydb, ddd, Diff, stoxos
+Dim k, JOBLIST, X, r, ok, a, mydb, ddd, Diff, stoxos
 Dim rkod As String
 Dim m_err
 
@@ -6558,7 +6558,7 @@ On Error Resume Next
    'Kill "C:\TALOS\dokprosp.dbf"
 
 
-If PROSPAU2.Recordset.eof Then PROSPAU2.Recordset.MoveLast
+If prospau2.Recordset.eof Then prospau2.Recordset.MoveLast
 
 Set mydb = Workspaces(0).OpenDatabase("C:\TALOS\RECIPIES.MDB", False, False)
 mydb.Execute "DELETE *FROM DOKPROS2;"
@@ -6662,27 +6662,27 @@ On Error GoTo 0
 
 End Sub
 Private Sub back()
-Dim kod6400, K, cmd$, TEMP%, L
+Dim kod6400, k, cmd$, TEMP%, l
    
-For K = 2 To 19
-  If Label3(K).BackColor = &HFF& Then ' αν δεν είναι κόκκινη θέση φέρτο εδώ
-   kod6400 = 12000 + Ar_Mpoykal * K + Val(Label3(K).Caption)
+For k = 2 To 19
+  If Label3(k).BackColor = &HFF& Then ' αν δεν είναι κόκκινη θέση φέρτο εδώ
+   kod6400 = 12000 + Ar_Mpoykal * k + Val(Label3(k).Caption)
    cmd$ = "!var12=" + str(kod6400) + ":"
      TEMP% = SendATBlock(768, cmd$, 0)
-     For L = 1 To 1000
+     For l = 1 To 1000
      Next
      ' περίμενε μέχρι να κλείσει ο gripper
      While Not (out_bit(4) = 1 And out_bit(5) = 0) 'περίμενε μέχρι να πάρεις σήμα ότι τελείωσε το ρομποτ την εργασία του
         DoEvents
      Wend
-     Label3(K).BackColor = &HFFFF80       ' χρωμάτισε το μπουάλι άσπρο
+     Label3(k).BackColor = &HFFFF80       ' χρωμάτισε το μπουάλι άσπρο
      
      
      While out_bit(bit_ok) = 0
         DoEvents
      Wend
-     Label1(Val(Label3(K).Caption)).BackColor = &HFF&   ' κοκκινο
-     For L = 1 To 100000
+     Label1(Val(Label3(k).Caption)).BackColor = &HFF&   ' κοκκινο
+     For l = 1 To 100000
      Next
      
 End If
@@ -6728,7 +6728,7 @@ Dim result%, status_high%, status_low%, status&
     Uesh_4axona = axe(4)
 End Function
 Function uesh_ajonon()
-     Dim x, result%, status_high%, status_low%, status&
+     Dim X, result%, status_high%, status_low%, status&
      Dim Y, Z
        uesh_ajonon = axe(1) + axe(2) + axe(3)
        
@@ -6817,9 +6817,9 @@ End Sub
 
 Private Function MAKE_FILE()
 Dim m(1 To 30, 1 To 199), MilliGrs(1 To 30, 1 To 199), UeshMpoyk(1 To 30, 1 To 199)
-Dim Ar_Syntag, K, MSYN, Arxh, m_nero(1 To 30)
+Dim Ar_Syntag, k, MSYN, Arxh, m_nero(1 To 30)
 Dim Mpoyk_Synt, Count, mS, mKEF, mydb, MySet
-Dim sql_del, mgr, L, aa, bb, mXR, kef_doso, kef_kin
+Dim sql_del, mgr, l, aa, bb, mXR, kef_doso, kef_kin
    tkin(1) = "To scale pot....."
    tkin(2) = "Return pot......."
    tkin(3) = "To head bottle..."
@@ -6845,34 +6845,34 @@ mydb.Close
    Ar_Syntag = IIf(Val(Text1.text) > Ar_Pothr Or Val(Text1.text) < 1, 0, Val(Text1.text) - 1)
    ' διαβάζω τον πίνακα από τις συνταγές
    
-   XIMITECH.Recordset.Index = "KOD"
-   PROSPAU2.Recordset.MoveFirst
+   ximitech.Recordset.Index = "KOD"
+   prospau2.Recordset.MoveFirst
    
-   Do While Not PROSPAU2.Recordset.eof
+   Do While Not prospau2.Recordset.eof
        Ar_Syntag = Ar_Syntag + 1
-       m_syntag(Ar_Syntag) = Trim(PROSPAU2.Recordset("ENTOLH")) + "-" + LTrim(PROSPAU2.Recordset("aa_PROSPAU"))
+       m_syntag(Ar_Syntag) = Trim(prospau2.Recordset("ENTOLH")) + "-" + LTrim(prospau2.Recordset("aa_PROSPAU"))
        Count = 0
-       Do While Not PROSPAU2.Recordset.eof And m_syntag(Ar_Syntag) = PROSPAU2.Recordset("ENTOLH") + "-" + LTrim(PROSPAU2.Recordset("aa_prospau"))
-          If PROSPAU2.Recordset("SEIRA") = 1 Then
-             m_nero(Ar_Syntag) = PROSPAU2.Recordset("nero")
+       Do While Not prospau2.Recordset.eof And m_syntag(Ar_Syntag) = prospau2.Recordset("ENTOLH") + "-" + LTrim(prospau2.Recordset("aa_prospau"))
+          If prospau2.Recordset("SEIRA") = 1 Then
+             m_nero(Ar_Syntag) = prospau2.Recordset("nero")
           End If
-          If Not IsNull(PROSPAU2.Recordset("GR")) Then
-              mgr = PROSPAU2.Recordset("GR")
+          If Not IsNull(prospau2.Recordset("GR")) Then
+              mgr = prospau2.Recordset("GR")
               If mgr > 0 Then
                    'XIMITECH.Recordset.Index = "KOD"
-                   XIMITECH.Recordset.Seek "=", PROSPAU2.Recordset("KOD")
-                   If Not IsNull(XIMITECH.Recordset("ADDr_prot")) Then
+                   ximitech.Recordset.Seek "=", prospau2.Recordset("KOD")
+                   If Not IsNull(ximitech.Recordset("ADDr_prot")) Then
                      Count = Count + 1
-                     m(Ar_Syntag, Count) = XIMITECH.Recordset("ADDr_prot")
-                     MilliGrs(Ar_Syntag, Count) = Val(PROSPAU2.Recordset("gr"))
-                     UeshMpoyk(Ar_Syntag, Count) = K 'θέση που θα ενημερώσω μετά την ζύγιση
+                     m(Ar_Syntag, Count) = ximitech.Recordset("ADDr_prot")
+                     MilliGrs(Ar_Syntag, Count) = Val(prospau2.Recordset("gr"))
+                     UeshMpoyk(Ar_Syntag, Count) = k 'θέση που θα ενημερώσω μετά την ζύγιση
                      End If
               End If
            End If
-           PROSPAU2.Recordset.MoveNext
-           If PROSPAU2.Recordset.eof Then Exit Do
+           prospau2.Recordset.MoveNext
+           If prospau2.Recordset.eof Then Exit Do
        Loop
-       If PROSPAU2.Recordset.eof Then Exit Do
+       If prospau2.Recordset.eof Then Exit Do
       ' prospau2.Recordset.MoveNext
    Loop
    
@@ -6888,9 +6888,9 @@ Arxh = IIf(Val(Text1.text) > Ar_Pothr Or Val(Text1.text) < 1, 1, Val(Text1.text)
 For mS = Arxh To Ar_Syntag
      'βρίσκω πόσα μπουκάλια έχει η συνταγή
      Mpoyk_Synt = 0
-     For L = 1 To 30 ' 25-10-2000
-       If Not IsNull(m(mS, L)) Then
-          If m(mS, L) > 0 Then
+     For l = 1 To 30 ' 25-10-2000
+       If Not IsNull(m(mS, l)) Then
+          If m(mS, l) > 0 Then
             Mpoyk_Synt = Mpoyk_Synt + 1
           End If
        End If
@@ -6955,16 +6955,16 @@ For mS = Arxh To Ar_Syntag
              
     '---------------------------stop για σήμερα 30-8-98  --------------
 
-For L = 3 To Mpoyk_Synt
+For l = 3 To Mpoyk_Synt
              xronos = xronos + 1
              KEFALH = IIf(KEFALH = 1, 2, 1)
       '   O2    O1d
           'πανε πίσω το  L-2 μπουκάλι & φέρε το L
-             Upd_kin mS, 4, m(mS, L), KEFALH, 0, KEF(KEFALH), xronos
-              KEF(KEFALH) = m(mS, L)
+             Upd_kin mS, 4, m(mS, l), KEFALH, 0, KEF(KEFALH), xronos
+              KEF(KEFALH) = m(mS, l)
               '  στην δοσομέτρηση σαν PANE βάζω την θέση στην αρχική συνταγή για να μπορώ να ενημερώσω το REGRi
               'δοσομετρώ το L-1
-              Upd_kin mS, 9, m(mS, L - 1), 0, MilliGrs(mS, L - 1), UeshMpoyk(mS, L - 1), xronos 'δοσομετρώ το 1ο μπουκάλι
+              Upd_kin mS, 9, m(mS, l - 1), 0, MilliGrs(mS, l - 1), UeshMpoyk(mS, l - 1), xronos 'δοσομετρώ το 1ο μπουκάλι
 Next
      
      
@@ -7137,8 +7137,8 @@ Ref.Caption = "--"
      
      
      
-       If Not IsNull(PROSPAU2.Recordset("ALATIGR")) Then
-          If PROSPAU2.Recordset("ALATIGR") > 0 And UESH_ALATIOY > 0 Then
+       If Not IsNull(prospau2.Recordset("ALATIGR")) Then
+          If prospau2.Recordset("ALATIGR") > 0 And UESH_ALATIOY > 0 Then
                alati = 1
          End If
        End If
@@ -7261,12 +7261,12 @@ Ref.Caption = "--"
     If alati = 1 And Ektel_kinhsh <> -20 Then
 51100
     
-           Real_Alati = DOS_ALATI_DOK(PROSPAU2.Recordset("ALATIGR"))
+           Real_Alati = DOS_ALATI_DOK(prospau2.Recordset("ALATIGR"))
          '  GoTo 51100
-              PROSPAU2.Recordset.EDIT
-              PROSPAU2.Recordset("AlatiGr") = Real_Alati
+              prospau2.Recordset.EDIT
+              prospau2.Recordset("AlatiGr") = Real_Alati
                  Real_Alati = 0
-              PROSPAU2.Recordset.update
+              prospau2.Recordset.update
          
          
          ' aneba στο πανω Ζ
@@ -7394,16 +7394,16 @@ Case 2 'ΠΑΝΕ ΠΟΤΗΡΙ
      Case 8 'ΔΟΣΟΜΕΤΡΗΣΗ ΝΕΡΟΥ
             ' MSComm1.Output = "Z " + Chr$(13) + Chr(10)
             G_REZERO MSComm1
-           MilSec 500
+           MilSec 2500
            ' G_REZERO MSComm1
            
            If aritmos_ximikon > 0 Then
                  m_synt = a_Ar_Syntag(Move)
                  real_dos = DISPENSE_XIMIKA(m_synt)
-                 PROSPAU2.Recordset.EDIT
-                 PROSPAU2.Recordset("RENERO") = real_dos
-                 PROSPAU2.Recordset("date_disp") = Now '  time_x / 100
-                 PROSPAU2.Recordset.update
+                 prospau2.Recordset.EDIT
+                 prospau2.Recordset("RENERO") = real_dos
+                 prospau2.Recordset("date_disp") = Now '  time_x / 100
+                 prospau2.Recordset.update
                  
                  If m_ximika(50, 5) = -31 Then
                     Ektel_kinhsh = -31   ' Ektel_kinhsh = -31 Then
@@ -7424,12 +7424,12 @@ End If
 '          dum = gyrise_zygaria(3)
            MilSec 500
            real_dos = 0
-           If Not IsNull(PROSPAU2.Recordset("nero")) Then
+           If Not IsNull(prospau2.Recordset("nero")) Then
 33:
                If system_ready = 0 Then
-                  real_dos = PROSPAU2.Recordset("nero") + 1
+                  real_dos = prospau2.Recordset("nero") + 1
                Else
-                  real_dos = NER_DOSOMETRHSH(PROSPAU2.Recordset("nero"), Porta_Ner)
+                  real_dos = NER_DOSOMETRHSH(prospau2.Recordset("nero"), Porta_Ner)
                End If
                 
                Get_Gen_xronos "telos neroy"
@@ -7445,15 +7445,15 @@ End If
            time_x = Mid$(Time$, 1, time_a - 1) + Mid$(Time$, time_a + 1, 2)
            If real_dos < -111000222 Then
                 Ektel_kinhsh = -30
-                PROSPAU2.Recordset.EDIT
-                PROSPAU2.Recordset("RENERO") = 999999
-                PROSPAU2.Recordset("date_disp") = Now   ' time_x / 100
-                PROSPAU2.Recordset.update
+                prospau2.Recordset.EDIT
+                prospau2.Recordset("RENERO") = 999999
+                prospau2.Recordset("date_disp") = Now   ' time_x / 100
+                prospau2.Recordset.update
            Else
-                PROSPAU2.Recordset.EDIT
-                PROSPAU2.Recordset("RENERO") = real_dos
-                PROSPAU2.Recordset("date_disp") = Now '  time_x / 100
-                PROSPAU2.Recordset.update
+                prospau2.Recordset.EDIT
+                prospau2.Recordset("RENERO") = real_dos
+                prospau2.Recordset("date_disp") = Now '  time_x / 100
+                prospau2.Recordset.update
            End If
       Case 9 'ΔΟΣΟΜΕΤΡΗΣΗ ΧΡΩΜΑΤΟΣ
              frmSYNT.Caption = frmSYNT.Caption + " dispense  " + str(a_Fere(Move))
@@ -7676,7 +7676,7 @@ End Function
 '
 Private Sub com_file_exec_Click()
 Dim Last_Epil, Message, SYN_ALATIOY
-Dim m_Counter, DUM, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, K
+Dim m_Counter, DUM, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, k
 Dim response, cmd$, TEMP%, PHDHMENA_POTHRIA, mkin
 Dim mm_Synt
 
@@ -7697,18 +7697,18 @@ Dim mm_Synt
  End If
  
  ' Sort_Recipes
- PROSPAU2.Refresh
+ prospau2.Refresh
  MilSec 1000
  
  
  
  SYN_ALATIOY = 0
- PROSPAU2.Recordset.MoveFirst
- Do While Not PROSPAU2.Recordset.eof
-    If Not IsNull(PROSPAU2.Recordset("ALATIGR")) Then
-        SYN_ALATIOY = SYN_ALATIOY + PROSPAU2.Recordset("ALATIGR")
+ prospau2.Recordset.MoveFirst
+ Do While Not prospau2.Recordset.eof
+    If Not IsNull(prospau2.Recordset("ALATIGR")) Then
+        SYN_ALATIOY = SYN_ALATIOY + prospau2.Recordset("ALATIGR")
     End If
-    PROSPAU2.Recordset.MoveNext
+    prospau2.Recordset.MoveNext
     'Grid.Refresh
  Loop
  If DOYLEYO_ALATI = 0 Or UESH_ALATIOY = 0 Then SYN_ALATIOY = 0
@@ -7763,8 +7763,8 @@ End If
  End If
   Command1.Enabled = False
  
- For K = 1 To 40
-   Ektelesueises(K) = 0
+ For k = 1 To 40
+   Ektelesueises(k) = 0
  Next
   
   
@@ -7789,8 +7789,8 @@ Timer1.Enabled = True
 XALASE_NERO = 0
 
    'ΜΑΡΚΑΡΩ ΤΙΣ ΚΙΝΗΣΕΙΣ ΠΟΥ ΕΚΤΕΛΟΥΝΤΑΙ ΤΑΥΤΟΧΡΟΝΑ
- PROSPAU2.Recordset.MoveFirst
- Last_Epil = PROSPAU2.Recordset("epil")
+ prospau2.Recordset.MoveFirst
+ Last_Epil = prospau2.Recordset("epil")
 
 PHDHMENA_POTHRIA = Val(Text1.text) - 1
 PHDHMENA_POTHRIA = IIf(PHDHMENA_POTHRIA < 0, 0, PHDHMENA_POTHRIA)
@@ -7850,8 +7850,8 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                     result = Ektel_kinhsh(2)
                     result = Ektel_kinhsh(1) 'ΔΟΣΟΜΕΤΡΗΣΗ
                     
-                           Last_Epil = PROSPAU2.Recordset("epil")
-                           PROSPAU2.Recordset.MoveNext
+                           Last_Epil = prospau2.Recordset("epil")
+                           prospau2.Recordset.MoveNext
                            'Grid.Refresh
                     
                     
@@ -7884,8 +7884,8 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
            
                    result = Ektel_kinhsh(1)
                    result = Ektel_kinhsh(2) 'ΔΟΣΟΜΕΤΡΗΣΗ
-                   Last_Epil = PROSPAU2.Recordset("epil")
-                   PROSPAU2.Recordset.MoveNext
+                   Last_Epil = prospau2.Recordset("epil")
+                   prospau2.Recordset.MoveNext
                    'Grid.Refresh
                    DOSO_MPOYK = a_Fere(2)
                    DUM = Wait_Robot(0)
@@ -7932,8 +7932,8 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                If a_Kinhsh(1) <> 9 Then
                     DUM = Wait_Robot(0)
                Else
-                    Last_Epil = PROSPAU2.Recordset("epil")
-                    PROSPAU2.Recordset.MoveNext
+                    Last_Epil = prospau2.Recordset("epil")
+                    prospau2.Recordset.MoveNext
                     'Grid.Refresh
                End If
        End If
@@ -8103,16 +8103,16 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
         
        On Error Resume Next
        
-       Last_Epil = PROSPAU2.Recordset("epil")
+       Last_Epil = prospau2.Recordset("epil")
         
-       PROSPAU2.Recordset.MoveFirst
-        Do While Not PROSPAU2.Recordset.eof
-            If Last_Epil = PROSPAU2.Recordset("epil") Then
-                PROSPAU2.Recordset.EDIT
-                  PROSPAU2.Recordset("status") = 1
-                PROSPAU2.Recordset.update
+       prospau2.Recordset.MoveFirst
+        Do While Not prospau2.Recordset.eof
+            If Last_Epil = prospau2.Recordset("epil") Then
+                prospau2.Recordset.EDIT
+                  prospau2.Recordset("status") = 1
+                prospau2.Recordset.update
             End If
-            PROSPAU2.Recordset.MoveNext
+            prospau2.Recordset.MoveNext
         Loop
         
        On Error GoTo 0
@@ -8164,7 +8164,7 @@ End Sub
 
 Private Sub com_file_exec_old_Click()
 Dim Last_Epil, Message, SYN_ALATIOY
-Dim m_Counter, DUM, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, K
+Dim m_Counter, DUM, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, k
 Dim response, cmd$, TEMP%, PHDHMENA_POTHRIA, mkin
 Dim mm_Synt
 
@@ -8185,18 +8185,18 @@ Dim mm_Synt
  End If
  
  ' Sort_Recipes
- PROSPAU2.Refresh
+ prospau2.Refresh
  MilSec 1000
  
  
  
  SYN_ALATIOY = 0
- PROSPAU2.Recordset.MoveFirst
- Do While Not PROSPAU2.Recordset.eof
-    If Not IsNull(PROSPAU2.Recordset("ALATIGR")) Then
-        SYN_ALATIOY = SYN_ALATIOY + PROSPAU2.Recordset("ALATIGR")
+ prospau2.Recordset.MoveFirst
+ Do While Not prospau2.Recordset.eof
+    If Not IsNull(prospau2.Recordset("ALATIGR")) Then
+        SYN_ALATIOY = SYN_ALATIOY + prospau2.Recordset("ALATIGR")
     End If
-    PROSPAU2.Recordset.MoveNext
+    prospau2.Recordset.MoveNext
     'Grid.Refresh
  Loop
  If DOYLEYO_ALATI = 0 Or UESH_ALATIOY = 0 Then SYN_ALATIOY = 0
@@ -8251,8 +8251,8 @@ End If
  End If
   Command1.Enabled = False
  
- For K = 1 To 40
-   Ektelesueises(K) = 0
+ For k = 1 To 40
+   Ektelesueises(k) = 0
  Next
   
   
@@ -8277,8 +8277,8 @@ Timer1.Enabled = True
 XALASE_NERO = 0
 
    'ΜΑΡΚΑΡΩ ΤΙΣ ΚΙΝΗΣΕΙΣ ΠΟΥ ΕΚΤΕΛΟΥΝΤΑΙ ΤΑΥΤΟΧΡΟΝΑ
- PROSPAU2.Recordset.MoveFirst
- Last_Epil = PROSPAU2.Recordset("epil")
+ prospau2.Recordset.MoveFirst
+ Last_Epil = prospau2.Recordset("epil")
 
 PHDHMENA_POTHRIA = Val(Text1.text) - 1
 PHDHMENA_POTHRIA = IIf(PHDHMENA_POTHRIA < 0, 0, PHDHMENA_POTHRIA)
@@ -8361,8 +8361,8 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                     result = Ektel_kinhsh(2)
                     result = Ektel_kinhsh(1) 'ΔΟΣΟΜΕΤΡΗΣΗ
                     
-                           Last_Epil = PROSPAU2.Recordset("epil")
-                           PROSPAU2.Recordset.MoveNext
+                           Last_Epil = prospau2.Recordset("epil")
+                           prospau2.Recordset.MoveNext
                            'Grid.Refresh
                     
                     
@@ -8413,8 +8413,8 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
            
                    result = Ektel_kinhsh(1)
                    result = Ektel_kinhsh(2) 'ΔΟΣΟΜΕΤΡΗΣΗ
-                   Last_Epil = PROSPAU2.Recordset("epil")
-                   PROSPAU2.Recordset.MoveNext
+                   Last_Epil = prospau2.Recordset("epil")
+                   prospau2.Recordset.MoveNext
                    'Grid.Refresh
                    DOSO_MPOYK = a_Fere(2)
                    DUM = Wait_Robot(0)
@@ -8480,8 +8480,8 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                If a_Kinhsh(1) <> 9 Then
                     DUM = Wait_Robot(0)
                Else
-                    Last_Epil = PROSPAU2.Recordset("epil")
-                    PROSPAU2.Recordset.MoveNext
+                    Last_Epil = prospau2.Recordset("epil")
+                    prospau2.Recordset.MoveNext
                     'Grid.Refresh
                End If
        End If
@@ -8668,16 +8668,16 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
         
        On Error Resume Next
        
-       Last_Epil = PROSPAU2.Recordset("epil")
+       Last_Epil = prospau2.Recordset("epil")
         
-       PROSPAU2.Recordset.MoveFirst
-        Do While Not PROSPAU2.Recordset.eof
-            If Last_Epil = PROSPAU2.Recordset("epil") Then
-                PROSPAU2.Recordset.EDIT
-                  PROSPAU2.Recordset("status") = 1
-                PROSPAU2.Recordset.update
+       prospau2.Recordset.MoveFirst
+        Do While Not prospau2.Recordset.eof
+            If Last_Epil = prospau2.Recordset("epil") Then
+                prospau2.Recordset.EDIT
+                  prospau2.Recordset("status") = 1
+                prospau2.Recordset.update
             End If
-            PROSPAU2.Recordset.MoveNext
+            prospau2.Recordset.MoveNext
         Loop
         
        On Error GoTo 0
@@ -8744,7 +8744,7 @@ End Sub
 
 'select * from prospau2 where status=1 and epil>0  order by epil,seira
 Private Sub Form_Load()
-Dim K, a, aneb, L1, L6
+Dim k, a, aneb, L1, L6
 Dim mydb As Database
 Dim r As Recordset
 Dim co As Integer
@@ -8777,12 +8777,12 @@ On Error Resume Next
  
  
  If IsNull(r("lsneg")) Then
-    For K = 1 To 5:   f_poso_apor(co) = 100: Next
+    For k = 1 To 5:   f_poso_apor(co) = 100: Next
  Else
     co = 0
-    For K = 1 To 21 Step 5
+    For k = 1 To 21 Step 5
         co = co + 1
-        f_poso_apor(co) = Val(Mid$(r("lsneg"), K, 5))
+        f_poso_apor(co) = Val(Mid$(r("lsneg"), k, 5))
     Next
  End If
  
@@ -8805,18 +8805,18 @@ MSComm1.PortOpen = True
  
   
 ' σχεδιάζω την νεκρή περιοχή  k_AR=0
-  For K = 1 To 20
-    Label1(K_AR + K).Visible = False
-    Label1(K_AR + K + 20).Visible = False
-    Label1(K_AR + K + 40).Visible = False
-    If K <= 9 Then
-      Label1(K_AR + K + 60).Visible = False
+  For k = 1 To 20
+    Label1(K_AR + k).Visible = False
+    Label1(K_AR + k + 20).Visible = False
+    Label1(K_AR + k + 40).Visible = False
+    If k <= 9 Then
+      Label1(K_AR + k + 60).Visible = False
     End If
  Next
   aneb = 6285 - 5210
   
-  For K = 1 To 30
-    Label3(K).top = Label3(K).top - aneb   ' + IIf(k Mod 2 <> 0, 0, -Label3(k).height / 2)
+  For k = 1 To 30
+    Label3(k).top = Label3(k).top - aneb   ' + IIf(k Mod 2 <> 0, 0, -Label3(k).height / 2)
   Next
   
 '  For k = 8 To 14
@@ -8828,8 +8828,8 @@ MSComm1.PortOpen = True
   
   
   
-  For K = 1 To Ar_Mpoykal Step 2
-    Label1(K).top = Label1(K).top - Label1(K).height / 2
+  For k = 1 To Ar_Mpoykal Step 2
+    Label1(k).top = Label1(k).top - Label1(k).height / 2
   Next
   '
   
@@ -8878,22 +8878,22 @@ aneb = 200
   
   
   
-  For K = 1 To Ar_Mpoykal
+  For k = 1 To Ar_Mpoykal
     
-        Label1(K).BackColor = &HFFFFFF     ' ασπρο          '  &HFF0000    μπλέ  φόντο      '
+        Label1(k).BackColor = &HFFFFFF     ' ασπρο          '  &HFF0000    μπλέ  φόντο      '
         'Label1(k).ForeColor = &HFF0000         ' μπλέ γραμματα
-        OldColor(K) = Label1(K).BackColor
-        Label1(K).Caption = K
-        mTop(K) = Label1(K).top
-        mLeft(K) = Label1(K).left
+        OldColor(k) = Label1(k).BackColor
+        Label1(k).Caption = k
+        mTop(k) = Label1(k).top
+        mLeft(k) = Label1(k).left
     
  Next
      
-  For K = 1 To Ar_Pothr
-     Label3(K).Caption = K
-     Label3(K).BackColor = &HFFFF00 'SIEL      &HFFFFFF   ' ασπρο&H00FFFF00&
-     pTop(K) = Label3(K).top
-     pLeft(K) = Label3(K).left
+  For k = 1 To Ar_Pothr
+     Label3(k).Caption = k
+     Label3(k).BackColor = &HFFFF00 'SIEL      &HFFFFFF   ' ασπρο&H00FFFF00&
+     pTop(k) = Label3(k).top
+     pLeft(k) = Label3(k).left
      
  Next
  Label13.Caption = mL_CapRes(330) '   "Μικτό"
@@ -8909,15 +8909,15 @@ Command1.Caption = mL_CapRes(341) '    "ΕΞΟΔΟΣ"
 
 
 ' σχεδιάζω την νεκρή περιοχή  k_AR=0
-  For K = 1 To Ar_1_mpoykal - 1
-      Label1(K).Visible = False
+  For k = 1 To Ar_1_mpoykal - 1
+      Label1(k).Visible = False
   Next
-  For K = Ar_1_mpoykal To Ar_tel_mpoykal
-      Label1(K).Visible = True
+  For k = Ar_1_mpoykal To Ar_tel_mpoykal
+      Label1(k).Visible = True
   Next
   
-  For K = Ar_tel_mpoykal + 1 To Ar_Mpoykal
-      Label1(K).Visible = False
+  For k = Ar_tel_mpoykal + 1 To Ar_Mpoykal
+      Label1(k).Visible = False
   Next
 
 
@@ -8932,7 +8932,7 @@ End Sub
 
 Private Sub Form_Paint()
 Dim u, DIEYUYNSH(1 To 8), PROBLHMA, mmm_D, m_Counter, v, dbsjet
-Dim K, hmeres
+Dim k, hmeres
 If flag_paint = 1 Then
    Exit Sub
 Else
@@ -8942,8 +8942,8 @@ End If
   frmSYNT.Visible = False
   
   PROBLHMA = 0
-  For K = 1 To 8
-     DIEYUYNSH(K) = "Ω" + str(K)
+  For k = 1 To 8
+     DIEYUYNSH(k) = "Ω" + str(k)
   Next
   
   
@@ -8983,39 +8983,39 @@ End If
   v.Close
   
   
- XIMITECH.Recordset.Index = "KOD"
- XIMITECH.Recordset.MoveFirst
- While Not XIMITECH.Recordset.eof
+ ximitech.Recordset.Index = "KOD"
+ ximitech.Recordset.MoveFirst
+ While Not ximitech.Recordset.eof
          u = 0
-         If Not IsNull(XIMITECH.Recordset("ADDR_PROT")) Then
-                 u = XIMITECH.Recordset("addr_prot")
+         If Not IsNull(ximitech.Recordset("ADDR_PROT")) Then
+                 u = ximitech.Recordset("addr_prot")
          End If
          
          If u > 0 And u <= Ar_Mpoykal Then    ' =============================================
                                   
-                 If Not IsNull(XIMITECH.Recordset("LHJ_PROT")) Then   ' ---------------
-                          hmeres = DateDiff("d", Now, XIMITECH.Recordset("LHJ_PROT"))
+                 If Not IsNull(ximitech.Recordset("LHJ_PROT")) Then   ' ---------------
+                          hmeres = DateDiff("d", Now, ximitech.Recordset("LHJ_PROT"))
                  Else
                           hmeres = 1000
                  End If
                  
-                If XIMITECH.Recordset("skonh") = 1 Then ' ΣΤΕΡΕΑ
+                If ximitech.Recordset("skonh") = 1 Then ' ΣΤΕΡΕΑ
                                           Label1(u).BackColor = &H808080           '   καφε
                 Else  '    Δ Ι Α Λ Υ Μ Α Τ Α
                       Label1(u).BackColor = FIND_COLOR(hmeres)
                 End If
                 
                 OldColor(u) = Label1(u).BackColor
-                kodikos(u) = IIf(Not IsNull(XIMITECH.Recordset("kod")), XIMITECH.Recordset("kod"), "0000")
-                Perigrafh(u) = IIf(Not IsNull(XIMITECH.Recordset("perigrafh")), XIMITECH.Recordset("perigrafh"), "  ")
-                LHJH(u) = IIf(Not IsNull(XIMITECH.Recordset("Lhj_prot")), XIMITECH.Recordset("Lhj_prot"), "00/00/00")
-                Ypoloipo(u) = IIf(Not IsNull(XIMITECH.Recordset("ypol_prot")), XIMITECH.Recordset("ypol_prot"), 0)
+                kodikos(u) = IIf(Not IsNull(ximitech.Recordset("kod")), ximitech.Recordset("kod"), "0000")
+                Perigrafh(u) = IIf(Not IsNull(ximitech.Recordset("perigrafh")), ximitech.Recordset("perigrafh"), "  ")
+                LHJH(u) = IIf(Not IsNull(ximitech.Recordset("Lhj_prot")), ximitech.Recordset("Lhj_prot"), "00/00/00")
+                Ypoloipo(u) = IIf(Not IsNull(ximitech.Recordset("ypol_prot")), ximitech.Recordset("ypol_prot"), 0)
                  'αν το υπόλοιπο είναι κάτω των 50 γραμμαρίων να κοκκινίζει
                  If Ypoloipo(u) < 50 Then
                        Label1(u).BackColor = &HFF&        'κοκκινο
                  End If
                 Ypoloipo(u) = IIf(Ypoloipo(u) < 0, 100, Ypoloipo(u))
-                katofli(u) = IIf(Not IsNull(XIMITECH.Recordset("katofli")), XIMITECH.Recordset("katofli"), 0)
+                katofli(u) = IIf(Not IsNull(ximitech.Recordset("katofli")), ximitech.Recordset("katofli"), 0)
                 'katofli(u) = IIf(katofli(u) > 15500, katofli(u), 15500)
                 If Not IsNull(Perigrafh(u)) Then
                      Label1(u).Caption = Format(u, "###") + " " + Perigrafh(u)
@@ -9025,24 +9025,24 @@ End If
                ' Label1(u).top = find_top(Label1(u).top, Label1(u).height, Ypoloipo(u))
                ' Label1(u).height = find_height(Label1(u).top, Label1(u).height, Ypoloipo(u))
          End If ' ================================================================
-         XIMITECH.Recordset.MoveNext
+         ximitech.Recordset.MoveNext
  Wend
 
 
-PROSPAU2.Recordset.MoveLast
+prospau2.Recordset.MoveLast
 
-If PROSPAU2.Recordset.RecordCount = 0 Then
+If prospau2.Recordset.RecordCount = 0 Then
    MsgBox mL_Res(889) ' "Δεν έχουν περάσει οι συνταγές από την ζύγιση πανιών "
    Com_file_exec.Enabled = False
 End If
 
- PROSPAU2.Recordset.MoveFirst
+ prospau2.Recordset.MoveFirst
 m_CC = 0
-Do While Not PROSPAU2.Recordset.eof
-    If PROSPAU2.Recordset("seira") = 1 Then
+Do While Not prospau2.Recordset.eof
+    If prospau2.Recordset("seira") = 1 Then
         m_CC = m_CC + 1
     End If
-    PROSPAU2.Recordset.MoveNext
+    prospau2.Recordset.MoveNext
 Loop
 
  
@@ -9157,18 +9157,18 @@ Loop
 'End If
 
  ' δίνω το αρχικό χρώμα στα ποτήρια
-   For K = 1 To Ar_Pothr
-         Label3(K).BackColor = ASPRO    ' &HFFFFFF   ' ασπρο
+   For k = 1 To Ar_Pothr
+         Label3(k).BackColor = ASPRO    ' &HFFFFFF   ' ασπρο
    Next
    
-   For K = m_Counter + 1 To Ar_Pothr
-       Label3(K).BackColor = BLE      '   &HFF0000       ' mple
-       pin_Syntag(K) = "   "
+   For k = m_Counter + 1 To Ar_Pothr
+       Label3(k).BackColor = BLE      '   &HFF0000       ' mple
+       pin_Syntag(k) = "   "
    Next
    
-   For K = 1 To m_CC
-       Label3(K).BackColor = ROZ '   &HFF0000       ' mple
-       pin_Syntag(K) = "   "
+   For k = 1 To m_CC
+       Label3(k).BackColor = ROZ '   &HFF0000       ' mple
+       pin_Syntag(k) = "   "
    Next
 
    
@@ -9313,7 +9313,7 @@ End Sub
 Private Sub Label1_Click(Index As Integer)
 '   fernei (index)
 '                                 ασπρο                                                     γκρίζο
-Dim K
+Dim k
 
 'If Label1(Index).BackColor = &HFFFFFF Then   'ασπρο δεν κινείται
      '
@@ -9342,9 +9342,9 @@ Dim K
 
 End Sub
 
-Private Sub Label1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub Label1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 If Not IsNull(Perigrafh(Index)) Then
-     sxolia1.Caption = Perigrafh(Index)
+     SXOLIA1.Caption = Perigrafh(Index)
  End If
 If Not IsNull(Format(Ypoloipo(Index), "###") + "              " + Format(LHJH(Index), "dd/mm/yy")) Then
      SXOLIA2.Caption = Format(Ypoloipo(Index), "###") + "              " + Format(LHJH(Index), "dd/mm/yy")
@@ -9357,7 +9357,7 @@ End Sub
 
 
 
-Private Sub Label3_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub Label3_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 If Index > 0 And Index <= Ar_Pothr Then
      Label18.Caption = IIf(IsNull(pin_Syntag(Index)), "", pin_Syntag(Index))
 End If
@@ -9378,20 +9378,20 @@ End Sub
 
 
 Private Sub Text1_LostFocus()
-Dim K
+Dim k
 If Not IsNumeric(Text1) Then Text1 = "1"
 If Val(Text1) > Ar_Pothr Then Text1 = "1"
    
    
-   For K = 1 To Ar_Pothr
-       Label3(K).BackColor = BLE        '   &HFF0000       ' mple
-       pin_Syntag(K) = "   "
+   For k = 1 To Ar_Pothr
+       Label3(k).BackColor = BLE        '   &HFF0000       ' mple
+       pin_Syntag(k) = "   "
    Next
   
   
-  For K = Val(Text1) To m_CC + Val(Text1) - 1
-       Label3(K).BackColor = ROZ        '   &HFF0000       ' mple
-       pin_Syntag(K) = "   "
+  For k = Val(Text1) To m_CC + Val(Text1) - 1
+       Label3(k).BackColor = ROZ        '   &HFF0000       ' mple
+       pin_Syntag(k) = "   "
    Next
 End Sub
 
@@ -9621,7 +9621,7 @@ End Sub
 
 Sub G_REZERO(porta)
 
-Dim K As Integer
+Dim k As Integer
 
 
     Dim Zero
@@ -9645,7 +9645,7 @@ Dim K As Integer
                 
         Else
             If Abs(ZZ) = 999000999 Then ' ΣΒΗΣΤΗ Ή ΧΑΛΑΣΜΕΝΗ
-                For K = 1 To 4
+                For k = 1 To 4
                     porta.Output = "ON" + Chr(13)  'ΤΗΝ ΑΝΑΒΩ
                     MilSec 4000  '4 OK
                     porta.Output = "T" + Chr(13)
@@ -9675,14 +9675,14 @@ Dim K As Integer
                 
                 porta.Output = "T" + Chr(13)
                    MilSec 4000
-                For K = 1 To 10
+                For k = 1 To 10
                 
                     If Abs(zyg_ADAM(0)) < 2 Then
                         ' OK
                         Exit For
                     End If
                     porta.Output = "T" + Chr(13)
-                    If K > 5 Then
+                    If k > 5 Then
                        MilSec 6000
                     Else
                         MilSec 4000

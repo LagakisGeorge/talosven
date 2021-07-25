@@ -16,6 +16,14 @@ Begin VB.Form FRMSYNT2
    ScaleHeight     =   8490
    ScaleWidth      =   11040
    WindowState     =   2  'Maximized
+   Begin VB.CommandButton cmdΡύθμισηΑυτόματης 
+      Caption         =   "Ρύθμιση αυτόματης επιλογής"
+      Height          =   240
+      Left            =   7320
+      TabIndex        =   42
+      Top             =   5400
+      Width           =   2655
+   End
    Begin VB.CommandButton Command5 
       Caption         =   "Βισκόζη"
       Height          =   270
@@ -39,7 +47,7 @@ Begin VB.Form FRMSYNT2
       TabIndex        =   39
       Top             =   5115
       Value           =   1  'Checked
-      Width           =   1935
+      Width           =   2655
    End
    Begin VB.CheckBox Check1 
       Caption         =   "Πραγματικές συντ."
@@ -47,7 +55,7 @@ Begin VB.Form FRMSYNT2
       Left            =   7320
       TabIndex        =   37
       Top             =   4800
-      Width           =   1935
+      Width           =   2655
    End
    Begin VB.TextBox Text3 
       Height          =   315
@@ -364,10 +372,10 @@ Begin VB.Form FRMSYNT2
    Begin VB.Label Label9 
       BackColor       =   &H00FFFF00&
       Height          =   405
-      Left            =   60
+      Left            =   120
       TabIndex        =   32
-      Top             =   5610
-      Width           =   9330
+      Top             =   5640
+      Width           =   9855
    End
    Begin VB.Label Label8 
       Alignment       =   1  'Right Justify
@@ -526,6 +534,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+
 Dim m_ROW, m_COL
 Dim CAN_UPDATE_GRID
 Const BLE = &HFF0000
@@ -576,7 +585,8 @@ Next
 
 Data1.Recordset.Index = "PER"
 mcount = 0
-    
+ Dim mNERO As Long
+ 
     'Ιδια συνταγή
  mNERO = 0
  mAPAIT_POSOT = 0
@@ -835,6 +845,24 @@ Function bres2_ximiko(mper, pykn)
 'δίνω το όνομα του χημικού και μου δίνει το πυκνότερο/αραιότερο  σε περίπτωση που έχω 2 συγκεντρώσεις
 ' pykn=1 δίνω το πυκνότερο ,  =0 δίνω το αραιότερο
 
+
+
+' εδω διαβαζει την παραμετρο ελαχιστης ποσότητας για επιλογη πυκνου/αραιου
+Dim mydb As Database
+Dim work As Workspace
+Dim r As Recordset
+Set work = Workspaces(0)
+Set mydb = work.OpenDatabase("c:\TALOS\RECIPIES.MDB", False, False)
+Set r = mydb.OpenRecordset("parametroi")
+r.MoveNext
+Dim n0 As Long
+n0 = IIf(IsNull(r!Time_Preheat), 0, r!Time_Preheat)
+r.Close
+
+
+
+
+
 Dim mC, mR, k, mT, mCI, mEK, mGL, mMORFH, upd, ff, mTot
 Dim m1, m2, m3, per1
                Grid1.Col = 1
@@ -857,20 +885,30 @@ Dim m1, m2, m3, per1
              Exit Function
        End If
        
+       
+Dim sql As String
+Dim e As Recordset
+
+       
 Set mydb = Workspaces(0).OpenDatabase("C:\TALOS\RECIPIES.MDB", False, False)
-SQL = "select ximitech.addr_prot,ximitech.real_cons,ximitech.kataskeyas,ximitech.perigrafh from ximitech where kataskeyas='" + mCI + "' and real_cons>0 and addr_prot>0  order by real_cons;"
-Set e = mydb.OpenRecordset(SQL, dbOpenDynaset)
+sql = "select ximitech.addr_prot,ximitech.real_cons,ximitech.kataskeyas,ximitech.perigrafh from ximitech where kataskeyas='" + mCI + "' and real_cons>0 and addr_prot>0  order by real_cons;"
+Set e = mydb.OpenRecordset(sql, dbOpenDynaset)
 
 
 If e.RecordCount = 0 Then
-   SQL = "select ximitech.addr_prot,ximitech.real_cons,ximitech.kataskeyas,ximitech.perigrafh from ximitech where kataskeyas='" + mCI + "' and skonh=0 and addr_prot>0  order by real_cons;"
-   Set e = mydb.OpenRecordset(SQL, dbOpenDynaset)
+   sql = "select ximitech.addr_prot,ximitech.real_cons,ximitech.kataskeyas,ximitech.perigrafh from ximitech where kataskeyas='" + mCI + "' and skonh=0 and addr_prot>0  order by real_cons;"
+   Set e = mydb.OpenRecordset(sql, dbOpenDynaset)
    bres2_ximiko = e("perigrafh")
    Exit Function
 End If
 
 
 e.MoveFirst
+
+
+Dim mesos As Single
+
+
 
 
 m1 = e("real_cons")
@@ -891,7 +929,7 @@ Do While Not e.eof
        If (mTot / m1) > JOBLIST.Recordset("SXESH_MPAN") Then 'LIQUOR RATIO
             m1 = e("real_cons") 'PAIRNO TO PYKNO
             per1 = e("perigrafh")
-       ElseIf (mTot / e("REAL_CONS")) * JOBLIST.Recordset("BAROS_PANI") > 500 Then
+       ElseIf (mTot / e("REAL_CONS")) * JOBLIST.Recordset("BAROS_PANI") > n0 Then  ' des parapano
             m1 = e("real_cons") 'PAIRNO TO PYKNO
             per1 = e("perigrafh")
        Else
@@ -965,13 +1003,13 @@ Exit Function
 End Function
 
 
-Function CdBln(x)
+Function CdBln(X)
    
-   a = InStr(x, ",")
+   a = InStr(X, ",")
    If a = 0 Then
-        CdBln = x
+        CdBln = X
    Else
-       CdBln = left(x, a - 1) + "." + Mid(x, a + 1, Len(x) - a)
+       CdBln = left(X, a - 1) + "." + Mid(X, a + 1, Len(X) - a)
     End If
  
 End Function
@@ -1035,16 +1073,18 @@ Ok_Print = 1
 ' σχεδίαση οθόνης με προηγούμενες συνταγές
 
 On Error Resume Next
+Dim k, l As Integer
 
 ' σβήνω τις προηγούμενες να μην μένουν απομεινάρια
 For k = 1 To Grid1.Rows - 1
-   For L = 3 To Grid1.Cols - 1
+   For l = 3 To Grid1.Cols - 1
        Grid1.Row = k
-       Grid1.Col = L
+       Grid1.Col = l
        Grid1.text = " "
    Next
 Next
 
+Dim mm_aa As String
 
 'το m_aa εχει την τελευταία προσπάθεια + 1
 mm_aa = Right$("00" + LTrim(str(Val(m_aa) - 1)), 2)
@@ -1108,6 +1148,7 @@ Do While Not PROSXHM.Recordset.BOF And PROSXHM.Recordset("entolh") = m_entolh
                     Text1(Grid1.Col - 3).ForeColor = MAYRO '
                  End If
                End If
+                 Dim mGrid_col As Integer
                  
                  'γράφω την περιγραφή του χημικοτεχνικού
                  mGrid_col = Grid1.Col
@@ -1140,7 +1181,7 @@ Do While Not PROSXHM.Recordset.BOF And PROSXHM.Recordset("entolh") = m_entolh
       If DOYLEYO_ALATI <> 0 Then
    '   If M_ALATI > 0 And DOYLEYO_ALATI <> 0 Then
          M_COL2 = Grid1.Col
-         M_ROW2 = Grid.Row
+         M_ROW2 = Grid1.Row
          Grid1.Row = 11
          Grid1.Col = 0
          Grid1.text = Label10.Caption
@@ -1159,7 +1200,7 @@ Do While Not PROSXHM.Recordset.BOF And PROSXHM.Recordset("entolh") = m_entolh
        ' Exit Do
        
        Ok_Print = 0
-       print_onoma = 1
+     ' print_onoma = 1
      End If
      'PROSXHM.Recordset.MovePrevious
 '     If perpathse = 0 Then
@@ -1173,6 +1214,7 @@ PROSXHM.Recordset.MoveLast
 
 seira = Max_Row_Updated
 
+Dim rf As Integer
 
 rf = Grid1.RowHeight(seira) ' * (seira + 1)
 
@@ -1239,9 +1281,15 @@ End If
    
    If DOYLEYO_ALATI = 1 Then
    Dim sum_al As Single
+   Dim k As Integer
+   
      For k = 1 To 10
         sum_al = sum_al + Val(Replace(Grid1.TextMatrix(k, 1), ",", "."))
      Next
+   
+   
+   Dim mydb As Database
+   Dim r As Recordset
    
    Set mydb = Workspaces(0).OpenDatabase("c:\talos\RECIPIES.MDB")
     Set r = mydb.OpenRecordset("ALATI")
@@ -1275,6 +1323,45 @@ End If
       'Label1(m_ROW).Caption = per_xim(m_ROW)
 End Sub
 
+
+Private Sub cmdΡύθμισηΑυτόματης_Click()
+
+
+Dim mydb As Database
+Dim work As Workspace
+Dim r As Recordset
+
+
+ Set work = Workspaces(0)
+Set mydb = work.OpenDatabase("c:\TALOS\RECIPIES.MDB", False, False)
+
+'mydb.Execute ""
+
+
+Set r = mydb.OpenRecordset("parametroi")
+r.MoveNext
+Dim n0 As Long
+n0 = IIf(IsNull(r!Time_Preheat), 0, r!Time_Preheat)
+'r.Close
+
+n0 = InputBox("ελαχιστο βάρος δοσομέτρησης σε mg για να αποφευγει το πυκνό(500-1000) ", "", n0)
+If n0 < 100 Or n0 > 5000 Then
+    n0 = 500
+End If
+
+
+
+
+
+r.EDIT
+  r!Time_Preheat = n0
+r.update
+
+
+'    Text1.text = r("MPANIO")
+ '   Text2.text = r("default_baros_panioy")
+     r.Close
+End Sub
 
 Private Sub Command1_Click()
 Text3.text = "0"
@@ -1378,8 +1465,8 @@ Dim update, mC, mGL, mEK, m_ok
          
 If M_AA2 > 0 Then
   Set mydb = Workspaces(0).OpenDatabase("C:\TALOS\RECIPIES.MDB", False, False)
-  SQL = "delete *from prospau2   WHERE entolh='" + m_entolh + "' and aa_prospau='" + Right$("00" + LTrim(str(M_AA2)), 2) + "';"
-  mydb.Execute SQL
+  sql = "delete *from prospau2   WHERE entolh='" + m_entolh + "' and aa_prospau='" + Right$("00" + LTrim(str(M_AA2)), 2) + "';"
+  mydb.Execute sql
 End If
          
          
@@ -1418,39 +1505,39 @@ End If
                mGL = IIf(IsNull(Grid1.text), 0, Val(Grid1.text))
              If mEK + mGL > 0 Then
               mC = mC + 1
-              PROSPAU2.Recordset.AddNew
-              PROSPAU2.Recordset("ENTOLH") = m_entolh
-              PROSPAU2.Recordset("SXESH_MPAN") = mJOBLIST.JOBLIST.Recordset("SXESH_MPAN")
+              prospau2.Recordset.AddNew
+              prospau2.Recordset("ENTOLH") = m_entolh
+              prospau2.Recordset("SXESH_MPAN") = mJOBLIST.JOBLIST.Recordset("SXESH_MPAN")
              If M_AA2 = 0 Then
-                 PROSPAU2.Recordset("AA_PROSPAU") = m_aa
+                 prospau2.Recordset("AA_PROSPAU") = m_aa
              Else
-                 PROSPAU2.Recordset("AA_PROSPAU") = Right$("00" + LTrim(str(M_AA2)), 2)
+                 prospau2.Recordset("AA_PROSPAU") = Right$("00" + LTrim(str(M_AA2)), 2)
              End If
-              PROSPAU2.Recordset("SEIRA") = mC
-                    PROSPAU2.Recordset("STATUS") = 0
-              PROSPAU2.Recordset("AYJON") = Grid1.Row
-              PROSPAU2.Recordset("KOD") = Data1.Recordset("KOD")
-              PROSPAU2.Recordset("PERIGR") = Data1.Recordset("PERIGRAFH")
-              PROSPAU2.Recordset("apoxrvsh") = mJOBLIST.JOBLIST.Recordset("apoxrvsh")
-              PROSPAU2.Recordset("kod_pel") = mJOBLIST.JOBLIST.Recordset("kod_pel")
-              PROSPAU2.Recordset("hme_parad") = mJOBLIST.JOBLIST.Recordset("hme_parad")
-              PROSPAU2.Recordset("baros_pani") = mJOBLIST.JOBLIST.Recordset("baros_pani")
+              prospau2.Recordset("SEIRA") = mC
+                    prospau2.Recordset("STATUS") = 0
+              prospau2.Recordset("AYJON") = Grid1.Row
+              prospau2.Recordset("KOD") = Data1.Recordset("KOD")
+              prospau2.Recordset("PERIGR") = Data1.Recordset("PERIGRAFH")
+              prospau2.Recordset("apoxrvsh") = mJOBLIST.JOBLIST.Recordset("apoxrvsh")
+              prospau2.Recordset("kod_pel") = mJOBLIST.JOBLIST.Recordset("kod_pel")
+              prospau2.Recordset("hme_parad") = mJOBLIST.JOBLIST.Recordset("hme_parad")
+              prospau2.Recordset("baros_pani") = mJOBLIST.JOBLIST.Recordset("baros_pani")
               
               
               
               
-              PROSPAU2.Recordset("EK") = mEK
-              PROSPAU2.Recordset("UserW") = User_ID
+              prospau2.Recordset("EK") = mEK
+              prospau2.Recordset("UserW") = User_ID
               Grid1.Col = 2
-              PROSPAU2.Recordset("hme") = Date
+              prospau2.Recordset("hme") = Date
               If IsNull(JOBLIST.Recordset("apor")) Then
-                            PROSPAU2.Recordset("apor") = 0
+                            prospau2.Recordset("apor") = 0
               Else
-                            PROSPAU2.Recordset("apor") = JOBLIST.Recordset("apor")
+                            prospau2.Recordset("apor") = JOBLIST.Recordset("apor")
               End If
-              PROSPAU2.Recordset("GL") = mGL
-              PROSPAU2.Recordset("ALATI") = Text3.text
-              PROSPAU2.Recordset.update
+              prospau2.Recordset("GL") = mGL
+              prospau2.Recordset("ALATI") = Text3.text
+              prospau2.Recordset.update
              End If
           End If
        End If
@@ -1495,6 +1582,9 @@ End Sub
 
 Private Sub Command3_Click()
 ' **********************   ΝΕΑ ΣΥΝΤΑΓΗ   ***************************
+Dim m As String
+m = ""
+
  work_focus = True
    Check1.Enabled = False
    Command3.Enabled = False
@@ -1508,6 +1598,7 @@ Private Sub Command3_Click()
    'MaskEdBox2.Visible = True
 
   Command5.Enabled = True
+Dim k As Integer
 
 For k = 1 To Max_Row_Updated
     Grid1.Row = k
@@ -1577,6 +1668,7 @@ End Sub
 Private Sub DBCombo1_LostFocus()
    DBCombo1.BackColor = old_cb
    DBCombo1.ForeColor = old_cf
+   Dim k As Integer
    
 For k = 1 To seira
    If k = m_ROW Then
@@ -1599,6 +1691,9 @@ End Sub
 
 
 Private Sub Form_Click()
+ 
+ 
+ 
  'Dim A
  'A = 1
 End Sub
@@ -1611,7 +1706,7 @@ End Sub
 
 
 Private Sub Form_Load()
-Dim L
+Dim l
 M_AA2 = 0
 work_focus = False
 MDIForm1.Arxeia(10).Visible = False
@@ -1687,6 +1782,7 @@ Grid1.width = Me.width
    
    
    
+   Dim k As Integer
    
    YCOS = 315  ' 315
 For k = 0 To Grid1.Rows - 1
@@ -1703,6 +1799,8 @@ Grid1.text = "   % "
 Grid1.Col = 2
 Grid1.text = "   g/l "
 
+Dim r As Integer
+
 For k = 0 To 2
   For r = 1 To Grid1.Rows - 1
      Grid1.Row = r
@@ -1711,6 +1809,7 @@ For k = 0 To 2
    Next
 Next
    
+   Dim rf As Long
    
 rf = Grid1.RowHeight(0)
    
@@ -1736,8 +1835,8 @@ Maskedbox2.left = FIND_LEFT2() ' = 40 + Grid1.left + Grid1.ColWidth(0) + Grid1.C
  
  'ΥΠΟΛΟΓΊΖΩ ΤΙΣ ΘΕΣΕΙΣ ΤΩΝ ΤΕΧΤ
     
-L = Grid1.left + Grid1.ColWidth(0) + Grid1.ColWidth(1) + Grid1.ColWidth(2)
-    Text1(0).left = 10 + L  '50
+l = Grid1.left + Grid1.ColWidth(0) + Grid1.ColWidth(1) + Grid1.ColWidth(2)
+    Text1(0).left = 10 + l  '50
     Text1(0).width = Grid1.ColWidth(4) - 10
     Text1(0).top = Grid1.top + 10
     'Text1(0).BackColor = 100
@@ -1745,9 +1844,9 @@ L = Grid1.left + Grid1.ColWidth(0) + Grid1.ColWidth(1) + Grid1.ColWidth(2)
  
  For k = 1 To 7
     Text1(k).width = Grid1.ColWidth(2 + k) - 50
-    L = L + Grid1.ColWidth(2 + k)
+    l = l + Grid1.ColWidth(2 + k)
     'Text1(k).left = L + 50 + 20 * k
-    Text1(k).left = L + 0 + 20 * k
+    Text1(k).left = l + 0 + 20 * k
     
     
     Text1(k).top = Grid1.top + 10
@@ -1772,9 +1871,9 @@ If proth_fora = 1 Then
    JOBLIST.Recordset.Index = "entolh"
    JOBLIST.Recordset.Seek "=", m_entolh
    
-   If PROSPAU2.Recordset.RecordCount = 0 Then
-      PROSPAU2.Recordset.AddNew
-      PROSPAU2.Recordset.update
+   If prospau2.Recordset.RecordCount = 0 Then
+      prospau2.Recordset.AddNew
+      prospau2.Recordset.update
    End If
 
 '----------------------------------------
@@ -1806,20 +1905,21 @@ If proth_fora = 1 Then
    
    
    ' SQL = "CREATE INDEX entolh ON prospau2 (ENTOLH,AA_PROSPAU,SEIRA);"
-   PROSPAU2.Recordset.Index = "entolh"
-   PROSPAU2.Recordset.Seek "<=", m_entolh, "99"
+   prospau2.Recordset.Index = "entolh"
+   prospau2.Recordset.Seek "<=", m_entolh, "99"
     
     On Error GoTo ff
-        a = PROSPAU2.Recordset("entolh")
+        a = prospau2.Recordset("entolh")
     On Error GoTo 0
    ' υπάρχει ήδη προσπάθεια
-   If PROSPAU2.Recordset("entolh") = m_entolh Then
-      m_aa = Right$("00" + LTrim(str(Val(PROSPAU2.Recordset("aa_prospau")) + 1)), 2)
+   If prospau2.Recordset("entolh") = m_entolh Then
+      m_aa = Right$("00" + LTrim(str(Val(prospau2.Recordset("aa_prospau")) + 1)), 2)
    Else
       m_aa = "01"
    End If
    show_on_grid
 
+Dim rf As Long
 
 'δείχνω τα combo & τα maskedbox στην τελευταία σειρά +1
 rf = Grid1.RowPos(m_ROW) 'Grid1.SelStartRow)
@@ -1859,9 +1959,9 @@ ff:
 a = Err.Number
 
    'If prospau2.Recordset.RecordCount = 0 Then
-      PROSPAU2.Recordset.AddNew
-      PROSPAU2.Recordset.update
-      PROSPAU2.Recordset.MoveFirst
+      prospau2.Recordset.AddNew
+      prospau2.Recordset.update
+      prospau2.Recordset.MoveFirst
    'End If
    Resume Next
 
@@ -1917,6 +2017,7 @@ End If
     m_ROW = Grid1.Row
     m_COL = Grid1.Col
     
+Dim rf As Integer
 
     
     rf = Grid1.RowPos(m_ROW) 'Grid1.SelStartRow)
@@ -1930,6 +2031,7 @@ maskedbox1.left = FIND_LEFT1() ' Grid1.left + Grid1.ColWidth(0) + 20
 Maskedbox2.top = rf + Grid1.top + Grid1.Row
 Maskedbox2.left = FIND_LEFT2() ' = 30 + Grid1.left + Grid1.ColWidth(0) + Grid1.ColWidth(1) + 20
     
+    Dim M_ROW2 As Integer
     
  M_ROW2 = Grid1.Row 'κρατάω την τιμή για να δώ αν θα αλλάξει παρακάτω
     
@@ -1955,7 +2057,7 @@ End Sub
 
 
 
-Private Sub Grid1_MouseDown(Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub Grid1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 ' Grid1.SelEndRow = Grid1.SelStartRow
 ' Grid1.SelEndCol = Grid1.SelStartCol
  

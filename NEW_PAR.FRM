@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
 Object = "{00028C01-0000-0000-0000-000000000046}#1.0#0"; "DBGRID32.OCX"
 Begin VB.Form PARAMETROI 
    Caption         =   "Form1"
@@ -68,39 +68,67 @@ Begin VB.Form PARAMETROI
       _ExtentY        =   10107
       _Version        =   393216
       Tabs            =   6
-      Tab             =   5
       TabHeight       =   529
+      BackColor       =   12640511
       TabCaption(0)   =   "Γενικά Συνταγές"
       TabPicture(0)   =   "NEW_PAR.frx":0000
-      Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "Text12(21)"
-      Tab(0).Control(1)=   "Text14"
-      Tab(0).Control(2)=   "Text13"
-      Tab(0).Control(3)=   "Text12(16)"
-      Tab(0).Control(4)=   "Text12(11)"
-      Tab(0).Control(5)=   "Text12(6)"
-      Tab(0).Control(6)=   "Text12(1)"
-      Tab(0).Control(7)=   "Text11"
-      Tab(0).Control(8)=   "Check6"
-      Tab(0).Control(9)=   "Text3"
-      Tab(0).Control(10)=   "Check1"
-      Tab(0).Control(11)=   "Check4"
-      Tab(0).Control(12)=   "Text1"
-      Tab(0).Control(13)=   "Text2"
-      Tab(0).Control(14)=   "Text4"
-      Tab(0).Control(15)=   "Label12(5)"
-      Tab(0).Control(16)=   "Label15"
-      Tab(0).Control(17)=   "Label14"
-      Tab(0).Control(18)=   "Label12(3)"
-      Tab(0).Control(19)=   "Label12(2)"
-      Tab(0).Control(20)=   "Label12(1)"
-      Tab(0).Control(21)=   "Label13"
-      Tab(0).Control(22)=   "Label12(0)"
-      Tab(0).Control(23)=   "Label11"
-      Tab(0).Control(24)=   "Label3"
-      Tab(0).Control(25)=   "Label1"
-      Tab(0).Control(26)=   "Label2"
-      Tab(0).Control(27)=   "Label4"
+      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).Control(0)=   "Label4"
+      Tab(0).Control(0).Enabled=   0   'False
+      Tab(0).Control(1)=   "Label2"
+      Tab(0).Control(1).Enabled=   0   'False
+      Tab(0).Control(2)=   "Label1"
+      Tab(0).Control(2).Enabled=   0   'False
+      Tab(0).Control(3)=   "Label3"
+      Tab(0).Control(3).Enabled=   0   'False
+      Tab(0).Control(4)=   "Label11"
+      Tab(0).Control(4).Enabled=   0   'False
+      Tab(0).Control(5)=   "Label12(0)"
+      Tab(0).Control(5).Enabled=   0   'False
+      Tab(0).Control(6)=   "Label13"
+      Tab(0).Control(6).Enabled=   0   'False
+      Tab(0).Control(7)=   "Label12(1)"
+      Tab(0).Control(7).Enabled=   0   'False
+      Tab(0).Control(8)=   "Label12(2)"
+      Tab(0).Control(8).Enabled=   0   'False
+      Tab(0).Control(9)=   "Label12(3)"
+      Tab(0).Control(9).Enabled=   0   'False
+      Tab(0).Control(10)=   "Label14"
+      Tab(0).Control(10).Enabled=   0   'False
+      Tab(0).Control(11)=   "Label15"
+      Tab(0).Control(11).Enabled=   0   'False
+      Tab(0).Control(12)=   "Label12(5)"
+      Tab(0).Control(12).Enabled=   0   'False
+      Tab(0).Control(13)=   "Text4"
+      Tab(0).Control(13).Enabled=   0   'False
+      Tab(0).Control(14)=   "Text2"
+      Tab(0).Control(14).Enabled=   0   'False
+      Tab(0).Control(15)=   "Text1"
+      Tab(0).Control(15).Enabled=   0   'False
+      Tab(0).Control(16)=   "Check4"
+      Tab(0).Control(16).Enabled=   0   'False
+      Tab(0).Control(17)=   "Check1"
+      Tab(0).Control(17).Enabled=   0   'False
+      Tab(0).Control(18)=   "Text3"
+      Tab(0).Control(18).Enabled=   0   'False
+      Tab(0).Control(19)=   "Check6"
+      Tab(0).Control(19).Enabled=   0   'False
+      Tab(0).Control(20)=   "Text11"
+      Tab(0).Control(20).Enabled=   0   'False
+      Tab(0).Control(21)=   "Text12(1)"
+      Tab(0).Control(21).Enabled=   0   'False
+      Tab(0).Control(22)=   "Text12(6)"
+      Tab(0).Control(22).Enabled=   0   'False
+      Tab(0).Control(23)=   "Text12(11)"
+      Tab(0).Control(23).Enabled=   0   'False
+      Tab(0).Control(24)=   "Text12(16)"
+      Tab(0).Control(24).Enabled=   0   'False
+      Tab(0).Control(25)=   "Text13"
+      Tab(0).Control(25).Enabled=   0   'False
+      Tab(0).Control(26)=   "Text14"
+      Tab(0).Control(26).Enabled=   0   'False
+      Tab(0).Control(27)=   "Text12(21)"
+      Tab(0).Control(27).Enabled=   0   'False
       Tab(0).ControlCount=   28
       TabCaption(1)   =   "Νερό Συνταγών"
       TabPicture(1)   =   "NEW_PAR.frx":001C
@@ -136,18 +164,15 @@ Begin VB.Form PARAMETROI
       Tab(4).ControlCount=   1
       TabCaption(5)   =   "Ρυθμισεις για αλάτι"
       TabPicture(5)   =   "NEW_PAR.frx":008C
-      Tab(5).ControlEnabled=   -1  'True
-      Tab(5).Control(0)=   "Command2"
-      Tab(5).Control(0).Enabled=   0   'False
+      Tab(5).ControlEnabled=   0   'False
+      Tab(5).Control(0)=   "Command3"
       Tab(5).Control(1)=   "DBGrid2"
-      Tab(5).Control(1).Enabled=   0   'False
-      Tab(5).Control(2)=   "Command3"
-      Tab(5).Control(2).Enabled=   0   'False
+      Tab(5).Control(2)=   "Command2"
       Tab(5).ControlCount=   3
       Begin VB.CommandButton Command3 
          Caption         =   "ΔΙΟΡΘΩΣΗ "
          Height          =   360
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   49
          Top             =   1380
          Width           =   990
@@ -155,7 +180,7 @@ Begin VB.Form PARAMETROI
       Begin MSDBGrid.DBGrid DBGrid2 
          Bindings        =   "NEW_PAR.frx":00A8
          Height          =   3345
-         Left            =   1770
+         Left            =   -73230
          OleObjectBlob   =   "NEW_PAR.frx":00BC
          TabIndex        =   48
          Top             =   1020
@@ -164,7 +189,7 @@ Begin VB.Form PARAMETROI
       Begin VB.CommandButton Command2 
          Caption         =   "Δημιουργία Πίνακα"
          Height          =   360
-         Left            =   210
+         Left            =   -74790
          TabIndex        =   47
          Top             =   720
          Width           =   990
@@ -181,7 +206,7 @@ Begin VB.Form PARAMETROI
          EndProperty
          Height          =   360
          Index           =   21
-         Left            =   -67425
+         Left            =   7575
          MaxLength       =   7
          TabIndex        =   45
          Top             =   3480
@@ -189,14 +214,14 @@ Begin VB.Form PARAMETROI
       End
       Begin VB.TextBox Text14 
          Height          =   360
-         Left            =   -71685
+         Left            =   3315
          TabIndex        =   42
          Top             =   5130
          Width           =   1245
       End
       Begin VB.TextBox Text13 
          Height          =   360
-         Left            =   -71685
+         Left            =   3315
          TabIndex        =   41
          Top             =   4695
          Width           =   1245
@@ -213,7 +238,7 @@ Begin VB.Form PARAMETROI
          EndProperty
          Height          =   360
          Index           =   16
-         Left            =   -67440
+         Left            =   7560
          MaxLength       =   5
          TabIndex        =   39
          Top             =   3000
@@ -231,7 +256,7 @@ Begin VB.Form PARAMETROI
          EndProperty
          Height          =   360
          Index           =   11
-         Left            =   -67440
+         Left            =   7560
          MaxLength       =   5
          TabIndex        =   37
          Top             =   2520
@@ -249,7 +274,7 @@ Begin VB.Form PARAMETROI
          EndProperty
          Height          =   360
          Index           =   6
-         Left            =   -67440
+         Left            =   7560
          MaxLength       =   5
          TabIndex        =   35
          Top             =   2040
@@ -267,7 +292,7 @@ Begin VB.Form PARAMETROI
          EndProperty
          Height          =   360
          Index           =   1
-         Left            =   -67440
+         Left            =   7560
          MaxLength       =   5
          TabIndex        =   32
          Top             =   1560
@@ -277,7 +302,7 @@ Begin VB.Form PARAMETROI
          DataField       =   "uesh_alatioy"
          DataSource      =   "Data1"
          Height          =   360
-         Left            =   -71685
+         Left            =   3315
          TabIndex        =   29
          Top             =   1680
          Width           =   1245
@@ -295,7 +320,7 @@ Begin VB.Form PARAMETROI
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -74130
+         Left            =   870
          TabIndex        =   28
          Top             =   1335
          Width           =   2640
@@ -320,7 +345,7 @@ Begin VB.Form PARAMETROI
       End
       Begin VB.TextBox Text3 
          Height          =   360
-         Left            =   -71685
+         Left            =   3315
          TabIndex        =   22
          Top             =   4260
          Width           =   1245
@@ -389,7 +414,7 @@ Begin VB.Form PARAMETROI
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   -74115
+         Left            =   885
          TabIndex        =   12
          Top             =   2130
          Width           =   2640
@@ -409,7 +434,7 @@ Begin VB.Form PARAMETROI
             Strikethrough   =   0   'False
          EndProperty
          Height          =   435
-         Left            =   -74100
+         Left            =   900
          TabIndex        =   11
          Top             =   2415
          Width           =   2640
@@ -434,7 +459,7 @@ Begin VB.Form PARAMETROI
          DataField       =   "AXRHSIMOPOIHTES_ORES"
          DataSource      =   "Data1"
          Height          =   360
-         Left            =   -71685
+         Left            =   3315
          TabIndex        =   3
          Top             =   2865
          Width           =   1245
@@ -443,7 +468,7 @@ Begin VB.Form PARAMETROI
          DataField       =   "default_baros_panioy"
          DataSource      =   "Data1"
          Height          =   360
-         Left            =   -71685
+         Left            =   3315
          TabIndex        =   2
          Top             =   3330
          Width           =   1245
@@ -452,7 +477,7 @@ Begin VB.Form PARAMETROI
          DataField       =   "MPANIO"
          DataSource      =   "Data1"
          Height          =   360
-         Left            =   -71685
+         Left            =   3315
          TabIndex        =   1
          Top             =   3855
          Width           =   1245
@@ -480,7 +505,7 @@ Begin VB.Form PARAMETROI
          EndProperty
          Height          =   375
          Index           =   5
-         Left            =   -70140
+         Left            =   4860
          TabIndex        =   46
          Top             =   3480
          Width           =   2700
@@ -499,7 +524,7 @@ Begin VB.Form PARAMETROI
             Strikethrough   =   0   'False
          EndProperty
          Height          =   285
-         Left            =   -74400
+         Left            =   600
          TabIndex        =   44
          Top             =   4770
          Width           =   2655
@@ -518,7 +543,7 @@ Begin VB.Form PARAMETROI
             Strikethrough   =   0   'False
          EndProperty
          Height          =   285
-         Left            =   -74385
+         Left            =   615
          TabIndex        =   43
          Top             =   5190
          Width           =   2655
@@ -537,7 +562,7 @@ Begin VB.Form PARAMETROI
          EndProperty
          Height          =   375
          Index           =   3
-         Left            =   -70200
+         Left            =   4800
          TabIndex        =   40
          Top             =   3000
          Width           =   2700
@@ -556,7 +581,7 @@ Begin VB.Form PARAMETROI
          EndProperty
          Height          =   375
          Index           =   2
-         Left            =   -70200
+         Left            =   4800
          TabIndex        =   38
          Top             =   2520
          Width           =   2700
@@ -575,7 +600,7 @@ Begin VB.Form PARAMETROI
          EndProperty
          Height          =   375
          Index           =   1
-         Left            =   -70200
+         Left            =   4800
          TabIndex        =   36
          Top             =   2040
          Width           =   2700
@@ -593,7 +618,7 @@ Begin VB.Form PARAMETROI
             Strikethrough   =   0   'False
          EndProperty
          Height          =   375
-         Left            =   -69600
+         Left            =   5400
          TabIndex        =   34
          Top             =   960
          Width           =   3855
@@ -612,7 +637,7 @@ Begin VB.Form PARAMETROI
          EndProperty
          Height          =   375
          Index           =   0
-         Left            =   -70200
+         Left            =   4800
          TabIndex        =   33
          Top             =   1560
          Width           =   2700
@@ -631,7 +656,7 @@ Begin VB.Form PARAMETROI
             Strikethrough   =   0   'False
          EndProperty
          Height          =   285
-         Left            =   -74655
+         Left            =   345
          TabIndex        =   30
          Top             =   1710
          Width           =   2655
@@ -688,7 +713,7 @@ Begin VB.Form PARAMETROI
             Strikethrough   =   0   'False
          EndProperty
          Height          =   285
-         Left            =   -74430
+         Left            =   570
          TabIndex        =   23
          Top             =   4335
          Width           =   2655
@@ -783,7 +808,7 @@ Begin VB.Form PARAMETROI
             Strikethrough   =   0   'False
          EndProperty
          Height          =   285
-         Left            =   -74520
+         Left            =   480
          TabIndex        =   6
          Top             =   3435
          Width           =   2655
@@ -802,7 +827,7 @@ Begin VB.Form PARAMETROI
             Strikethrough   =   0   'False
          EndProperty
          Height          =   480
-         Left            =   -74370
+         Left            =   630
          TabIndex        =   5
          Top             =   2805
          Width           =   2655
@@ -821,7 +846,7 @@ Begin VB.Form PARAMETROI
             Strikethrough   =   0   'False
          EndProperty
          Height          =   285
-         Left            =   -74415
+         Left            =   585
          TabIndex        =   4
          Top             =   3930
          Width           =   2655
