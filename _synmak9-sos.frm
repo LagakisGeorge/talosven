@@ -16,6 +16,14 @@ Begin VB.Form FRMSYNT2
    ScaleHeight     =   8490
    ScaleWidth      =   11040
    WindowState     =   2  'Maximized
+   Begin VB.CheckBox ximikon 
+      Caption         =   "Χημικό"
+      Height          =   255
+      Left            =   6240
+      TabIndex        =   43
+      Top             =   5280
+      Width           =   975
+   End
    Begin VB.CommandButton cmdΡύθμισηΑυτόματης 
       Caption         =   "Ρύθμιση αυτόματης επιλογής"
       Height          =   240
@@ -533,7 +541,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
+Dim f_barosXimikoy As Long
 
 Dim m_ROW, m_COL
 Dim CAN_UPDATE_GRID
@@ -886,18 +894,18 @@ Dim m1, m2, m3, per1
        End If
        
        
-Dim sql As String
+Dim SQL As String
 Dim e As Recordset
 
        
 Set mydb = Workspaces(0).OpenDatabase("C:\TALOS\RECIPIES.MDB", False, False)
-sql = "select ximitech.addr_prot,ximitech.real_cons,ximitech.kataskeyas,ximitech.perigrafh from ximitech where kataskeyas='" + mCI + "' and real_cons>0 and addr_prot>0  order by real_cons;"
-Set e = mydb.OpenRecordset(sql, dbOpenDynaset)
+SQL = "select ximitech.addr_prot,ximitech.real_cons,ximitech.kataskeyas,ximitech.perigrafh from ximitech where kataskeyas='" + mCI + "' and real_cons>0 and addr_prot>0  order by real_cons;"
+Set e = mydb.OpenRecordset(SQL, dbOpenDynaset)
 
 
 If e.RecordCount = 0 Then
-   sql = "select ximitech.addr_prot,ximitech.real_cons,ximitech.kataskeyas,ximitech.perigrafh from ximitech where kataskeyas='" + mCI + "' and skonh=0 and addr_prot>0  order by real_cons;"
-   Set e = mydb.OpenRecordset(sql, dbOpenDynaset)
+   SQL = "select ximitech.addr_prot,ximitech.real_cons,ximitech.kataskeyas,ximitech.perigrafh from ximitech where kataskeyas='" + mCI + "' and skonh=0 and addr_prot>0  order by real_cons;"
+   Set e = mydb.OpenRecordset(SQL, dbOpenDynaset)
    bres2_ximiko = e("perigrafh")
    Exit Function
 End If
@@ -1003,13 +1011,13 @@ Exit Function
 End Function
 
 
-Function CdBln(X)
+Function CdBln(x)
    
-   a = InStr(X, ",")
+   a = InStr(x, ",")
    If a = 0 Then
-        CdBln = X
+        CdBln = x
    Else
-       CdBln = left(X, a - 1) + "." + Mid(X, a + 1, Len(X) - a)
+       CdBln = left(x, a - 1) + "." + Mid(x, a + 1, Len(x) - a)
     End If
  
 End Function
@@ -1073,13 +1081,13 @@ Ok_Print = 1
 ' σχεδίαση οθόνης με προηγούμενες συνταγές
 
 On Error Resume Next
-Dim k, l As Integer
+Dim k, L As Integer
 
 ' σβήνω τις προηγούμενες να μην μένουν απομεινάρια
 For k = 1 To Grid1.Rows - 1
-   For l = 3 To Grid1.Cols - 1
+   For L = 3 To Grid1.Cols - 1
        Grid1.Row = k
-       Grid1.Col = l
+       Grid1.Col = L
        Grid1.text = " "
    Next
 Next
@@ -1100,6 +1108,18 @@ Do While Not PROSXHM.Recordset.BOF And PROSXHM.Recordset("entolh") = m_entolh
          If Not IsNull(PROSXHM.Recordset("alati")) Then
              M_ALATI = PROSXHM.Recordset("alati")
          End If
+
+
+         If Not IsNull(PROSXHM.Recordset("ximikon")) Then
+            If PROSXHM.Recordset("ximikon") = 1 Then
+               ximikon.value = vbChecked
+            Else
+               ximikon.value = vbUnchecked
+            End If
+             
+         End If
+
+
 
 
          If Not IsNull(PROSXHM.Recordset("seira")) Then
@@ -1335,7 +1355,7 @@ Dim r As Recordset
  Set work = Workspaces(0)
 Set mydb = work.OpenDatabase("c:\TALOS\RECIPIES.MDB", False, False)
 
-'mydb.Execute ""
+'mydb.Execute ""  ' ximikon.text = r("WEIGHT_BOTTLE_MIN")
 
 
 Set r = mydb.OpenRecordset("parametroi")
@@ -1465,8 +1485,8 @@ Dim update, mC, mGL, mEK, m_ok
          
 If M_AA2 > 0 Then
   Set mydb = Workspaces(0).OpenDatabase("C:\TALOS\RECIPIES.MDB", False, False)
-  sql = "delete *from prospau2   WHERE entolh='" + m_entolh + "' and aa_prospau='" + Right$("00" + LTrim(str(M_AA2)), 2) + "';"
-  mydb.Execute sql
+  SQL = "delete *from prospau2   WHERE entolh='" + m_entolh + "' and aa_prospau='" + Right$("00" + LTrim(str(M_AA2)), 2) + "';"
+  mydb.Execute SQL
 End If
          
          
@@ -1524,6 +1544,11 @@ End If
               prospau2.Recordset("baros_pani") = mJOBLIST.JOBLIST.Recordset("baros_pani")
               
               
+              If ximikon.value = vbChecked Then
+                 prospau2.Recordset("ximikon") = f_barosXimikoy
+              Else
+                 prospau2.Recordset("ximikon") = 0
+              End If
               
               
               prospau2.Recordset("EK") = mEK
@@ -1706,7 +1731,7 @@ End Sub
 
 
 Private Sub Form_Load()
-Dim l
+Dim L
 M_AA2 = 0
 work_focus = False
 MDIForm1.Arxeia(10).Visible = False
@@ -1835,8 +1860,8 @@ Maskedbox2.left = FIND_LEFT2() ' = 40 + Grid1.left + Grid1.ColWidth(0) + Grid1.C
  
  'ΥΠΟΛΟΓΊΖΩ ΤΙΣ ΘΕΣΕΙΣ ΤΩΝ ΤΕΧΤ
     
-l = Grid1.left + Grid1.ColWidth(0) + Grid1.ColWidth(1) + Grid1.ColWidth(2)
-    Text1(0).left = 10 + l  '50
+L = Grid1.left + Grid1.ColWidth(0) + Grid1.ColWidth(1) + Grid1.ColWidth(2)
+    Text1(0).left = 10 + L  '50
     Text1(0).width = Grid1.ColWidth(4) - 10
     Text1(0).top = Grid1.top + 10
     'Text1(0).BackColor = 100
@@ -1844,13 +1869,36 @@ l = Grid1.left + Grid1.ColWidth(0) + Grid1.ColWidth(1) + Grid1.ColWidth(2)
  
  For k = 1 To 7
     Text1(k).width = Grid1.ColWidth(2 + k) - 50
-    l = l + Grid1.ColWidth(2 + k)
+    L = L + Grid1.ColWidth(2 + k)
     'Text1(k).left = L + 50 + 20 * k
-    Text1(k).left = l + 0 + 20 * k
+    Text1(k).left = L + 0 + 20 * k
     
     
     Text1(k).top = Grid1.top + 10
  Next
+ 
+ 
+ 
+'mydb.Execute ""  ' ximikon.text = r("WEIGHT_BOTTLE_MIN")
+
+
+Dim mydb As Database
+Dim work As Workspace
+
+Set work = Workspaces(0)
+Set mydb = work.OpenDatabase("c:\TALOS\RECIPIES.MDB", False, False)
+
+
+
+
+Dim r7 As Recordset
+
+Set r7 = mydb.OpenRecordset("parametroi")
+r7.MoveNext
+f_barosXimikoy = IIf(IsNull(r7("WEIGHT_BOTTLE_MIN")), 0, r7("WEIGHT_BOTTLE_MIN"))
+r7.Close
+ 
+ 
  
  
  
@@ -1977,7 +2025,7 @@ Grid1.width = Me.width
 End Sub
 
 Private Sub Grid1_Click()
-Dim mRow2, DUM
+Dim mRow2, dum
 11
 If work_focus = False Then
    MsgBox mL_Res(310) '"Ζήτησε Νέα συνταγή"
@@ -2050,14 +2098,14 @@ If M_ROW2 <> m_ROW Then
    maskedbox1.SetFocus  ' 31-1
    
 End If
-DUM = Check_Mpanio()  '
+dum = Check_Mpanio()  '
 End Sub
 
 
 
 
 
-Private Sub Grid1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Grid1_MouseDown(Button As Integer, Shift As Integer, x As Single, Y As Single)
 ' Grid1.SelEndRow = Grid1.SelStartRow
 ' Grid1.SelEndCol = Grid1.SelStartCol
  
@@ -2208,7 +2256,7 @@ On Error Resume Next
          maskedbox1.SetFocus
      Grid1_Click
      
-    DUM = Check_Mpanio()
+    dum = Check_Mpanio()
 
      If DBCombo1.Visible Then
         DBCombo1.SetFocus

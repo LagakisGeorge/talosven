@@ -92,7 +92,7 @@ Begin VB.Form frmSYNT
       Height          =   540
       Left            =   1395
       TabIndex        =   329
-      Top             =   5190
+      Top             =   5160
       Width           =   1665
    End
    Begin VB.CommandButton Command1 
@@ -4078,15 +4078,15 @@ Function calc_ximika()
 '-------------------------------------------------
 Dim mydb, r, counter
 Dim use_valve(1 To 5) As Integer
-Dim mepil, r2, k, l
+Dim mepil, r2, k, L
 
 calc_ximika = 1 'OK
 
-For l = 1 To aritmos_ximikon: use_valve(l) = 0: Next
+For L = 1 To aritmos_ximikon: use_valve(L) = 0: Next
 
 For k = 1 To 50
-   For l = 1 To aritmos_ximikon
-       m_ximika(k, l) = 0
+   For L = 1 To aritmos_ximikon
+       m_ximika(k, L) = 0
    Next
 Next
 
@@ -4176,7 +4176,7 @@ Sub dispense_old_Ximika()
 
 Dim dr As Long, c, quantity, a00(1 To 5), b00(1 To 5), a2
 Dim mepil, xr(1 To 5), for_use, dokXr(1 To 5), sXr(1 To 5)
-Dim k, l, megas, amax, Off_On(1 To 5), per
+Dim k, L, megas, amax, Off_On(1 To 5), per
 Dim max_xronos, mz, mZ1, mz2
 Dim sum_gr, q_ner, xr_ner
 
@@ -4236,7 +4236,7 @@ End If
 's[-arr
 For k = 1 To 4: dokXr(k) = xr(k): Next
 
-For l = 1 To 4
+For L = 1 To 4
     amax = -2
     megas = 1
    For k = 1 To 4
@@ -4246,7 +4246,7 @@ For l = 1 To 4
       End If
    Next
    dokXr(megas) = -1
-   sXr(l) = amax
+   sXr(L) = amax
 Next
  
  
@@ -4399,9 +4399,9 @@ Function DISPENSE_XIMIKA(m_synt)
 
 Dim dr As Long, c, quantity, a00, b00, a2
 Dim mepil, xr(1 To 5), for_use, dokXr(1 To 5), sXr(1 To 5)
-Dim k, l, megas, amax, Off_On(1 To 5), per
+Dim k, L, megas, amax, Off_On(1 To 5), per
 Dim max_xronos, mz, mZ1, mz2
-Dim sum_gr, q_ner, xr_ner, DUM
+Dim sum_gr, q_ner, xr_ner, dum
 
 Dim Max_apoklish
 Dim ENA_ENA As Integer
@@ -4442,16 +4442,39 @@ For k = 1 To aritmos_ximikon
          xr(k) = 0
       Else
         a00 = a00x(k): b00 = b00x(k)
-        DUM = DISP_ENA_XIMIKO(k, quantity, a00, b00, m_synt)
+        dum = DISP_ENA_XIMIKO(k, quantity, a00, b00, m_synt)
         'xr(k) = (m_ximika(mepil, k) - b00x(k)) / a00x(k) 'xrhsimopoionta 2, 0.5 sec
       End If
       
   End If
 Next
  
+'If Len(XimNer_on) > 5 Then
+
+       
 
 
-If Not IsNull(prospau2.Recordset("nero")) Then  ' Exit Sub
+
+'End If
+
+
+667  'DUM = DISP_ENA_XIMIKO(5, 5000, a00, b00, m_synt)
+ If IsNull(prospau2.Recordset("ximikon")) Then
+ Else
+     If prospau2.Recordset("ximikon") > 0 Then
+     
+        a00 = a00x(k): b00 = b00x(k)
+        dum = DISP_ENA_XIMIKO(1, prospau2.Recordset("ximikon"), a00, b00, m_synt)
+     End If
+  End If
+ 
+ 
+ DISPENSE_XIMIKA = dum
+ Exit Function
+ 
+' GoTo 667
+ 
+ If Not IsNull(prospau2.Recordset("nero")) Then  ' Exit Sub
   
   q_ner = prospau2.Recordset("nero")
   sum_gr = sum_gr + q_ner
@@ -4459,14 +4482,14 @@ If Not IsNull(prospau2.Recordset("nero")) Then  ' Exit Sub
       xr_ner = 0
   Else
       a00 = a00x(5): b00 = b00x(5)
-      DUM = DISP_ENA_XIMIKO(5, q_ner, a00, b00, m_synt)
+      dum = DISP_ENA_XIMIKO(5, q_ner, a00, b00, m_synt)
       xr_ner = (q_ner - b00x(5)) / a00x(5) 'xrhsimopoionta 2, 0.5 sec
   End If
   
 End If
  
 
-DISPENSE_XIMIKA = DUM
+DISPENSE_XIMIKA = dum
     
 
 
@@ -4486,6 +4509,11 @@ Select Case BALBIDA
    Case 1
       X_ON = Xim1_on
       X_OFF = xim1_Off
+      
+   
+      
+      
+      
    Case 2
       X_ON = Xim2_on  '18-1,13-0
       X_OFF = xim2_Off
@@ -4503,15 +4531,22 @@ End Select
        
        
 a0 = Zygis0(0)
+q1 = quantity
+'If quantity > 6000 Then q1 = quantity - 4000 Else q1 = quantity
+If a00 <> 0 Then
+    XR2 = (q1) / 600
+Else
+   XR2 = 0
+End If
 
-If quantity > 6000 Then q1 = quantity - 4000 Else q1 = quantity
-If a00 <> 0 Then XR2 = (q1 - b00) / a00 Else XR2 = 0
-RobSend ("!" + X_ON + ":")
+XR2 = XR2 * 1000
+
+RobSend ("!" + XimNer_on + ":")
 c = GetCurrentTime()
 Do While GetCurrentTime() - c < XR2
     DoEvents
 Loop
-RobSend ("!" + X_OFF + ":")
+RobSend ("!" + XimNer_Off + ":")
 
 MilSec 3000
 a2 = Zygis0(0) - a0
@@ -4542,7 +4577,22 @@ If BALBIDA <> 5 Then
    mydb.Execute cmd$
    mydb.Close
 End If
+
+Dim dum
+dum = NER_DOSOMETRHSH(1000, 99)
+
+
 DISP_ENA_XIMIKO = a2
+
+'-------------------------------------
+
+
+
+
+
+
+
+
 
 End Function
 
@@ -4553,7 +4603,7 @@ Sub dispenseMONO_Ximika()
 
 Dim dr As Long, c, quantity, a00(1 To 5), b00(1 To 5), a2
 Dim mepil, xr(1 To 5), for_use, dokXr(1 To 5), sXr(1 To 5)
-Dim k, l, megas, amax, Off_On(1 To 5), per
+Dim k, L, megas, amax, Off_On(1 To 5), per
 Dim max_xronos, mz, mZ1, mz2
 Dim sum_gr
 Dim Max_apoklish
@@ -4592,7 +4642,7 @@ Next
 's[-arr
 For k = 1 To 5: dokXr(k) = xr(k): Next
 
-For l = 1 To 5
+For L = 1 To 5
    amax = 0
    For k = 1 To 5
       If dokXr(k) > amax Then
@@ -4601,7 +4651,7 @@ For l = 1 To 5
       End If
    Next
    dokXr(megas) = -1
-   sXr(l) = amax
+   sXr(L) = amax
 Next
  
  
@@ -4738,7 +4788,7 @@ Dim counter, FIRST_TIME, Motori_On, Xam_Ligo, Xam_Poly, reystothta
 Dim FLAG1, D1, D2, BHMA
 Dim ZYG1, ZYG2, FLAG2, FLAG3, Target
 Dim mydb, r, var93, Skacimo, v_Z
-Dim DUM, xam_tax, CurQ_Dis
+Dim dum, xam_tax, CurQ_Dis
 Dim ARX_DIADROMH, m_axe3, DZYG, max_zyg
  'ΑΛΛΑΓΗ   DIADROMH_BOLAN = DIADROMH_BOLAN / 60 => 40   17/04/2001
 ' XRONIKO PERIUVRIO SE 10MIN
@@ -4854,12 +4904,12 @@ TaxyThtes = "!V,," + str(v_Z) + ":"
      
         'ΚΡΑΤΑ ΑΠΟΒΑΡΟ
    
-     DUM = wait_to_understand("!var12=94:")
+     dum = wait_to_understand("!var12=94:")
      
      
      APOBARO = Zygis0(0)
      
-     DUM = Wait_Robot(0)
+     dum = Wait_Robot(0)
 
 
     
@@ -5352,7 +5402,7 @@ Function Load_kinhsh(Index As Integer)
 End Function
 
 
-Function Mhdenismos_Zygoy(DUM)
+Function Mhdenismos_Zygoy(dum)
 Dim Can_Zero, mz, counter_num
 Screen.MousePointer = 11
 Can_Zero = 1
@@ -5424,13 +5474,13 @@ Sub sort_recipes()
 ' ταξινομει τις συνταγές για να έχει λίγες μετακινήσεις
 Dim kod(1 To 30, 1 To 10), seira(1 To 30, 1 To 10)
 Dim posaX(1 To 30)
-Dim k, r, l, mepil, c_s, c_sys, zygo, mono1, mono2
+Dim k, r, L, mepil, c_s, c_sys, zygo, mono1, mono2
 
 Dim k0, l0, pano, kato, koina, mydb
 
 mydb = OpenDatabase("c:\talos\recipies.mdb")
 Set r = mydb.OpenRecordset("select...")
-For k = 1 To 30: For l = 1 To 10: kod(k, l) = "**": seira(k, l) = 18: Next: Next
+For k = 1 To 30: For L = 1 To 10: kod(k, L) = "**": seira(k, L) = 18: Next: Next
 
 'Set r = data1.Recordset
 If r.RecordCount < 3 Then Exit Sub
@@ -5488,8 +5538,8 @@ For zygo = 2 To c_s Step 2   'TO C_S
 
 
 For k = 1 To posaX(zygo)
-     For l = 1 To posaX(mono1)    ' EXOYN IDIO KODIKO KAI DEN EINAI KAPAROMENO
-          If kod(zygo, k) = kod(mono1, l) And seira(mono1, l) = 18 Then
+     For L = 1 To posaX(mono1)    ' EXOYN IDIO KODIKO KAI DEN EINAI KAPAROMENO
+          If kod(zygo, k) = kod(mono1, L) And seira(mono1, L) = 18 Then
                 seira(zygo, k) = 5
                ' seira(mono1, l) = 5
                 '
@@ -5516,8 +5566,8 @@ Next: Next
 
 
 For k = 1 To posaX(zygo)
-     For l = 1 To posaX(mono2)
-          If kod(zygo, k) = kod(mono2, l) Then
+     For L = 1 To posaX(mono2)
+          If kod(zygo, k) = kod(mono2, L) Then
                 
                 seira(zygo, k) = IIf(seira(zygo, k) = 5, 15, 20)
                ' seira(mono2, l) = 10
@@ -5608,9 +5658,9 @@ Next
 'dino sta mona pano thn telikh ariumhsh
 For k = 1 To posaX(zygo)
    If seira(zygo, k) = 5 Then
-          For l = 1 To posaX(mono1)
-                If kod(zygo, k) = kod(mono1, l) Then
-                   seira(mono1, l) = 20
+          For L = 1 To posaX(mono1)
+                If kod(zygo, k) = kod(mono1, L) Then
+                   seira(mono1, L) = 20
                    Exit For
                 End If
           Next
@@ -5620,9 +5670,9 @@ Next
 'dino sta mona Kato thn telikh ariumhsh
 For k = 1 To posaX(zygo)
    If seira(zygo, k) = 20 Then
-          For l = 1 To posaX(mono2)
-                If kod(zygo, k) = kod(mono2, l) Then
-                   seira(mono2, l) = 5
+          For L = 1 To posaX(mono2)
+                If kod(zygo, k) = kod(mono2, L) Then
+                   seira(mono2, L) = 5
                    Exit For
                 End If
           Next
@@ -5648,7 +5698,7 @@ Next zygo
 
 'BLEPO PINAKA
 For k = 1 To c_s
-    For l = 1 To posaX(k)
+    For L = 1 To posaX(k)
       ' List1.AddItem kod(k, L) + "--" + str(seira(k, L))
     Next
     Next
@@ -5662,9 +5712,9 @@ For k = 1 To c_s
 ' JE-fortoma toy pinaka
 r.MoveFirst
 For k = 1 To c_s
-    For l = 1 To posaX(k)
+    For L = 1 To posaX(k)
          r.EDIT
-         r("EPIL") = r("EPIL") + seira(k, l) / 1000 '+ IIf(K Mod 2 = 0, 1000000 - Val(R("KOD")), Val(R("KOD"))) / 1000000000000#
+         r("EPIL") = r("EPIL") + seira(k, L) / 1000 '+ IIf(K Mod 2 = 0, 1000000 - Val(R("KOD")), Val(R("KOD"))) / 1000000000000#
          r.update
          r.MoveNext
          If r.eof Then Exit For
@@ -5715,7 +5765,7 @@ End Sub
 '
 
 
-Function Zyg_KAUARO(DUM)
+Function Zyg_KAUARO(dum)
    Zyg_KAUARO = Zygis0(0) - APOBARO
    Label8.Caption = IIf(Zyg_KAUARO < 0, 0, Zyg_KAUARO)
 End Function
@@ -5727,7 +5777,7 @@ Function NER_DOSOMETRHSH(ByVal gr As Single, ByVal porta As String)
 
 'πιάνω το 95% με την μία
 Dim ssdxx As Single, Y As Double, Z As Double, w As Double, fores
-Dim X As Single, tmax As Double, tmin As Double, t As Double, texcel As Double, stoxos As Double
+Dim x As Single, tmax As Double, tmin As Double, t As Double, texcel As Double, stoxos As Double
 Dim xronos, mxronos
 Dim Poses_Zyg, starter, DEYTEROLEPTA
 Dim proth_fora As Byte, ZYG1, DT
@@ -5737,6 +5787,7 @@ Dim ll, ii$, zyg0, TEMP%, t_a0
 Dim abs_zyg, anoikth, mgr_sec, a0
 Dim mS, xr
 Dim Water
+Dim orio_2 As Long
 
   DEYTEROLEPTA = 20
   posa_loop = 0
@@ -5789,7 +5840,18 @@ Water_On = Cold_Water_On
 Water_Off = Cold_Water_Off
 
 
-If EPIU < 5000 Then     '300
+
+
+
+If Val(porta) = 99 Then ' ximiko dipla sto nero
+  Water_On = XimNer_on
+  Water_Off = XimNer_Off
+End If
+
+
+
+
+If EPIU < 5000 Or Val(porta) = 99 Then   '300
   a = 0
 Else
 
@@ -5801,6 +5863,14 @@ Else
   
   Water_On = Cold_Water_On
   Water_Off = Cold_Water_Off
+  
+If Val(porta) = 99 Then ' ximiko dipla sto nero
+  Water_On = XimNer_on
+  Water_Off = XimNer_Off
+End If
+  
+  
+  
   
   starter = GetCurrentTime()
   cmd$ = "!" + Water_On + ":"
@@ -5903,7 +5973,8 @@ starter = GetCurrentTime()
 
 proth_fora = 1: ZYG1 = 0: DT = 0
 
-Do While EPIU - a > 500
+If Val(porta) = 99 Then orio_2 = 40 Else orio_2 = 500
+Do While EPIU - a > orio_2
      a0 = a
      t_a0 = GetCurrentTime()
      
@@ -5916,7 +5987,11 @@ Do While EPIU - a > 500
         If (xr + GetCurrentTime()) - starter > MaxTimeWater * 1000 Then
            xr = MaxTimeWater * 1000 - (GetCurrentTime() - starter)
         Else
-           a = metrhs3_ner(xr, 1) ' /2 mono ston griba
+          If Val(porta) = 99 Then
+               a = metrhs3_ner(xr + 100, 1)
+          Else
+               a = metrhs3_ner(xr, 1) ' /2 mono ston griba
+          End If
         End If
      End If
      mS = GetCurrentTime()
@@ -6147,7 +6222,7 @@ End Function
 
 
 
-Function Zygis_ADAM(X As Single)  'OLD ONE
+Function Zygis_ADAM(x As Single)  'OLD ONE
   Dim counter, START1, FromModem$, dummy, ZYG
     ' Flush the input buffer.
        MSComm1.Output = Balance_Asking + Chr$(13)
@@ -6188,7 +6263,7 @@ End Function
 '
 '
 
-Function Zygis0(X As Single)
+Function Zygis0(x As Single)
   Dim counter, starter, FromModem$, x0, y0
   
    If Balance_Type = "ADAM" Then
@@ -6253,7 +6328,7 @@ Function Zygis0(X As Single)
      
       If InStr(FromModem$, ".") < 5 Then
          x0 = InStr(6, FromModem$, ".")
-         y0 = InStr(X, FromModem$, "g")
+         y0 = InStr(x, FromModem$, "g")
       Else
          x0 = InStr(FromModem$, ".")
          y0 = InStr(FromModem$, "g")
@@ -6269,7 +6344,7 @@ Function Zygis0(X As Single)
 End Function
 
 
-Function Zygis0OLD(X As Single)
+Function Zygis0OLD(x As Single)
   Dim counter, starter, dummy, FromModem$
   Dim Y
   Ref.Caption = left(Ref.Caption + Space(15), 15) + "Sc"
@@ -6340,13 +6415,13 @@ Function Zygis0OLD(X As Single)
     
  
       If InStr(FromModem$, ".") < 5 Then
-         X = InStr(6, FromModem$, ".")
-         Y = InStr(X, FromModem$, "g")
+         x = InStr(6, FromModem$, ".")
+         Y = InStr(x, FromModem$, "g")
       Else
-         X = InStr(FromModem$, ".")
+         x = InStr(FromModem$, ".")
          Y = InStr(FromModem$, "g")
       End If
-      Zygis0OLD = Val(Mid$(FromModem$, X - 6, 10)) * 1000
+      Zygis0OLD = Val(Mid$(FromModem$, x - 6, 10)) * 1000
 
     
 '    Gwrite_zygish FromModem$, ZYGIS0OLD
@@ -6544,7 +6619,7 @@ End Function
 Private Sub print_rep(mpot, m_synt)
 
 ' print_rep str(a_Syntagh(Move)), a_Ar_Syntag(Move)
-Dim k, JOBLIST, X, r, ok, a, mydb, ddd, Diff, stoxos
+Dim k, JOBLIST, x, r, ok, a, mydb, ddd, Diff, stoxos
 Dim rkod As String
 Dim m_err
 
@@ -6662,14 +6737,14 @@ On Error GoTo 0
 
 End Sub
 Private Sub back()
-Dim kod6400, k, cmd$, TEMP%, l
+Dim kod6400, k, cmd$, TEMP%, L
    
 For k = 2 To 19
   If Label3(k).BackColor = &HFF& Then ' αν δεν είναι κόκκινη θέση φέρτο εδώ
    kod6400 = 12000 + Ar_Mpoykal * k + Val(Label3(k).Caption)
    cmd$ = "!var12=" + str(kod6400) + ":"
      TEMP% = SendATBlock(768, cmd$, 0)
-     For l = 1 To 1000
+     For L = 1 To 1000
      Next
      ' περίμενε μέχρι να κλείσει ο gripper
      While Not (out_bit(4) = 1 And out_bit(5) = 0) 'περίμενε μέχρι να πάρεις σήμα ότι τελείωσε το ρομποτ την εργασία του
@@ -6682,7 +6757,7 @@ For k = 2 To 19
         DoEvents
      Wend
      Label1(Val(Label3(k).Caption)).BackColor = &HFF&   ' κοκκινο
-     For l = 1 To 100000
+     For L = 1 To 100000
      Next
      
 End If
@@ -6728,7 +6803,7 @@ Dim result%, status_high%, status_low%, status&
     Uesh_4axona = axe(4)
 End Function
 Function uesh_ajonon()
-     Dim X, result%, status_high%, status_low%, status&
+     Dim x, result%, status_high%, status_low%, status&
      Dim Y, Z
        uesh_ajonon = axe(1) + axe(2) + axe(3)
        
@@ -6819,7 +6894,7 @@ Private Function MAKE_FILE()
 Dim m(1 To 30, 1 To 199), MilliGrs(1 To 30, 1 To 199), UeshMpoyk(1 To 30, 1 To 199)
 Dim Ar_Syntag, k, MSYN, Arxh, m_nero(1 To 30)
 Dim Mpoyk_Synt, Count, mS, mKEF, mydb, MySet
-Dim sql_del, mgr, l, aa, bb, mXR, kef_doso, kef_kin
+Dim sql_del, mgr, L, aa, bb, mXR, kef_doso, kef_kin
    tkin(1) = "To scale pot....."
    tkin(2) = "Return pot......."
    tkin(3) = "To head bottle..."
@@ -6888,9 +6963,9 @@ Arxh = IIf(Val(Text1.text) > Ar_Pothr Or Val(Text1.text) < 1, 1, Val(Text1.text)
 For mS = Arxh To Ar_Syntag
      'βρίσκω πόσα μπουκάλια έχει η συνταγή
      Mpoyk_Synt = 0
-     For l = 1 To 30 ' 25-10-2000
-       If Not IsNull(m(mS, l)) Then
-          If m(mS, l) > 0 Then
+     For L = 1 To 30 ' 25-10-2000
+       If Not IsNull(m(mS, L)) Then
+          If m(mS, L) > 0 Then
             Mpoyk_Synt = Mpoyk_Synt + 1
           End If
        End If
@@ -6955,16 +7030,16 @@ For mS = Arxh To Ar_Syntag
              
     '---------------------------stop για σήμερα 30-8-98  --------------
 
-For l = 3 To Mpoyk_Synt
+For L = 3 To Mpoyk_Synt
              xronos = xronos + 1
              KEFALH = IIf(KEFALH = 1, 2, 1)
       '   O2    O1d
           'πανε πίσω το  L-2 μπουκάλι & φέρε το L
-             Upd_kin mS, 4, m(mS, l), KEFALH, 0, KEF(KEFALH), xronos
-              KEF(KEFALH) = m(mS, l)
+             Upd_kin mS, 4, m(mS, L), KEFALH, 0, KEF(KEFALH), xronos
+              KEF(KEFALH) = m(mS, L)
               '  στην δοσομέτρηση σαν PANE βάζω την θέση στην αρχική συνταγή για να μπορώ να ενημερώσω το REGRi
               'δοσομετρώ το L-1
-              Upd_kin mS, 9, m(mS, l - 1), 0, MilliGrs(mS, l - 1), UeshMpoyk(mS, l - 1), xronos 'δοσομετρώ το 1ο μπουκάλι
+              Upd_kin mS, 9, m(mS, L - 1), 0, MilliGrs(mS, L - 1), UeshMpoyk(mS, L - 1), xronos 'δοσομετρώ το 1ο μπουκάλι
 Next
      
      
@@ -7104,7 +7179,7 @@ End Sub
 
 Function Ektel_kinhsh(Move)
   
-  Dim Ok_s, Llk, All_Null, DUM, alati, m_Counter, mCoun, time_a, time_x
+  Dim Ok_s, Llk, All_Null, dum, alati, m_Counter, mCoun, time_a, time_x
   Dim mgen_xr, dum_x, mz, cmd$, DDDDD, real_dos
   Dim mpoykali, Zygisma, m_synt
 Dim UESH
@@ -7188,7 +7263,7 @@ Ref.Caption = "--"
    
         cmd$ = "!var12=" + str(kod6400) + ":"
    Ref.Caption = "ref:Wait Beak1"
-        DUM = wait_to_understand(cmd$)
+        dum = wait_to_understand(cmd$)
         
 
         
@@ -7225,12 +7300,12 @@ Ref.Caption = "--"
          
          MilSec 1000
      
-     DUM = Wait_Robot(0)
+     dum = Wait_Robot(0)
    If alati = 1 Then
       wait_to_understand ("!var12=93:")  ' φερε κεφαλή σκόνης σε ζυγό
               
       Ref.Caption = "ref:Wait_kef_sk"
-      DUM = Wait_Robot(0)
+      dum = Wait_Robot(0)
    End If
 
 
@@ -7300,13 +7375,13 @@ Ref.Caption = "--"
      
 Case 2 'ΠΑΝΕ ΠΟΤΗΡΙ
          
-        DUM = Wait_Robot(0)
+        dum = Wait_Robot(0)
          
          
          frmSYNT.Caption = a_Tkinhsh(Move) + str(a_Syntagh(Move))
          kod6400 = 4000 + a_Syntagh(Move)
          cmd$ = "!var12=" + str(kod6400) + ":"
-         DUM = wait_to_understand(cmd$)
+         dum = wait_to_understand(cmd$)
          
                Label3(a_Syntagh(Move)).BackColor = Prasino
   
@@ -7333,7 +7408,7 @@ Case 2 'ΠΑΝΕ ΠΟΤΗΡΙ
        'frmSYNT.caption = ml_CapRes(365) + Str(a_Fere(Move))
        kod6400 = 1000 + a_Fere(Move)
        cmd$ = "!var12=" + str(kod6400) + ":"
-       DUM = wait_to_understand(cmd$)
+       dum = wait_to_understand(cmd$)
 
      Case 4 'ΠΑΝΕ & ΦΕΡΕ ΜΠΟΥΚΑΛΙ
           If a_Syntagh(Move) = 4 Then
@@ -7349,7 +7424,7 @@ Case 2 'ΠΑΝΕ ΠΟΤΗΡΙ
               cmd$ = "!var12=" + str(kod6400) + ":!var13=" + str(a_Fere(Move)) + ":"
               Ref.Caption = "ref:Wait_panfer"
                
-              DUM = wait_to_understand(cmd$)
+              dum = wait_to_understand(cmd$)
           End If
      Case 5 'ΠΑΝΕ ΜΠΟΥΚΑΛΙ
           frmSYNT.Caption = " Return  " + str(a_Fere(Move))
@@ -7358,7 +7433,7 @@ Case 2 'ΠΑΝΕ ΠΟΤΗΡΙ
           cmd$ = "!var12=" + str(kod6400) + ":"
           Ref.Caption = "ref:Wait_pane"
 
-          DUM = wait_to_understand(cmd$)
+          dum = wait_to_understand(cmd$)
      Case 6 'ΦΕΡΕ ΚΕΦΑΛΗ 1 ΣΕ ΖΥΓΑΡΙΑ (ΔΕΞΙΑ)
             frmSYNT.Caption = "ΚΕΦΑΛΗ 1 ΣΕ ΖΥΓΑΡΙΑ "
             If var65_1kef = Uesh_4axona() Then
@@ -7369,10 +7444,10 @@ Case 2 'ΠΑΝΕ ΠΟΤΗΡΙ
             End If
           Ref.Caption = "ref:WaitU_kef1"
           
-          DUM = wait_to_understand(cmd$)
+          dum = wait_to_understand(cmd$)
           Ref.Caption = "ref:Wait_kef1"
 
-          DUM = Wait_Robot(0)
+          dum = Wait_Robot(0)
         
 
      Case 7 'ΦΕΡΕ ΚΕΦΑΛΗ 2 ΣΕ ΖΥΓΑΡΙΑ   (ARISTERH)
@@ -7384,10 +7459,10 @@ Case 2 'ΠΑΝΕ ΠΟΤΗΡΙ
           cmd$ = "!var12=91:"
           Ref.Caption = "ref:WaitU_kef2"
        
-          DUM = wait_to_understand(cmd$)
+          dum = wait_to_understand(cmd$)
           Ref.Caption = "ref:Wait_kef2"
 
-          DUM = Wait_Robot(0)
+          dum = Wait_Robot(0)
 
        End If
 
@@ -7397,12 +7472,12 @@ Case 2 'ΠΑΝΕ ΠΟΤΗΡΙ
            MilSec 2500
            ' G_REZERO MSComm1
            
-           If aritmos_ximikon > 0 Then
+           If aritmos_ximikon > 0 Or Len(XimNer_on) > 5 Then ' h exo ximika dipla sto nero
                  m_synt = a_Ar_Syntag(Move)
                  real_dos = DISPENSE_XIMIKA(m_synt)
                  prospau2.Recordset.EDIT
-                 prospau2.Recordset("RENERO") = real_dos
-                 prospau2.Recordset("date_disp") = Now '  time_x / 100
+                 prospau2.Recordset("ximikon") = real_dos
+                 ' prospau2.Recordset("date_disp") = Now '  time_x / 100
                  prospau2.Recordset.update
                  
                  If m_ximika(50, 5) = -31 Then
@@ -7410,7 +7485,7 @@ Case 2 'ΠΑΝΕ ΠΟΤΗΡΙ
                     Exit Function
                  End If
                  
-                 Exit Function
+            '     Exit Function
            End If
 If Abs(Zygis0(0)) > 5 Then
            G_REZERO MSComm1
@@ -7523,7 +7598,7 @@ Function DOS_ALATI(M_ALATI)
     '------dont use it!!!!!!!!!!!------------------
     Dim APOBARO, Apoklish, DIADROMH_BOLAN, Arxh, TIME_ANOXH, Z, ok, TaxyThtes
 
-    Dim counter, FIRST_TIME, Motori_On, DUM
+    Dim counter, FIRST_TIME, Motori_On, dum
 
     Motori_On = 0
     FIRST_TIME = True
@@ -7547,12 +7622,12 @@ Function DOS_ALATI(M_ALATI)
     'ΑΝΩ Ζ
     
     ' ΠΑΝΕ ΣΤΟ ΒΟΛΑΝ ΚΑΙ  ΠΙΑΣΤΟ   94
-    DUM = wait_to_understand("!var12=94:")
+    dum = wait_to_understand("!var12=94:")
      
     'ΚΡΑΤΑ ΑΠΟΒΑΡΟ
     APOBARO = Zygis0(0)
      
-    DUM = Wait_Robot(0)
+    dum = Wait_Robot(0)
     
     Arxh = GetCurrentTime()
   
@@ -7676,7 +7751,7 @@ End Function
 '
 Private Sub com_file_exec_Click()
 Dim Last_Epil, Message, SYN_ALATIOY
-Dim m_Counter, DUM, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, k
+Dim m_Counter, dum, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, k
 Dim response, cmd$, TEMP%, PHDHMENA_POTHRIA, mkin
 Dim mm_Synt
 
@@ -7715,12 +7790,12 @@ Dim mm_Synt
  
  If SYN_ALATIOY > 0 Then
        ' πανε τον  W στην θέση της σκόνης
-         DUM = wait_to_understand("!var12=93:")
-         DUM = Wait_Robot(0)
+         dum = wait_to_understand("!var12=93:")
+         dum = Wait_Robot(0)
          '
          ' φέρε το αλάτι στην κεφαλή της σκόνης
-         DUM = wait_to_understand("!var12=" + LTrim(str(1000 + UESH_ALATIOY)) + ":!var13=1:")
-         DUM = Wait_Robot(0)
+         dum = wait_to_understand("!var12=" + LTrim(str(1000 + UESH_ALATIOY)) + ":!var13=1:")
+         dum = Wait_Robot(0)
          ANIXE
          ' aneba στο πανω Ζ
          RobSend ("!d,," + str(var93_anoZ) + ":")
@@ -7835,16 +7910,16 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                      If var65_1kef = Uesh_4axona() Then
                      Else
                           cmd$ = "var12=90:"
-                          DUM = wait_to_understand(cmd$)
-                          DUM = Wait_Robot(0)
+                          dum = wait_to_understand(cmd$)
+                          dum = Wait_Robot(0)
                     End If
                  Else
                       'κινησε τον 4ο στην 2η κεφαλή
                         If var66_2kef = Uesh_4axona() Then
                         Else
                                cmd$ = "var12=91:"
-                               DUM = wait_to_understand(cmd$)
-                               DUM = Wait_Robot(0)
+                               dum = wait_to_understand(cmd$)
+                               dum = Wait_Robot(0)
                         End If
                  End If
                     result = Ektel_kinhsh(2)
@@ -7858,7 +7933,7 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                     
                     
                     DOSO_MPOYK = a_Fere(1)
-                    DUM = Wait_Robot(0)
+                    dum = Wait_Robot(0)
            
            
            ElseIf a_Kinhsh(2) = 9 Then   ' ΔΟΣΟΜΕΤΡΗΣΗ ΧΡΩΜΑΤΟΣ ΣΤΟ (2)
@@ -7868,16 +7943,16 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                      If var65_1kef = Uesh_4axona() Then
                      Else
                       cmd$ = "var12=90:"
-                      DUM = wait_to_understand(cmd$)
-                      DUM = Wait_Robot(0)
+                      dum = wait_to_understand(cmd$)
+                      dum = Wait_Robot(0)
                     End If
                  Else
                       'κινησε τον 4ο στην 2η κεφαλή
                      If var66_2kef = Uesh_4axona() Then
                      Else
                          cmd$ = "var12=91:"
-                         DUM = wait_to_understand(cmd$)
-                         DUM = Wait_Robot(0)
+                         dum = wait_to_understand(cmd$)
+                         dum = Wait_Robot(0)
                       End If
                  End If
            
@@ -7888,7 +7963,7 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                    prospau2.Recordset.MoveNext
                    'Grid.Refresh
                    DOSO_MPOYK = a_Fere(2)
-                   DUM = Wait_Robot(0)
+                   dum = Wait_Robot(0)
            Else  ' ΔΕΝ ΕΧΩ ΔΟΣΟΜΕΤΡΗΣΗ ΧΡΩΜΑΤΟΣ
            
           
@@ -7899,7 +7974,7 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                   result = Ektel_kinhsh(1)
                   result = Ektel_kinhsh(2)
               End If
-              DUM = Wait_Robot(0)
+              dum = Wait_Robot(0)
            End If
        
        Else '---------- ΟΧΙ ΤΑΥΤΟΧΡΟΝΙΣΜΟΣ ------------------------------------------
@@ -7910,16 +7985,16 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                        If var65_1kef = Uesh_4axona() Then
                        Else
                            cmd$ = "var12=90:"
-                           DUM = wait_to_understand(cmd$)
-                           DUM = Wait_Robot(0)
+                           dum = wait_to_understand(cmd$)
+                           dum = Wait_Robot(0)
                        End If
                  Else
                       'κινησε τον 4ο στην 2η κεφαλή
                         If var66_2kef = Uesh_4axona() Then
                         Else
                            cmd$ = "var12=91:"
-                           DUM = wait_to_understand(cmd$)
-                           DUM = Wait_Robot(0)
+                           dum = wait_to_understand(cmd$)
+                           dum = Wait_Robot(0)
                         End If
                  End If
                End If
@@ -7930,7 +8005,7 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                  DOSO_MPOYK = a_Fere(1)
 
                If a_Kinhsh(1) <> 9 Then
-                    DUM = Wait_Robot(0)
+                    dum = Wait_Robot(0)
                Else
                     Last_Epil = prospau2.Recordset("epil")
                     prospau2.Recordset.MoveNext
@@ -8018,16 +8093,16 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                        If var66_2kef = Uesh_4axona() Then
                        Else
                             cmd$ = "var12=91:"
-                           DUM = wait_to_understand(cmd$)
-                           DUM = Wait_Robot(0)
+                           dum = wait_to_understand(cmd$)
+                           dum = Wait_Robot(0)
                        End If
             
         
         
         a_Kinhsh(1) = 5
          a_Fere(1) = a_Kef1(1)
-         DUM = Ektel_kinhsh(1)
-         DUM = Wait_Robot(0)
+         dum = Ektel_kinhsh(1)
+         dum = Wait_Robot(0)
       End If
       
     ' ΕΠΙΣΤΡΟΦΗ ΜΠΟΥΚΑΛΑΣ 2ης ΚΕΦΑΛΗΣ
@@ -8036,22 +8111,22 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                        If var65_1kef = Uesh_4axona() Then
                        Else
                             cmd$ = "var12=90:"
-                           DUM = wait_to_understand(cmd$)
-                           DUM = Wait_Robot(0)
+                           dum = wait_to_understand(cmd$)
+                           dum = Wait_Robot(0)
                        End If
        
          
          a_Kinhsh(1) = 5
          a_Fere(1) = a_Kef2(1)
-          DUM = Ektel_kinhsh(1)
-          DUM = Wait_Robot(0)
+          dum = Ektel_kinhsh(1)
+          dum = Wait_Robot(0)
       End If
          
       ' επιστροφη ποτηριού
          a_Kinhsh(1) = 2
          a_Syntagh(1) = Pothri
-         DUM = Ektel_kinhsh(1)
-         DUM = Wait_Robot(0)
+         dum = Ektel_kinhsh(1)
+         dum = Wait_Robot(0)
        
        
        
@@ -8120,19 +8195,19 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
    End If
      
      
-    DUM = Wait_Robot(0)
+    dum = Wait_Robot(0)
      
 If SYN_ALATIOY > 0 Then
          
        ' πανε τον  W στην θέση της σκόνης
-         DUM = wait_to_understand("!var12=93:")
-         DUM = Wait_Robot(0)
+         dum = wait_to_understand("!var12=93:")
+         dum = Wait_Robot(0)
          
          
          
          ' φέρε το αλάτι στην κεφαλή της σκόνης
-         DUM = wait_to_understand("!var12=" + LTrim(str(2000 + UESH_ALATIOY)) + ":")
-         DUM = Wait_Robot(0)
+         dum = wait_to_understand("!var12=" + LTrim(str(2000 + UESH_ALATIOY)) + ":")
+         dum = Wait_Robot(0)
      
      
      
@@ -8141,8 +8216,8 @@ End If
      kod6400 = 82  ' parking
      cmd$ = "var12=82:"
      
-    DUM = wait_to_understand(cmd$)
-    DUM = Wait_Robot(0)
+    dum = wait_to_understand(cmd$)
+    dum = Wait_Robot(0)
      
      
      
@@ -8164,7 +8239,7 @@ End Sub
 
 Private Sub com_file_exec_old_Click()
 Dim Last_Epil, Message, SYN_ALATIOY
-Dim m_Counter, DUM, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, k
+Dim m_Counter, dum, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, k
 Dim response, cmd$, TEMP%, PHDHMENA_POTHRIA, mkin
 Dim mm_Synt
 
@@ -8203,12 +8278,12 @@ Dim mm_Synt
  
  If SYN_ALATIOY > 0 Then
        ' πανε τον  W στην θέση της σκόνης
-         DUM = wait_to_understand("!var12=93:")
-         DUM = Wait_Robot(0)
+         dum = wait_to_understand("!var12=93:")
+         dum = Wait_Robot(0)
          '
          ' φέρε το αλάτι στην κεφαλή της σκόνης
-         DUM = wait_to_understand("!var12=" + LTrim(str(1000 + UESH_ALATIOY)) + ":!var13=1:")
-         DUM = Wait_Robot(0)
+         dum = wait_to_understand("!var12=" + LTrim(str(1000 + UESH_ALATIOY)) + ":!var13=1:")
+         dum = Wait_Robot(0)
          ANIXE
          ' aneba στο πανω Ζ
          RobSend ("!d,," + str(var93_anoZ) + ":")
@@ -8271,7 +8346,7 @@ If system_ready = 1 Then
         cmd$ = "!" + Motor_Output_on + ":"
          TEMP% = SendATBlock(768, cmd$, 0)
   End If
-  DUM = begin_talos(0)
+  dum = begin_talos(0)
 End If
 Timer1.Enabled = True
 XALASE_NERO = 0
@@ -8369,7 +8444,7 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                     
                     
                     DOSO_MPOYK = a_Fere(1)
-                    DUM = Wait_Robot(0)
+                    dum = Wait_Robot(0)
            
            
            ElseIf a_Kinhsh(2) = 9 Then   ' ΔΟΣΟΜΕΤΡΗΣΗ ΧΡΩΜΑΤΟΣ ΣΤΟ (2)
@@ -8417,7 +8492,7 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                    prospau2.Recordset.MoveNext
                    'Grid.Refresh
                    DOSO_MPOYK = a_Fere(2)
-                   DUM = Wait_Robot(0)
+                   dum = Wait_Robot(0)
            Else  ' ΔΕΝ ΕΧΩ ΔΟΣΟΜΕΤΡΗΣΗ ΧΡΩΜΑΤΟΣ
            
           
@@ -8428,7 +8503,7 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                   result = Ektel_kinhsh(1)
                   result = Ektel_kinhsh(2)
               End If
-              DUM = Wait_Robot(0)
+              dum = Wait_Robot(0)
            End If
        
        Else '---------- ΟΧΙ ΤΑΥΤΟΧΡΟΝΙΣΜΟΣ ------------------------------------------
@@ -8478,7 +8553,7 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
                  DOSO_MPOYK = a_Fere(1)
 
                If a_Kinhsh(1) <> 9 Then
-                    DUM = Wait_Robot(0)
+                    dum = Wait_Robot(0)
                Else
                     Last_Epil = prospau2.Recordset("epil")
                     prospau2.Recordset.MoveNext
@@ -8580,7 +8655,7 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
         
         a_Kinhsh(1) = 5
          a_Fere(1) = a_Kef1(1)
-         DUM = Ektel_kinhsh(1)
+         dum = Ektel_kinhsh(1)
       End If
       
     ' ΕΠΙΣΤΡΟΦΗ ΜΠΟΥΚΑΛΑΣ 2ης ΚΕΦΑΛΗΣ
@@ -8608,15 +8683,15 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
          
          a_Kinhsh(1) = 5
          a_Fere(1) = a_Kef2(1)
-          DUM = Ektel_kinhsh(1)
-          DUM = Wait_Robot(0)
+          dum = Ektel_kinhsh(1)
+          dum = Wait_Robot(0)
       End If
          
       ' επιστροφη ποτηριού
          a_Kinhsh(1) = 2
          a_Syntagh(1) = Pothri
-         DUM = Ektel_kinhsh(1)
-         DUM = Wait_Robot(0)
+         dum = Ektel_kinhsh(1)
+         dum = Wait_Robot(0)
        
        
        
@@ -8685,19 +8760,19 @@ DOSO_MPOYK = 0  'ΔΟΣΟΜΕΤΡΟΥΜΕΝΟ ΜΠΟΥΚΑΛΙ ΣΤΟ ΟΠΟΙΟ ΣΥΝΕΒΗ ΒΛΑΒΗ
    End If
      
      
-    DUM = Wait_Robot(0)
+    dum = Wait_Robot(0)
      
 If SYN_ALATIOY > 0 Then
          
        ' πανε τον  W στην θέση της σκόνης
-         DUM = wait_to_understand("!var12=93:")
-         DUM = Wait_Robot(0)
+         dum = wait_to_understand("!var12=93:")
+         dum = Wait_Robot(0)
          
          
          
          ' φέρε το αλάτι στην κεφαλή της σκόνης
-         DUM = wait_to_understand("!var12=" + LTrim(str(2000 + UESH_ALATIOY)) + ":")
-         DUM = Wait_Robot(0)
+         dum = wait_to_understand("!var12=" + LTrim(str(2000 + UESH_ALATIOY)) + ":")
+         dum = Wait_Robot(0)
      
      
      
@@ -8706,8 +8781,8 @@ End If
      kod6400 = 82
      cmd$ = "!var12=82:"
      
-    DUM = wait_to_understand(cmd$)
-    DUM = Wait_Robot(0)
+    dum = wait_to_understand(cmd$)
+    dum = Wait_Robot(0)
      
      
      
@@ -9342,7 +9417,7 @@ Dim k
 
 End Sub
 
-Private Sub Label1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Label1_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
 If Not IsNull(Perigrafh(Index)) Then
      SXOLIA1.Caption = Perigrafh(Index)
  End If
@@ -9357,7 +9432,7 @@ End Sub
 
 
 
-Private Sub Label3_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Label3_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
 If Index > 0 And Index <= Ar_Pothr Then
      Label18.Caption = IIf(IsNull(pin_Syntag(Index)), "", pin_Syntag(Index))
 End If

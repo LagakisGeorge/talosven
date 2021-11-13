@@ -1,11 +1,11 @@
 VERSION 5.00
 Object = "{FAEEE763-117E-101B-8933-08002B2F4F5A}#1.1#0"; "DBLIST32.OCX"
 Object = "{00028C01-0000-0000-0000-000000000046}#1.0#0"; "DBGRID32.OCX"
-Object = "{00025600-0000-0000-C000-000000000046}#4.6#0"; "CRYSTL32.OCX"
+Object = "{00025600-0000-0000-C000-000000000046}#4.6#0"; "crystl32.ocx"
 Begin VB.Form EPANEKTYP 
    BackColor       =   &H00FFFF00&
-   ClientHeight    =   6372
-   ClientLeft      =   516
+   ClientHeight    =   6375
+   ClientLeft      =   510
    ClientTop       =   2160
    ClientWidth     =   9660
    ControlBox      =   0   'False
@@ -13,7 +13,7 @@ Begin VB.Form EPANEKTYP
    LockControls    =   -1  'True
    MDIChild        =   -1  'True
    PaletteMode     =   1  'UseZOrder
-   ScaleHeight     =   6372
+   ScaleHeight     =   6375
    ScaleWidth      =   9660
    WindowState     =   2  'Maximized
    Begin VB.TextBox Text8 
@@ -195,8 +195,8 @@ Begin VB.Form EPANEKTYP
    Begin Crystal.CrystalReport Report1 
       Left            =   6165
       Top             =   6945
-      _ExtentX        =   593
-      _ExtentY        =   593
+      _ExtentX        =   741
+      _ExtentY        =   741
       _Version        =   262150
       ReportFileName  =   "c:\talos\vis4-99.rpt"
       WindowControlBox=   -1  'True
@@ -222,7 +222,7 @@ Begin VB.Form EPANEKTYP
       Top             =   4230
       Width           =   1980
       _ExtentX        =   3493
-      _ExtentY        =   508
+      _ExtentY        =   556
       _Version        =   393216
       Appearance      =   0
       BackColor       =   16777215
@@ -458,6 +458,8 @@ End Sub
 
 Private Sub Command4_Click()
    Dim m
+   On Error Resume Next
+   
    print99_rep
 If Check1 Then  'megalo xarti
    Report1.ReportFileName = "c:\talos\vis4-99b.rpt"
