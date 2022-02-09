@@ -4401,7 +4401,7 @@ Dim dr As Long, c, quantity, a00, b00, a2
 Dim mepil, xr(1 To 5), for_use, dokXr(1 To 5), sXr(1 To 5)
 Dim k, L, megas, amax, Off_On(1 To 5), per
 Dim max_xronos, mz, mZ1, mz2
-Dim sum_gr, q_ner, xr_ner, dum
+Dim sum_gr, q_ner, xr_ner, DUM
 
 Dim Max_apoklish
 Dim ENA_ENA As Integer
@@ -4442,7 +4442,7 @@ For k = 1 To aritmos_ximikon
          xr(k) = 0
       Else
         a00 = a00x(k): b00 = b00x(k)
-        dum = DISP_ENA_XIMIKO(k, quantity, a00, b00, m_synt)
+        DUM = DISP_ENA_XIMIKO(k, quantity, a00, b00, m_synt)
         'xr(k) = (m_ximika(mepil, k) - b00x(k)) / a00x(k) 'xrhsimopoionta 2, 0.5 sec
       End If
       
@@ -4464,12 +4464,12 @@ Next
      If prospau2.Recordset("ximikon") > 0 Then
      
         a00 = a00x(k): b00 = b00x(k)
-        dum = DISP_ENA_XIMIKO(1, prospau2.Recordset("ximikon"), a00, b00, m_synt)
+        DUM = DISP_ENA_XIMIKO(1, prospau2.Recordset("ximikon"), a00, b00, m_synt)
      End If
   End If
  
  
- DISPENSE_XIMIKA = dum
+ DISPENSE_XIMIKA = DUM
  Exit Function
  
 ' GoTo 667
@@ -4482,14 +4482,14 @@ Next
       xr_ner = 0
   Else
       a00 = a00x(5): b00 = b00x(5)
-      dum = DISP_ENA_XIMIKO(5, q_ner, a00, b00, m_synt)
+      DUM = DISP_ENA_XIMIKO(5, q_ner, a00, b00, m_synt)
       xr_ner = (q_ner - b00x(5)) / a00x(5) 'xrhsimopoionta 2, 0.5 sec
   End If
   
 End If
  
 
-DISPENSE_XIMIKA = dum
+DISPENSE_XIMIKA = DUM
     
 
 
@@ -4578,11 +4578,17 @@ If BALBIDA <> 5 Then
    mydb.Close
 End If
 
-Dim dum
-dum = NER_DOSOMETRHSH(1000, 99)
+Dim DUM
+'DUM = NER_DOSOMETRHSH(quantity, 99)
 
 
-DISP_ENA_XIMIKO = a2
+
+
+'DUM = NER_DOSOMETRHSH(quantity, 99)
+
+' DUM = NER_DOSOMETRHSH(quantity, 99)
+DUM = NER_DOSOMETRHSH(quantity, 99)
+DISP_ENA_XIMIKO = DUM
 
 '-------------------------------------
 
@@ -4788,7 +4794,7 @@ Dim counter, FIRST_TIME, Motori_On, Xam_Ligo, Xam_Poly, reystothta
 Dim FLAG1, D1, D2, BHMA
 Dim ZYG1, ZYG2, FLAG2, FLAG3, Target
 Dim mydb, r, var93, Skacimo, v_Z
-Dim dum, xam_tax, CurQ_Dis
+Dim DUM, xam_tax, CurQ_Dis
 Dim ARX_DIADROMH, m_axe3, DZYG, max_zyg
  'аккацг   DIADROMH_BOLAN = DIADROMH_BOLAN / 60 => 40   17/04/2001
 ' XRONIKO PERIUVRIO SE 10MIN
@@ -4904,12 +4910,12 @@ TaxyThtes = "!V,," + str(v_Z) + ":"
      
         'йяата апобаяо
    
-     dum = wait_to_understand("!var12=94:")
+     DUM = wait_to_understand("!var12=94:")
      
      
      APOBARO = Zygis0(0)
      
-     dum = Wait_Robot(0)
+     DUM = Wait_Robot(0)
 
 
     
@@ -5402,7 +5408,7 @@ Function Load_kinhsh(Index As Integer)
 End Function
 
 
-Function Mhdenismos_Zygoy(dum)
+Function Mhdenismos_Zygoy(DUM)
 Dim Can_Zero, mz, counter_num
 Screen.MousePointer = 11
 Can_Zero = 1
@@ -5765,7 +5771,7 @@ End Sub
 '
 
 
-Function Zyg_KAUARO(dum)
+Function Zyg_KAUARO(DUM)
    Zyg_KAUARO = Zygis0(0) - APOBARO
    Label8.Caption = IIf(Zyg_KAUARO < 0, 0, Zyg_KAUARO)
 End Function
@@ -5846,6 +5852,7 @@ Water_Off = Cold_Water_Off
 If Val(porta) = 99 Then ' ximiko dipla sto nero
   Water_On = XimNer_on
   Water_Off = XimNer_Off
+  Avance_Online_Water = 10
 End If
 
 
@@ -5973,7 +5980,11 @@ starter = GetCurrentTime()
 
 proth_fora = 1: ZYG1 = 0: DT = 0
 
-If Val(porta) = 99 Then orio_2 = 40 Else orio_2 = 500
+If Val(porta) = 99 Then
+    orio_2 = 10
+    Else
+     orio_2 = 500
+ End If
 Do While EPIU - a > orio_2
      a0 = a
      t_a0 = GetCurrentTime()
@@ -7179,7 +7190,7 @@ End Sub
 
 Function Ektel_kinhsh(Move)
   
-  Dim Ok_s, Llk, All_Null, dum, alati, m_Counter, mCoun, time_a, time_x
+  Dim Ok_s, Llk, All_Null, DUM, alati, m_Counter, mCoun, time_a, time_x
   Dim mgen_xr, dum_x, mz, cmd$, DDDDD, real_dos
   Dim mpoykali, Zygisma, m_synt
 Dim UESH
@@ -7263,7 +7274,7 @@ Ref.Caption = "--"
    
         cmd$ = "!var12=" + str(kod6400) + ":"
    Ref.Caption = "ref:Wait Beak1"
-        dum = wait_to_understand(cmd$)
+        DUM = wait_to_understand(cmd$)
         
 
         
@@ -7300,12 +7311,12 @@ Ref.Caption = "--"
          
          MilSec 1000
      
-     dum = Wait_Robot(0)
+     DUM = Wait_Robot(0)
    If alati = 1 Then
       wait_to_understand ("!var12=93:")  ' ЖЕЯЕ ЙЕЖАКч СЙЭМГР СЕ ФУЦЭ
               
       Ref.Caption = "ref:Wait_kef_sk"
-      dum = Wait_Robot(0)
+      DUM = Wait_Robot(0)
    End If
 
 
@@ -7375,13 +7386,13 @@ Ref.Caption = "--"
      
 Case 2 'паме потгяи
          
-        dum = Wait_Robot(0)
+        DUM = Wait_Robot(0)
          
          
          frmSYNT.Caption = a_Tkinhsh(Move) + str(a_Syntagh(Move))
          kod6400 = 4000 + a_Syntagh(Move)
          cmd$ = "!var12=" + str(kod6400) + ":"
-         dum = wait_to_understand(cmd$)
+         DUM = wait_to_understand(cmd$)
          
                Label3(a_Syntagh(Move)).BackColor = Prasino
   
@@ -7408,7 +7419,7 @@ Case 2 'паме потгяи
        'frmSYNT.caption = ml_CapRes(365) + Str(a_Fere(Move))
        kod6400 = 1000 + a_Fere(Move)
        cmd$ = "!var12=" + str(kod6400) + ":"
-       dum = wait_to_understand(cmd$)
+       DUM = wait_to_understand(cmd$)
 
      Case 4 'паме & жеяе лпоуйаки
           If a_Syntagh(Move) = 4 Then
@@ -7424,7 +7435,7 @@ Case 2 'паме потгяи
               cmd$ = "!var12=" + str(kod6400) + ":!var13=" + str(a_Fere(Move)) + ":"
               Ref.Caption = "ref:Wait_panfer"
                
-              dum = wait_to_understand(cmd$)
+              DUM = wait_to_understand(cmd$)
           End If
      Case 5 'паме лпоуйаки
           frmSYNT.Caption = " Return  " + str(a_Fere(Move))
@@ -7433,7 +7444,7 @@ Case 2 'паме потгяи
           cmd$ = "!var12=" + str(kod6400) + ":"
           Ref.Caption = "ref:Wait_pane"
 
-          dum = wait_to_understand(cmd$)
+          DUM = wait_to_understand(cmd$)
      Case 6 'жеяе йежакг 1 се фуцаяиа (дениа)
             frmSYNT.Caption = "йежакг 1 се фуцаяиа "
             If var65_1kef = Uesh_4axona() Then
@@ -7444,10 +7455,10 @@ Case 2 'паме потгяи
             End If
           Ref.Caption = "ref:WaitU_kef1"
           
-          dum = wait_to_understand(cmd$)
+          DUM = wait_to_understand(cmd$)
           Ref.Caption = "ref:Wait_kef1"
 
-          dum = Wait_Robot(0)
+          DUM = Wait_Robot(0)
         
 
      Case 7 'жеяе йежакг 2 се фуцаяиа   (ARISTERH)
@@ -7459,10 +7470,10 @@ Case 2 'паме потгяи
           cmd$ = "!var12=91:"
           Ref.Caption = "ref:WaitU_kef2"
        
-          dum = wait_to_understand(cmd$)
+          DUM = wait_to_understand(cmd$)
           Ref.Caption = "ref:Wait_kef2"
 
-          dum = Wait_Robot(0)
+          DUM = Wait_Robot(0)
 
        End If
 
@@ -7598,7 +7609,7 @@ Function DOS_ALATI(M_ALATI)
     '------dont use it!!!!!!!!!!!------------------
     Dim APOBARO, Apoklish, DIADROMH_BOLAN, Arxh, TIME_ANOXH, Z, ok, TaxyThtes
 
-    Dim counter, FIRST_TIME, Motori_On, dum
+    Dim counter, FIRST_TIME, Motori_On, DUM
 
     Motori_On = 0
     FIRST_TIME = True
@@ -7622,12 +7633,12 @@ Function DOS_ALATI(M_ALATI)
     'амы ф
     
     ' паме сто бокам йаи  пиасто   94
-    dum = wait_to_understand("!var12=94:")
+    DUM = wait_to_understand("!var12=94:")
      
     'йяата апобаяо
     APOBARO = Zygis0(0)
      
-    dum = Wait_Robot(0)
+    DUM = Wait_Robot(0)
     
     Arxh = GetCurrentTime()
   
@@ -7751,7 +7762,7 @@ End Function
 '
 Private Sub com_file_exec_Click()
 Dim Last_Epil, Message, SYN_ALATIOY
-Dim m_Counter, dum, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, k
+Dim m_Counter, DUM, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, k
 Dim response, cmd$, TEMP%, PHDHMENA_POTHRIA, mkin
 Dim mm_Synt
 
@@ -7790,12 +7801,12 @@ Dim mm_Synt
  
  If SYN_ALATIOY > 0 Then
        ' ПАМЕ ТОМ  W СТГМ ХщСГ ТГР СЙЭМГР
-         dum = wait_to_understand("!var12=93:")
-         dum = Wait_Robot(0)
+         DUM = wait_to_understand("!var12=93:")
+         DUM = Wait_Robot(0)
          '
          ' ЖщЯЕ ТО АКэТИ СТГМ ЙЕЖАКч ТГР СЙЭМГР
-         dum = wait_to_understand("!var12=" + LTrim(str(1000 + UESH_ALATIOY)) + ":!var13=1:")
-         dum = Wait_Robot(0)
+         DUM = wait_to_understand("!var12=" + LTrim(str(1000 + UESH_ALATIOY)) + ":!var13=1:")
+         DUM = Wait_Robot(0)
          ANIXE
          ' aneba СТО ПАМЫ ф
          RobSend ("!d,," + str(var93_anoZ) + ":")
@@ -7910,16 +7921,16 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                      If var65_1kef = Uesh_4axona() Then
                      Else
                           cmd$ = "var12=90:"
-                          dum = wait_to_understand(cmd$)
-                          dum = Wait_Robot(0)
+                          DUM = wait_to_understand(cmd$)
+                          DUM = Wait_Robot(0)
                     End If
                  Else
                       'ЙИМГСЕ ТОМ 4О СТГМ 2Г ЙЕЖАКч
                         If var66_2kef = Uesh_4axona() Then
                         Else
                                cmd$ = "var12=91:"
-                               dum = wait_to_understand(cmd$)
-                               dum = Wait_Robot(0)
+                               DUM = wait_to_understand(cmd$)
+                               DUM = Wait_Robot(0)
                         End If
                  End If
                     result = Ektel_kinhsh(2)
@@ -7933,7 +7944,7 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                     
                     
                     DOSO_MPOYK = a_Fere(1)
-                    dum = Wait_Robot(0)
+                    DUM = Wait_Robot(0)
            
            
            ElseIf a_Kinhsh(2) = 9 Then   ' досолетягсг вяылатос сто (2)
@@ -7943,16 +7954,16 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                      If var65_1kef = Uesh_4axona() Then
                      Else
                       cmd$ = "var12=90:"
-                      dum = wait_to_understand(cmd$)
-                      dum = Wait_Robot(0)
+                      DUM = wait_to_understand(cmd$)
+                      DUM = Wait_Robot(0)
                     End If
                  Else
                       'ЙИМГСЕ ТОМ 4О СТГМ 2Г ЙЕЖАКч
                      If var66_2kef = Uesh_4axona() Then
                      Else
                          cmd$ = "var12=91:"
-                         dum = wait_to_understand(cmd$)
-                         dum = Wait_Robot(0)
+                         DUM = wait_to_understand(cmd$)
+                         DUM = Wait_Robot(0)
                       End If
                  End If
            
@@ -7963,7 +7974,7 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                    prospau2.Recordset.MoveNext
                    'Grid.Refresh
                    DOSO_MPOYK = a_Fere(2)
-                   dum = Wait_Robot(0)
+                   DUM = Wait_Robot(0)
            Else  ' дем евы досолетягсг вяылатос
            
           
@@ -7974,7 +7985,7 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                   result = Ektel_kinhsh(1)
                   result = Ektel_kinhsh(2)
               End If
-              dum = Wait_Robot(0)
+              DUM = Wait_Robot(0)
            End If
        
        Else '---------- ови таутовяомислос ------------------------------------------
@@ -7985,16 +7996,16 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                        If var65_1kef = Uesh_4axona() Then
                        Else
                            cmd$ = "var12=90:"
-                           dum = wait_to_understand(cmd$)
-                           dum = Wait_Robot(0)
+                           DUM = wait_to_understand(cmd$)
+                           DUM = Wait_Robot(0)
                        End If
                  Else
                       'ЙИМГСЕ ТОМ 4О СТГМ 2Г ЙЕЖАКч
                         If var66_2kef = Uesh_4axona() Then
                         Else
                            cmd$ = "var12=91:"
-                           dum = wait_to_understand(cmd$)
-                           dum = Wait_Robot(0)
+                           DUM = wait_to_understand(cmd$)
+                           DUM = Wait_Robot(0)
                         End If
                  End If
                End If
@@ -8005,7 +8016,7 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                  DOSO_MPOYK = a_Fere(1)
 
                If a_Kinhsh(1) <> 9 Then
-                    dum = Wait_Robot(0)
+                    DUM = Wait_Robot(0)
                Else
                     Last_Epil = prospau2.Recordset("epil")
                     prospau2.Recordset.MoveNext
@@ -8093,16 +8104,16 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                        If var66_2kef = Uesh_4axona() Then
                        Else
                             cmd$ = "var12=91:"
-                           dum = wait_to_understand(cmd$)
-                           dum = Wait_Robot(0)
+                           DUM = wait_to_understand(cmd$)
+                           DUM = Wait_Robot(0)
                        End If
             
         
         
         a_Kinhsh(1) = 5
          a_Fere(1) = a_Kef1(1)
-         dum = Ektel_kinhsh(1)
-         dum = Wait_Robot(0)
+         DUM = Ektel_kinhsh(1)
+         DUM = Wait_Robot(0)
       End If
       
     ' епистяожг лпоуйакас 2ГР йежакгс
@@ -8111,22 +8122,22 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                        If var65_1kef = Uesh_4axona() Then
                        Else
                             cmd$ = "var12=90:"
-                           dum = wait_to_understand(cmd$)
-                           dum = Wait_Robot(0)
+                           DUM = wait_to_understand(cmd$)
+                           DUM = Wait_Robot(0)
                        End If
        
          
          a_Kinhsh(1) = 5
          a_Fere(1) = a_Kef2(1)
-          dum = Ektel_kinhsh(1)
-          dum = Wait_Robot(0)
+          DUM = Ektel_kinhsh(1)
+          DUM = Wait_Robot(0)
       End If
          
       ' ЕПИСТЯОЖГ ПОТГЯИОЩ
          a_Kinhsh(1) = 2
          a_Syntagh(1) = Pothri
-         dum = Ektel_kinhsh(1)
-         dum = Wait_Robot(0)
+         DUM = Ektel_kinhsh(1)
+         DUM = Wait_Robot(0)
        
        
        
@@ -8195,19 +8206,19 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
    End If
      
      
-    dum = Wait_Robot(0)
+    DUM = Wait_Robot(0)
      
 If SYN_ALATIOY > 0 Then
          
        ' ПАМЕ ТОМ  W СТГМ ХщСГ ТГР СЙЭМГР
-         dum = wait_to_understand("!var12=93:")
-         dum = Wait_Robot(0)
+         DUM = wait_to_understand("!var12=93:")
+         DUM = Wait_Robot(0)
          
          
          
          ' ЖщЯЕ ТО АКэТИ СТГМ ЙЕЖАКч ТГР СЙЭМГР
-         dum = wait_to_understand("!var12=" + LTrim(str(2000 + UESH_ALATIOY)) + ":")
-         dum = Wait_Robot(0)
+         DUM = wait_to_understand("!var12=" + LTrim(str(2000 + UESH_ALATIOY)) + ":")
+         DUM = Wait_Robot(0)
      
      
      
@@ -8216,8 +8227,8 @@ End If
      kod6400 = 82  ' parking
      cmd$ = "var12=82:"
      
-    dum = wait_to_understand(cmd$)
-    dum = Wait_Robot(0)
+    DUM = wait_to_understand(cmd$)
+    DUM = Wait_Robot(0)
      
      
      
@@ -8239,7 +8250,7 @@ End Sub
 
 Private Sub com_file_exec_old_Click()
 Dim Last_Epil, Message, SYN_ALATIOY
-Dim m_Counter, dum, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, k
+Dim m_Counter, DUM, Bohu(1 To 19), Taytoxronismos, result, DOSO_MPOYK, aas, k
 Dim response, cmd$, TEMP%, PHDHMENA_POTHRIA, mkin
 Dim mm_Synt
 
@@ -8278,12 +8289,12 @@ Dim mm_Synt
  
  If SYN_ALATIOY > 0 Then
        ' ПАМЕ ТОМ  W СТГМ ХщСГ ТГР СЙЭМГР
-         dum = wait_to_understand("!var12=93:")
-         dum = Wait_Robot(0)
+         DUM = wait_to_understand("!var12=93:")
+         DUM = Wait_Robot(0)
          '
          ' ЖщЯЕ ТО АКэТИ СТГМ ЙЕЖАКч ТГР СЙЭМГР
-         dum = wait_to_understand("!var12=" + LTrim(str(1000 + UESH_ALATIOY)) + ":!var13=1:")
-         dum = Wait_Robot(0)
+         DUM = wait_to_understand("!var12=" + LTrim(str(1000 + UESH_ALATIOY)) + ":!var13=1:")
+         DUM = Wait_Robot(0)
          ANIXE
          ' aneba СТО ПАМЫ ф
          RobSend ("!d,," + str(var93_anoZ) + ":")
@@ -8346,7 +8357,7 @@ If system_ready = 1 Then
         cmd$ = "!" + Motor_Output_on + ":"
          TEMP% = SendATBlock(768, cmd$, 0)
   End If
-  dum = begin_talos(0)
+  DUM = begin_talos(0)
 End If
 Timer1.Enabled = True
 XALASE_NERO = 0
@@ -8444,7 +8455,7 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                     
                     
                     DOSO_MPOYK = a_Fere(1)
-                    dum = Wait_Robot(0)
+                    DUM = Wait_Robot(0)
            
            
            ElseIf a_Kinhsh(2) = 9 Then   ' досолетягсг вяылатос сто (2)
@@ -8492,7 +8503,7 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                    prospau2.Recordset.MoveNext
                    'Grid.Refresh
                    DOSO_MPOYK = a_Fere(2)
-                   dum = Wait_Robot(0)
+                   DUM = Wait_Robot(0)
            Else  ' дем евы досолетягсг вяылатос
            
           
@@ -8503,7 +8514,7 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                   result = Ektel_kinhsh(1)
                   result = Ektel_kinhsh(2)
               End If
-              dum = Wait_Robot(0)
+              DUM = Wait_Robot(0)
            End If
        
        Else '---------- ови таутовяомислос ------------------------------------------
@@ -8553,7 +8564,7 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
                  DOSO_MPOYK = a_Fere(1)
 
                If a_Kinhsh(1) <> 9 Then
-                    dum = Wait_Robot(0)
+                    DUM = Wait_Robot(0)
                Else
                     Last_Epil = prospau2.Recordset("epil")
                     prospau2.Recordset.MoveNext
@@ -8655,7 +8666,7 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
         
         a_Kinhsh(1) = 5
          a_Fere(1) = a_Kef1(1)
-         dum = Ektel_kinhsh(1)
+         DUM = Ektel_kinhsh(1)
       End If
       
     ' епистяожг лпоуйакас 2ГР йежакгс
@@ -8683,15 +8694,15 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
          
          a_Kinhsh(1) = 5
          a_Fere(1) = a_Kef2(1)
-          dum = Ektel_kinhsh(1)
-          dum = Wait_Robot(0)
+          DUM = Ektel_kinhsh(1)
+          DUM = Wait_Robot(0)
       End If
          
       ' ЕПИСТЯОЖГ ПОТГЯИОЩ
          a_Kinhsh(1) = 2
          a_Syntagh(1) = Pothri
-         dum = Ektel_kinhsh(1)
-         dum = Wait_Robot(0)
+         DUM = Ektel_kinhsh(1)
+         DUM = Wait_Robot(0)
        
        
        
@@ -8760,19 +8771,19 @@ DOSO_MPOYK = 0  'досолетяоулемо лпоуйаки сто опоио сумебг бкабг
    End If
      
      
-    dum = Wait_Robot(0)
+    DUM = Wait_Robot(0)
      
 If SYN_ALATIOY > 0 Then
          
        ' ПАМЕ ТОМ  W СТГМ ХщСГ ТГР СЙЭМГР
-         dum = wait_to_understand("!var12=93:")
-         dum = Wait_Robot(0)
+         DUM = wait_to_understand("!var12=93:")
+         DUM = Wait_Robot(0)
          
          
          
          ' ЖщЯЕ ТО АКэТИ СТГМ ЙЕЖАКч ТГР СЙЭМГР
-         dum = wait_to_understand("!var12=" + LTrim(str(2000 + UESH_ALATIOY)) + ":")
-         dum = Wait_Robot(0)
+         DUM = wait_to_understand("!var12=" + LTrim(str(2000 + UESH_ALATIOY)) + ":")
+         DUM = Wait_Robot(0)
      
      
      
@@ -8781,8 +8792,8 @@ End If
      kod6400 = 82
      cmd$ = "!var12=82:"
      
-    dum = wait_to_understand(cmd$)
-    dum = Wait_Robot(0)
+    DUM = wait_to_understand(cmd$)
+    DUM = Wait_Robot(0)
      
      
      
