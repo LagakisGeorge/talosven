@@ -1955,7 +1955,7 @@ Sub command1_old()
 End Sub
 
 Sub finirisma(mpoykali)
-Dim mixOn, mixOff, DUM
+Dim mixOn, mixOff, dum
 
 If mpoykali = 1 Then
    mixOn = mixer_ON
@@ -3338,7 +3338,7 @@ TaxyThtes = "!V,," + str(v_Z) + ":"
         'йяата апобаяо
      APOBARO = Zygis0(0)
      
-     DUM = Wait_Robot(0)
+     dum = Wait_Robot(0)
 
 
     
@@ -3775,7 +3775,7 @@ TaxyThtes = "!V,," + str(v_Z) + ",0.3:"
      
      APOBARO = Zygis0(0)
      
-     DUM = Wait_Robot(0)
+     dum = Wait_Robot(0)
 
 
     
@@ -4816,7 +4816,7 @@ If gXimikaDial Then
         '  fere mpoykali ximikon
      kod6400 = 1000 + 69  ' 69 mpoykali einai to ximiko
      cmd$ = "!var12=" + str(kod6400) + ":"
-     DUM = wait_to_understand(cmd$)
+     dum = wait_to_understand(cmd$)
 End If
 
 
@@ -4854,7 +4854,7 @@ Do
    If Telos_Dialymaton = 1 Then Exit Do
    CurQ = 0: CurQ_Dis = CurQ
    On Error GoTo 0
-   DUM = start2_dosing_click(1, 2, Buk, 7)
+   dum = start2_dosing_click(1, 2, Buk, 7)
    If Command2.Enabled = False Then Telos_Dialymaton = 1
    
    If Telos_Dialymaton = 1 Then Exit Do
@@ -4875,7 +4875,7 @@ If gXimikaDial Then
         '  fere mpoykali ximikon
      kod6400 = 2000 + 69  ' 69 mpoykali einai to ximiko
      cmd$ = "!var12=" + str(kod6400) + ":"
-     DUM = wait_to_understand(cmd$)
+     dum = wait_to_understand(cmd$)
      Wait_Robot (0)
 End If
        
@@ -5103,7 +5103,7 @@ End Sub
 
 Sub G_REZERO(porta)
 
-Dim K As Integer
+Dim k As Integer
 
 
     Dim Zero
@@ -5127,7 +5127,7 @@ Dim K As Integer
                 
         Else
             If Abs(ZZ) = 999000999 Then ' сбгстг ╧ вакаслемг
-                For K = 1 To 4
+                For k = 1 To 4
                     porta.Output = "ON" + Chr(13)  'тгм амабы
                     MilSec 4000  '4 OK
                     porta.Output = "T" + Chr(13)
@@ -5157,14 +5157,14 @@ Dim K As Integer
                 
                 porta.Output = "T" + Chr(13)
                    MilSec 4000
-                For K = 1 To 10
+                For k = 1 To 10
                 
                     If Abs(zyg_ADAM(0)) < 2 Then
                         ' OK
                         Exit For
                     End If
                     porta.Output = "T" + Chr(13)
-                    If K > 5 Then
+                    If k > 5 Then
                        MilSec 6000
                     Else
                         MilSec 4000
@@ -5179,6 +5179,9 @@ Dim K As Integer
             End If
        
         End If
+   Else
+        Zero = "Z" + Chr$(13) + Chr(10)
+        porta.Output = Zero
 
 
 
